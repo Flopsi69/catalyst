@@ -13,6 +13,14 @@ export default defineNuxtConfig({
     'nuxt-swiper',
   ],
 
+  nitro: {
+    output: {
+      dir: 'src/.output',
+      serverDir: 'src/.output/server',
+      publicDir: 'src/.output/public',
+    },
+  },
+
   imports: {
     dirs: ['stores'],
   },
