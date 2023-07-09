@@ -1,9 +1,4 @@
 {
-  "builds": [
-    {
-      "src": "./src",
-      "use": "yarn run build",
-      "output": "./src/.output"
-    }
-  ]
+  "outputDirectory": ".src/.output",
+  "buildCommand": "yarn build"
 }
