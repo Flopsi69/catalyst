@@ -1,4 +1,4 @@
 {
-  "outputDirectory": ".vercel_build_output",
+  "outputDirectory": "src/.vercel_build_output",
   "buildCommand": "yarn build"
 }
