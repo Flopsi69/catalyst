@@ -20,13 +20,15 @@ definePageMeta({
 
   <main class="main">
     <section class="section jumb">
-      <Particles
-        id="particles"
-        class="jumb__particles"
-        :particlesInit="particlesInit"
-        :particlesLoaded="particlesLoaded"
-        :options="particleOptions"
-      />
+      <ClientOnly>
+        <Particles
+          id="particles"
+          class="jumb__particles"
+          :particlesInit="particlesInit"
+          :particlesLoaded="particlesLoaded"
+          :options="particleOptions"
+        />
+      </ClientOnly>
 
       <div class="container jumb__container">
         <IndexIntro class="jumb__info" />
