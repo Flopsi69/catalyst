@@ -14,11 +14,12 @@ export default defineNuxtConfig({
   ],
 
   nitro: {
-    // output: {
-    //   dir: 'src/.output',
-    //   serverDir: 'src/.output/server',
-    //   publicDir: 'src/.output/public',
-    // },
+    preset: 'node-server',
+    output: {
+      dir: 'src/.output',
+      //   serverDir: 'src/.output/server',
+      //   publicDir: 'src/.output/public',
+    },
   },
 
   imports: {
