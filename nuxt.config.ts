@@ -14,12 +14,11 @@ export default defineNuxtConfig({
   ],
 
   nitro: {
-    preset: 'vercel-edge',
-    output: {
-      dir: 'src/.output',
-      serverDir: 'src/.output/server',
-      publicDir: 'src/.output/public',
-    },
+    // output: {
+    //   dir: 'src/.output',
+    //   serverDir: 'src/.output/server',
+    //   publicDir: 'src/.output/public',
+    // },
   },
 
   imports: {
