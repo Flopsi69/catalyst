@@ -45,15 +45,6 @@ definePageMeta({
 </template>
 
 <style lang="scss" scoped>
-// .swiper {
-//   height: 100px;
-//   background: $gray600;
-//   font-size: 40px;
-//   text-align: center;
-//   // max-width: 500px;
-//   width: 100%;
-//   margin: 20px auto;
-// }
 .jumb {
   position: relative;
   padding: 110px 0 48px;

@@ -31,6 +31,9 @@ const actions = [
     class="actions w-100"
     :modules="[SwiperAutoplay]"
     :slides-per-view="'auto'"
+    rewind
+    :init="false"
+    @init="console.log('fire')"
     :breakpoints="{
       0: {
         centeredSlides: true,
@@ -42,7 +45,7 @@ const actions = [
       }
     }"
     :autoplay="{
-      delay: 10000,
+      delay: 1500,
       disableOnInteraction: true,
     }"
   >
@@ -104,13 +107,14 @@ const actions = [
     }
     @media(max-width: $sm) {
       justify-content: flex-start;
+      justify-content: initial;
     }
   }
 }
 
 .action {
   position: relative;
-  transition: $transition;
+  transition: opacity $transition;
   cursor: pointer;
   top: 0;
   outline: 4px solid rgba(130, 195, 255, 0.3);
@@ -132,6 +136,7 @@ const actions = [
   }
   @media(max-width: $sm) {
     max-width: 75%;
+    // margin: 0 40px;
     // max-width: 340px;
     // height: 340px;
     // flex-shrink: 0;
@@ -144,8 +149,10 @@ const actions = [
     }
   }
 
-  &:hover {
-    top: -8px;
+  @media (hover: hover) {
+    &:hover {
+      top: -8px;
+    }
   }
   &:before {
     content: '';
@@ -178,9 +185,11 @@ const actions = [
       background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 50%, #02112B 100%);
       transition: $transition;
     }
-    &:hover {
-      &:before {
-        opacity: 0;
+    @media (hover: hover) {
+      &:hover {
+        &:before {
+          opacity: 0;
+        }
       }
     }
   }
@@ -213,8 +222,11 @@ const actions = [
       @media(max-width: $sm) {
         opacity: 1;
       }
-      .action:hover & {
-        opacity: 1;
+
+      @media (hover: hover) {
+        .action:hover & {
+          opacity: 1;
+        }
       }
     }
   }
