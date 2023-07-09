@@ -45,7 +45,7 @@ const actions = [
       }
     }"
     :autoplay="{
-      delay: 1500,
+      delay: 3000,
       disableOnInteraction: true,
     }"
   >
@@ -114,7 +114,7 @@ const actions = [
 
 .action {
   position: relative;
-  transition: opacity $transition;
+  transition: top $transition;
   cursor: pointer;
   top: 0;
   outline: 4px solid rgba(130, 195, 255, 0.3);

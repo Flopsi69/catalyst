@@ -20,11 +20,11 @@
       },
       "onHover": {
         "enable": true,
-        "mode": "bubble",
+        "mode": "slow",
         "parallax": {
           "enable": false,
-          "force": 2,
-          "smooth": 10
+          "force": 10,
+          "smooth": 50
         }
       },
       "resize": {
@@ -81,11 +81,11 @@
         "quantity": 2
       },
       "repulse": {
-        "distance": 400,
-        "duration": 0.4,
+        "distance": 200,
+        "duration": 0.3,
         "factor": 100,
         "speed": 1,
-        "maxSpeed": 50,
+        "maxSpeed": 25,
         "easing": "ease-out-quad",
         "divs": {
           "distance": 200,
@@ -98,8 +98,8 @@
         }
       },
       "slow": {
-        "factor": 3,
-        "radius": 200
+        "factor": 5,
+        "radius": 100
       },
       "trail": {
         "delay": 1,
@@ -134,12 +134,16 @@
       "direction": "bottom",
       "outModes": "out",
       "random": false,
-      "speed": { "min": 4, "max": 13 },
+      "speed": { "min": 4, "max": 15 },
       "straight": false
     },
-    "number": { "density": { "enable": true, "area": 800 }, "value": 80 },
+    "number": {
+      "limit": 80,
+      "density": { "enable": true, "area": 80 },
+      "value": 50
+    },
     "opacity": {
-      "value": { "min": 0.1, "max": 0.5 }
+      "value": { "min": 0.1, "max": 0.6 }
     },
     "shape": {
       "type": "circle"
@@ -151,7 +155,7 @@
   "pauseOnBlur": true,
   "pauseOnOutsideViewport": true,
   "smooth": false,
-  "zLayers": 100,
+  "zLayers": 50,
   "motion": {
     "disable": false,
     "reduce": {
