@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@nuxt/image": "^1.0.0-rc.1",
+    "@pinia/nuxt": "^0.4.11",
+    "@types/node": "^18.14.2",
+    "nuxt": "^3.6.0",
+    "nuxt-svgo": "^3.1.0",
+    "pinia": "^2.1.4",
+    "sass": "^1.58.3",
+    "sass-loader": "^13.2.0"
+  },
+  "dependencies": {
+    "nuxt-swiper": "^1.1.1",
+    "tsparticles": "^2.10.1",
+    "vue3-particles": "^2.10.1"
+  }
+}
