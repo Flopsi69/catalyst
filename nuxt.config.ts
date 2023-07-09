@@ -14,9 +14,9 @@ export default defineNuxtConfig({
   ],
 
   nitro: {
-    preset: 'node-server',
+    // preset: 'node-server',
     output: {
-      dir: 'src/.output',
+      dir: './src',
       //   serverDir: 'src/.output/server',
       //   publicDir: 'src/.output/public',
     },
