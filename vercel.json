@@ -2,7 +2,7 @@
   "builds": [
     {
       "src": "./src",
-      "use": "yarn build",
+      "use": "yarn run build",
       "output": "./src/.output"
     }
   ]
