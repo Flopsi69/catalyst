@@ -3,7 +3,7 @@
     {
       "src": "./src",
       "use": "yarn build",
-      "output": "./dist"
+      "output": "./src/.output"
     }
   ]
 }
