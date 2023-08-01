@@ -1,4 +1,6 @@
 <script setup>
+import { useToast } from "vue-toastification";
+
 import launchpad from '@img/icons/nav-launchpad.svg'
 import leaderboard from '@img/icons/nav-leaderboard.svg'
 import achievements from '@img/icons/nav-achievements.svg'

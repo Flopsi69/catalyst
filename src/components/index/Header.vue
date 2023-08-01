@@ -1,4 +1,6 @@
 <script setup>
+import { useToast } from "vue-toastification";
+
 const langs = reactive([
   {
     title: 'English',

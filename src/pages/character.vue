@@ -3,7 +3,7 @@
 
 // import * from "@esotericsoftware/spine-webgl";
 // import manOptions from "~/config/spine/man/options";
-// import { useToast } from 'vue-toastification'
+import { useToast } from "vue-toastification";
 import incrypt from "@img/character/incrypt-descr.png";
 import paladin from "@img/character/paladin-descr.png";
 import human from "@img/character/human.png";
