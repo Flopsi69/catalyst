@@ -15,7 +15,6 @@ const activeLang = ref(langs[0]);
 const user = useSupabaseUser();
 const supabase = useSupabaseAuthClient();
 
-
 async function signOut() {
   if (user.value) {
     const { error } = await supabase.auth.signOut();
