@@ -391,7 +391,7 @@ console.log('authWallet', authWallet.value)
     & + & {
       margin-left: 36px;
       @media(max-width: $lg) {
-        marign-left: 0;
+        margin-left: 0;
       }
     }
 
