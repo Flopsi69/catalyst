@@ -80,6 +80,10 @@ export default defineNuxtConfig({
 
   css: ['@/assets/scss/global.scss'],
 
+  build: {
+    transpile: ['vue-toastification'],
+  },
+
   vite: {
     css: {
       preprocessorOptions: {
