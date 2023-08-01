@@ -1,62 +1,36 @@
 <script setup>
+// import * as Spine from "@esotericsoftware/spine-webgl";
+
+// import * from "@esotericsoftware/spine-webgl";
+// import manOptions from "~/config/spine/man/options";
+// import { useToast } from 'vue-toastification'
 import incrypt from "@img/character/incrypt-descr.png";
 import paladin from "@img/character/paladin-descr.png";
-
-import orc from "@img/character/orc.png";
-import elf from "@img/character/elf.png";
 import human from "@img/character/human.png";
-import dwarf from "@img/character/dwarf.png";
-import undead from "@img/character/undead.png";
-import goblin from "@img/character/goblin.png";
-
-import class1 from "@img/character/class1.png";
-import class2 from "@img/character/class2.png";
+import iconArrow from "@img/icons/arrow-bold.svg?component";
+import { navigateTo } from "nuxt/app";
 
 definePageMeta({
   layout: false,
+  middleware: ['auth']
 });
 
-const races = reactive([
-  {
-    type: 'orc',
-    img: orc,
-  },
-  {
-    type: 'elf',
-    img: elf,
-  },
-  {
-    type: 'human',
-    img: human,
-  },
-  {
-    type: 'dwarf',
-    img: dwarf,
-  },
-  {
-    type: 'undead',
-    img: undead,
-  },
-  {
-    type: 'goblin',
-    img: goblin,
-  },
-])
+const { data: character} = await useFetch('/api/character');
+console.log('character', character.value);
 
-const classes = reactive([
-  {
-    type: 'class1',
-    img: class1,
-  },
-  {
-    type: 'class2',
-    img: class2,
-  }
-])
+if (character.value) {
+  navigateTo('/quests');
+}
 
-const activeClass = ref('class1');
-const activeRace = ref('elf');
-const sex = ref('male');
+const toast = useToast();
+
+const activeRace = ref(null);
+const activeClass = ref(null);
+const activeSex = ref(null);
+const nickname = ref('');
+const stepsCount = ref(3);
+const step = ref(1);
+
 
 const racesDescr = reactive([
   {
@@ -76,108 +50,76 @@ const racesDescr = reactive([
   }
 ]);
 
-const properties = reactive([
-  {
-    active: 'Skin Color',
-    list: [
-      'Skin Color 1',
-      'Skin Color 2',
-      'Skin Color 3',
-      'Skin Color 4',
-      'Skin Color 5',
-      'Skin Color 6',
-    ]
-  },
-  {
-    active: 'Face',
-    list: [
-      'Face 1',
-      'Face 2',
-      'Face 3',
-      'Face 4',
-      'Face 5',
-      'Face 6',
-    ]
-  },
-  {
-    active: 'Hair Style',
-    list: [
-      'Hair Style 1',
-      'Hair Style 2',
-      'Hair Style 3',
-      'Hair Style 4',
-      'Hair Style 5',
-      'Hair Style 6',
-    ]
-  },
-  {
-    active: 'Hair Color',
-    list: [
-      'Hair Color 1',
-      'Hair Color 2',
-      'Hair Color 3',
-      'Hair Color 4',
-      'Hair Color 5',
-      'Hair Color 6',
-    ]
+
+
+async function handlePlay() {
+  let error = null;
+
+  if (!nickname.value) {
+    error = 'Nickname is required';
+  } else if (nickname.value.length <= 3) {
+    error = 'Nickname is too short. Minimum 3 characters';
+  } else if (nickname.value.length > 12) {
+    error = 'Nickname is too long. Maximum 12 characters';
+  } else if (nickname.value == 'admin') {
+    error = 'Nickname is already taken';
   }
-])
+
+  if (error) {
+    toast.error(error);
+    return false;
+  }
+
+  const character = await $fetch('/api/character', {
+    method: 'post',
+    body: {
+      race: activeRace.value.type,
+      nickname: nickname.value,
+      sex: activeSex.value,
+    }
+  })
+
+  if (character) {
+    console.log('character', character);
+    navigateTo('/quests')
+  }
+}
 </script>
 
 <template>
-  <main class="main">
-    <div class="container flex justify-between">
+  <main class="main flex-center">
+    <!-- <div class="debug debug_brief">
+      <p>Nick: {{ nickname }} {{ nickname.length }}</p>
+      <p>Race: {{ activeRace }}</p>
+      <p>Sex: {{ activeSex }}</p>
+    </div> -->
+    <div class="main__desk container flex justify-between">
       <!-- <img src="@img/bg/character-video-placeholder.png" alt="" /> -->
       <div class="params plate">
-        <div class="params__logo">
+        <div class="params__logo lh-0">
           <img src="@img/logo-blue.png" alt="" />
         </div>
 
-        <div class="choose">
-          <div class="choose__caption text-center fw-700">
-            Choose a character's race
-          </div>
+        <div class="params__races-wrap">
+          <div class="caption">Choose a character's race</div>
 
-          <div
-            class="choose__list bg-dark flex-wrap flex-between ju-center text-center"
-          >
-            <tooltip
-              v-for="race in races"
-              class="choose__item flex-center pointer"
-              :class="{active: activeRace === race.type}"
-              @click="activeRace = race.type"
-              :text="race.type"
-            >
-              <img :src="race.img" alt="" />
-            </tooltip>
-          </div>
+          <CharacterRace
+            @updateRace="(val)=>{activeRace = val}"
+            class="params__races bg-dark flex-wrap flex-between"
+          />
         </div>
 
-        <div class="custom">
-          <div class="custom__caption text-center fw-700">
-            Character customization
-          </div>
-          <div class="custom__list fw-700 lh-1">
-            <div
-              v-for="property in properties"
-              class="custom__item overflow-hidden"
-            >
-              <div class="custom__item-inner flex-center property">
-                <button class="btn btn-gray property__prev property__arrow">
-                  <img src="@img/icons/arrow-solid.svg" alt="" />
-                </button>
-                <div class="property__value">{{ property.active }}</div>
-                <button class="btn btn-gray property__next property__arrow">
-                  <img src="@img/icons/arrow-solid.svg" alt="" />
-                </button>
-              </div>
-            </div>
-          </div>
+        <div class="params__props soon">
+          <div class="caption">Character customization</div>
+
+          <CharacterProps class="params__props-list" />
         </div>
 
-        <button class="btn btn-dark params__apply w-100">Customization</button>
+        <button class="btn btn-dark params__apply w-100 soon">
+          Customization
+        </button>
 
-        <button class="btn btn-blue params__randomize flex-center w-100">
+        <button class="btn btn-blue params__randomize flex-center w-100 soon">
           <img src="@img/icons/randomize.svg" alt="" />
           Randomize
         </button>
@@ -185,37 +127,18 @@ const properties = reactive([
 
       <div class="character">
         <div class="character__head ">
-          <div class="sex flex-between">
-            <div
-              class="sex__male sex__item flex-center pointer"
-              :class="{active: sex === 'male'}"
-              @click="sex='male'"
-            >
-              <img
-                v-show="sex === 'male'"
-                src="@img/icons/male-active.svg"
-                alt=""
-              />
-              <img v-show="sex === 'female'" src="@img/icons/male.svg" alt="" />
-            </div>
-
-            <div
-              class="sex__female sex__item flex-center pointer"
-              :class="{active: sex === 'female'}"
-              @click="sex='female'"
-            >
-              <img
-                v-show="sex === 'female'"
-                src="@img/icons/female-active.svg"
-                alt=""
-              />
-              <img v-show="sex === 'male'" src="@img/icons/female.svg" alt="" />
-            </div>
-          </div>
+          <CharacterSex
+            @updateSex="(val)=>{activeSex= val}"
+            class="flex-between"
+          />
 
           <div class="name">
             <div class="name__inner">
               <input
+                @input="nickname = nickname.replace(/\s/g, '')"
+                @keydown.space.prevent
+                :maxlength="12"
+                v-model.trim="nickname"
                 class="name__input fw-700 w-100 text-center"
                 type="text"
                 placeholder="Nickname"
@@ -224,26 +147,19 @@ const properties = reactive([
           </div>
         </div>
 
-        <div class="avatar">
-          <!-- <img src="@img/temp/man.gif" alt="" /> -->
-          <img src="@img/temp/woman.png" alt="" />
-        </div>
+        <ClientOnly>
+          <div class="avatar" :class="`avatar_${activeSex}`" id="avatar">
+            <img v-if="activeSex === 'male'" src="@img/temp/man.gif" alt="" />
+            <img v-else src="@img/temp/woman.png" alt="" />
+          </div>
+        </ClientOnly>
 
-        <div class="class plate">
+        <div v-if="false" class="character__class plate">
           <div class="class__caption text-center fw-700">
             Choose a character class
           </div>
 
-          <div class="class__list flex-center">
-            <div
-              v-for="classEl in classes"
-              class="class__item flex-center pointer"
-              :class="{active: activeClass === classEl.type}"
-              @click="activeClass = classEl.type"
-            >
-              <img :src="classEl.img" alt="" />
-            </div>
-          </div>
+          <CharacterClass class="character__class-list flex-center" />
         </div>
       </div>
 
@@ -261,20 +177,210 @@ const properties = reactive([
           </div>
         </div>
 
-        <button class="btn btn-blue btn-arrow info__play w-100 uppercase">
+        <button
+          @click="handlePlay"
+          class="btn btn-blue btn-arrow info__play w-100 uppercase"
+        >
           <span>Play</span>
         </button>
+      </div>
+    </div>
+
+    <div class="main__mob container">
+      <div class="avatar" :class="`avatar_${activeSex}`" id="avatar">
+        <img v-if="activeSex === 'male'" src="@img/temp/man.gif" alt="" />
+        <img v-else src="@img/temp/woman.png" alt="" />
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div v-if="step === 1" class="plate step__plate">
+            <div class="pagination flex-center">
+              <div
+                v-for="i in stepsCount"
+                class="pagination__item"
+                :class="{active: i === step}"
+              ></div>
+            </div>
+
+            <div class="caption">Choose your gender</div>
+
+            <CharacterSex
+              @updateSex="(val)=>{activeSex= val}"
+              class="flex-center step__sex"
+            />
+          </div>
+
+          <div v-else-if="step === 2" class="plate step__plate">
+            <div class="pagination flex-center">
+              <div
+                v-for="i in stepsCount"
+                class="pagination__item"
+                :class="{active: i === step}"
+              ></div>
+            </div>
+
+            <div class="caption">Choose a character's race</div>
+
+            <CharacterRace
+              @updateRace="(val)=>{activeRace = val}"
+              class="flex race-list"
+            />
+
+            <div class="race-list__divider"></div>
+
+            <ClientOnly>
+              <template v-if="activeRace">
+                <div class="race-list__value uppercase fw-900">
+                  {{ activeRace.type }}
+                </div>
+                <div class="race-list__descr fw-700">
+                  {{ activeRace.descr }}
+                </div>
+              </template>
+            </ClientOnly>
+          </div>
+
+          <!-- <div v-else-if="step === 3" class="plate step__plate">
+            <div class="pagination flex-center">
+              <div
+                v-for="i in stepsCount"
+                class="pagination__item"
+                :class="{active: i === step}"
+              ></div>
+            </div>
+
+            <div class="caption">Choose a character class</div>
+
+            <CharacterClass
+              @updateRace="(val)=>{activeClass = val}"
+              class="flex-center"
+            />
+
+            <div class="race-list__divider"></div>
+
+            <ClientOnly>
+              <template v-if="activeClass">
+                <div class="race-list__value uppercase fw-900">
+                  {{ activeClass.type }}
+                </div>
+                <div class="race-list__descr fw-700">
+                  {{ activeClass.descr }}
+                </div>
+              </template>
+            </ClientOnly>
+          </div> -->
+
+          <!-- <div v-else-if="step === 3" class="plate step__plate">
+            <div class="pagination flex-center">
+              <div
+                v-for="i in stepsCount"
+                class="pagination__item"
+                :class="{active: i === step}"
+              ></div>
+            </div>
+
+            <CharacterProps />
+          </div> -->
+          <div v-else-if="step === 3" class="plate step__plate">
+            <div class="pagination flex-center">
+              <div
+                v-for="i in stepsCount"
+                class="pagination__item"
+                :class="{active: i === step}"
+              ></div>
+            </div>
+
+            <div class="caption">Enter the character's nickname</div>
+
+            <div class="name">
+              <div class="name__inner">
+                <input
+                  @input="nickname = nickname.replace(/\s/g, '')"
+                  @keydown.space.prevent
+                  :maxlength="12"
+                  v-model.trim="nickname"
+                  class="name__input fw-700 w-100 text-center"
+                  type="text"
+                  placeholder="Nickname"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Steps control -->
+        <div class="control">
+          <button
+            class="btn btn-dark control__btn flex-center control__btn-prev uppercase"
+            :class="{disabled: step === 1}"
+            @click="step = step > 1 ? step - 1 : step"
+          >
+            <icon-arrow />
+            Back
+          </button>
+
+          <button
+            class="btn btn-blue control__btn flex-center control__btn-next uppercase"
+            @click="step < stepsCount ? step++ : handlePlay()"
+          >
+            {{ step < stepsCount ? "Next" : "Play" }} {{ step }} /
+            {{ stepsCount }}
+            <icon-arrow />
+          </button>
+        </div>
       </div>
     </div>
   </main>
 </template>
 
 <style lang="scss" scoped>
+.soon {
+  filter: grayscale(1);
+  // opacity: .9;
+  pointer-events: none;
+}
 .main {
+  position: relative;
   padding: 24px 0;
   min-height: 100vh;
   background: url('@img/bg/character.jpeg') no-repeat center top;
   background-size: cover;
+  @media(max-width: $md) {
+    background: url('@img/bg/character-mob.jpeg') no-repeat center;
+    background-size: cover;
+    padding-bottom: 120px;
+    &:after {
+      position: absolute;
+      height: 200px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #070B1A;
+      box-shadow: 0px 0px 24px 18px #070B1A;
+    }
+  }
+
+  &__desk {
+    @media(max-width: $md) {
+      display: none;
+    }
+  }
+  &__mob {
+    display: none;
+    @media(max-width: $md) {
+      display: block;
+    }
+  }
+}
+
+.caption {
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 20px;
+  @media(max-width: $md) {
+    margin-bottom: 16px;
+  }
 }
 
 .plate {
@@ -315,6 +421,21 @@ const properties = reactive([
     }
   }
 
+  &__races {
+    padding: 15px;
+    border-radius: 32px;
+    &-wrap {
+      margin-top: 24px;
+    }
+  }
+
+  &__props {
+    margin-top: 32px;
+    &-list {
+      margin-top: 18px;
+    }
+  }
+
   &__apply {
     height: 55px;
     margin-top: 16px;
@@ -329,105 +450,27 @@ const properties = reactive([
   }
 }
 
-.choose {
-  margin-top: 24px;
-  &__list {
-    padding: 15px;
-    border-radius: 32px;
-    margin-top: 20px;
+.race-list {
+  overflow-x: auto;
+  padding: 20px 24px;
+  margin: -20px -24px;
+  gap: 12px;
+
+  &__divider {
+    height: 1px;
+    background: linear-gradient(90deg, rgba(114, 111, 155, 0.15) 0%, rgba(114, 111, 155, 0.50) 48.96%, rgba(114, 111, 155, 0.15) 100%);
+    margin: 20px 0 12px;
   }
 
-  &__item {
-    position: relative;
-    width: 60px;
-    height: 60px;
-    &:deep(.tooltip__value) {
-      padding: 11px 8px;
-      min-width: 65px;
-      background-color: $gray600;
-      &:before {
-        background-color: $gray600;
-      }
-    }
-    &:before {
-      content: '';
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 60px;
-      height: 60px;
-      background-image: url('@img/character/bg.svg');
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: contain;
-      transition: $transition;
-      pointer-events: none;
-    }
-    &:hover {
-      &:before {
-        background-image: url('@img/character/bg-hover.svg');
-      }
-    }
-    &:nth-child(1n + 4) {
-      margin-top: 16px;
-    }
-
-    img {
-      width: 45px;
-      transition: $transition;
-    }
-
-    &.active {
-      img {
-        width: 48px;
-      }
-
-      &:before {
-        width: 100px;
-        height: 100px;
-        background-image: url('@img/character/bg-active.png');
-      }
-    }
-  }
-}
-
-.custom {
-  margin-top: 32px;
-  &__list {
-    margin-top: 18px;
+  &__value {
+    font-family: $f-un;
+    font-size: 14px;
   }
 
-  &__item {
-    border-radius: 18px;
-    background: #000 linear-gradient(to bottom, rgba(0, 0, 0, 0) 5%, #177AF7 50%, rgba(0, 0, 0, 0) 95%);
-    &-inner {
-      width: calc(100% - 8px);
-      margin: auto;
-      border-radius: 20px;
-      background: #000;
-    }
-    & + & {
-      margin-top: 12px;
-    }
-  }
-}
-
-.property {
-  padding: 12px;
-  font-size: 14px;
-  &__arrow {
-    border-radius: 128px;
-    width: 42px;
-    height: 32px;
-    padding: 0 4px 0 0;
-  }
-  &__prev {
-    margin-right: auto;
-  }
-  &__next {
-    margin-left: auto;
-    transform: rotate(180deg);
+  &__descr {
+    margin-top: 14px;
+    font-size: 13px;
+    letter-spacing: -0.26px;
   }
 }
 
@@ -437,47 +480,10 @@ const properties = reactive([
     width: 164px;
     margin: auto;
   }
-}
-
-
-.sex {
-  &__item {
-    position: relative;
-    width: 64px;
-    height: 64px;
-    &:before {
-      content: '';
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 64px;
-      height: 64px;
-      background-image: url('@img/icons/sex-bg.svg');
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: contain;
-      transition: $transition;
-      pointer-events: none;
-    }
-
-    &:hover {
-      &:before {
-        background-image: url('@img/character/bg-hover.svg');
-      }
-    }
-
-    img {
-      position: relative;
-      width: 30px;
-    }
-
-    &.active {
-      &:before {
-        width: 100px;
-        height: 100px;
-        background-image: url('@img/icons/sex-bg-active.png');
-      }
+  &__class {
+    margin-top: 10px;
+    &-list {
+      margin-top: 20px;
     }
   }
 }
@@ -486,6 +492,10 @@ const properties = reactive([
   margin-top: 20px;
   border-radius: 18px;
   background: #000 linear-gradient(to bottom, rgba(0, 0, 0, 0) 5%, #177AF7 50%, rgba(0, 0, 0, 0) 95%);
+  @media(max-width: $md) {
+    max-width: 175px;
+    margin: 24px auto 0;
+  }
   &__inner {
     width: calc(100% - 8px);
     margin: auto;
@@ -499,62 +509,20 @@ const properties = reactive([
 }
 
 .avatar {
+  text-align: center;
   margin-top: 30px;
+  @media(max-width: 992px) {
+    margin-top: 0;
+  }
   img {
-    max-width: 290px;
-    margin-left: -8%;
+    max-height: 555px;
+    @media(max-width: 992px) {
+      max-height: 70vh;
+    }
   }
-}
-
-.class {
-  margin-top: 10px;
-  &__list {
-    margin-top: 20px;
-  }
-  &__item {
-    position: relative;
-    width: 60px;
-    height: 60px;
-    & + & {
-      margin-left: 35px;
-    }
-    &:before {
-      content: '';
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 60px;
-      height: 60px;
-      background-image: url('@img/character/bg.svg');
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: contain;
-      transition: $transition;
-      pointer-events: none;
-    }
-
-    &:hover {
-      &:before {
-        background-image: url('@img/character/bg-hover.svg');
-      }
-    }
-
+  &_male {
     img {
-      width: 45px;
-      transition: $transition;
-    }
-
-    &.active {
-      img {
-        width: 48px;
-      }
-
-      &:before {
-        width: 100px;
-        height: 100px;
-        background-image: url('@img/character/bg-active.png');
-      }
+      margin-left: -15%;
     }
   }
 }
@@ -568,7 +536,7 @@ const properties = reactive([
     font-weight: 900;
     font-size: 18px;
     height: 64px;
-    margin-top: 50px;
+    margin-top: 30px;
     box-shadow: 0px 0px 24px 0px #00A3FF inset;
   }
 }
@@ -634,6 +602,96 @@ const properties = reactive([
     &::-webkit-scrollbar-thumb {
       background: $gray900;
       border-radius: 128px;
+    }
+  }
+}
+
+.control {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 17px;
+  margin-top: 12px;
+  &__btn {
+    font-family: $f-un;
+    font-size: 18px;
+    font-weight: 900;
+    border-radius: 18px;
+    padding: 18px 10px;
+    &.disabled {
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    svg {
+      fill: $white;
+      width: 18px;
+      margin-left: 10px;
+    }
+
+    &-prev {
+      border: 1px solid $gray600;
+      svg {
+        margin-left: 0;
+        margin-right: 10px;
+        transform: rotate(180deg);
+        fill: $gray700;
+      }
+    }
+
+  }
+}
+
+.steps {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+}
+
+.step {
+  &__plate {
+    padding: 24px;
+  }
+
+  &__sex {
+    margin-top: 25px;
+    padding-bottom: 10px;
+    gap: 24px;
+  }
+}
+
+.pagination {
+  margin-bottom: 18px;
+  &__item {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid $white;
+    opacity: 0.3;
+    transition: $transition;
+    &:before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: $white;
+      transition: $transition;
+      opacity: 0;
+    }
+    &.active {
+      border-color: $white;
+      opacity: 1;
+      &:before {
+        opacity: 1;
+      }
+    }
+    & + & {
+      margin-left: 8px;
     }
   }
 }

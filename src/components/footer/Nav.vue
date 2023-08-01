@@ -5,7 +5,7 @@ const cols = reactive([
     links: [
       {
         title: 'AlfaPlatform',
-        url: '#'
+        url: '/'
       },
       {
         title: 'Careers',

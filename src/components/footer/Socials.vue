@@ -49,6 +49,7 @@ const socials = reactive([
 <template>
   <div class="socials">
     <a
+      @click.prevent
       v-for="social of socials"
       :href="social.url"
       class="socials__link flex-center lh-0"

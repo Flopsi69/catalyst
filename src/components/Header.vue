@@ -3,6 +3,14 @@ import launchpad from '@img/icons/nav-launchpad.svg'
 import leaderboard from '@img/icons/nav-leaderboard.svg'
 import achievements from '@img/icons/nav-achievements.svg'
 
+useHead({
+  bodyAttrs: {
+    class: 'fixed-nav'
+  }
+})
+
+const toast = useToast();
+
 const nav = reactive([
   {
     title: 'Launchpad',
@@ -25,65 +33,109 @@ const nav = reactive([
 const stats = reactive([
   {
     type: 'diamonds',
-    value: 652,
+    value: 0,
   },
   {
     type: 'gold',
-    value: 175,
+    value: 0,
   },
   {
     type: 'stardust',
-    value: 380,
+    value: 0,
   },
 ])
 
-const chains = reactive([
-  {
-    icon: 'ethereum',
-    name: 'Ethereum'
+// const isBurgerActive = ref(false);
+
+// Web3
+const { address, isConnected } = useAccount();
+const { chain, chains } = useNetwork();
+
+const { connect, connectors } = useConnect({
+    onError(error) {
+    // console.log('errorConnect', error)
+      if (!connectors.value[0].ready) {
+        return toast.error('Metamask not installed!')
+      }
+      toast.error(error.message)
+    },
+    onSuccess({account, connector: { name }}) {
+      console.log('Connect', name)
+      toast.success(`${name}: ${account.slice(0, 6)}***${account.slice(-4)}\nSuccessfully connected!`)
+    }
+})
+
+const { disconnect } = useDisconnect({
+  onError(error) {
+    console.log('errorDisconnect', error)
+    toast.error(error.shortMessage)
   },
-  {
-    icon: 'polygon',
-    name: 'Polygon'
+  onSuccess(data) {
+    toast("Wallet disconnected!")
   },
-  {
-    icon: 'bnb',
-    name: 'BNB Smarn Chain'
-  },
-  {
-    icon: 'avalanche',
-    name: 'Avalanche'
-  },
-  {
-    icon: 'kcc',
-    name: 'KCC'
-  },
-  {
-    icon: 'arbitrum',
-    name: 'Arbitrum One'
-  },
-  {
-    icon: 'optimism',
-    name: 'Optimism'
-  },
-  {
-    icon: 'okx',
-    name: 'OKX Chain'
+});
+const { error, isLoading, pendingChainId, switchNetwork } =
+  useSwitchNetwork({
+    throwForSwitchChainNotSupported: true,
+    onError(err) {
+      const errorMessage = err.shortMessage ? err.shortMessage : err.message ? err.message : err;
+      toast.error(errorMessage)
+    },
+    onSuccess(data) {
+      console.log(data)
+      toast.success(`Successfully switched to ${data.name}!`)
+    },
+  });
+
+const user = useSupabaseUser();
+console.log(user.value)
+const supabase = useSupabaseAuthClient();
+
+
+async function signOut() {
+  if (!user.value) return toast.error('You are not logged in');
+
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    return toast.error(error.message)
   }
-]);
 
-const isBurgerActive = ref(false);
+  toast.info("Successfully signed out!");
+  navigateTo('/');
+}
 
-const activeChain = ref(chains[0]);
+watch(chain,
+  (chain) => {
+    console.log('watchCahin', chain)
+    if (chain?.unsupported && chains.value[0]?.id) {
+      // switchNetwork(chains.value[0]?.id)
+      toast.error('Unsupported network')
+    }
+  }
+)
+
+const authWallet = computed(() => {
+  return address.value || user.value?.user_metadata?.walletAddress
+})
+
+console.log('authWallet', authWallet.value)
 </script>
 
 <template>
+  <!-- <client-only>
+    <div v-if="status === 'authenticated' || address" class="debug">
+      <p v-if="address">Address: {{ address }}</p>
+      <p v-if="data">{{ data }}</p>
+    </div>
+  </client-only> -->
+
   <header class="header container">
     <div class="header__inner head-decor flex align-center">
       <!-- Logo -->
-      <NuxtLink class="header__logo logo" to="/">
+      <div class="header__logo logo">
         <img src="@img/logo.svg" alt="" />
-      </NuxtLink>
+      </div>
 
       <!-- Nav -->
       <nav class="header__nav nav flex align-center">
@@ -98,7 +150,7 @@ const activeChain = ref(chains[0]);
       </nav>
 
       <!-- Stats -->
-      <div class="stats flex align-center">
+      <div class="stats header__stats flex align-center">
         <tooltip
           v-for="{ value, type } of stats"
           class="stat stats__item flex align-center fw-700"
@@ -112,82 +164,147 @@ const activeChain = ref(chains[0]);
       </div>
 
       <!-- Wallet -->
-      <div class="dropdowns flex">
-        <dropdown class="wallet">
-          <template #trigger>
-            <div class="network wallet__dropdown flex align-center">
-              <div class="wallet__icon flex align-center justify-center">
-                <img :src="`/images/chains/${activeChain.icon}.svg`" alt="" />
-              </div>
-              <div class="wallet__info">
-                <div class="wallet__label fw-700">Network</div>
-                <div class="wallet__value dropdown__icon fw-700">
-                  {{ activeChain.name }}
-                </div>
-              </div>
-            </div>
-          </template>
+      <client-only>
+        <div v-if="user" class="wallet__wrap flex align-center">
+          <button
+            v-if="!isConnected"
+            @click="isConnected ? disconnect() : connect({connector: connectors[0]})"
+            class="btn btn-blue btn-icon header__connect"
+          >
+            <img src="@img/icons/wallet.svg" alt="" />
+            {{ isConnected ? "Disconnect" : "Connect" }} Wallet
+          </button>
 
-          <template #body>
-            <div class="chains fw-700">
-              <div
-                v-for="chain of chains"
-                class="chain flex align-center"
-                :class="{ active: activeChain.name === chain.name }"
-                @click="activeChain = chain"
-              >
-                <div class="chain__icon flex-center lh-0">
+          <dropdown v-if="isConnected" md="right" class="wallet">
+            <template #trigger>
+              <div class="network wallet__dropdown flex align-center">
+                <div class="wallet__icon flex align-center justify-center">
                   <img
-                    :src="`/images/chains/${activeChain.name === chain.name ? 'active' : chain.icon}.svg`"
+                    :src="`/images/chains/${chain.unsupported ? 'unsupported' : chain.network}.svg`"
                     alt=""
                   />
                 </div>
-                <div>
-                  {{ chain.name }}
+                <div class="wallet__info">
+                  <div class="wallet__label fw-700">Network</div>
+                  <div class="wallet__value dropdown__icon fw-700">
+                    {{ chain.name }}
+                  </div>
                 </div>
               </div>
-            </div>
-          </template>
-        </dropdown>
+            </template>
 
-        <dropdown class="wallet">
-          <template #trigger>
-            <div class="network wallet__dropdown flex align-center">
-              <div class="wallet__icon flex align-center justify-center">
-                <img src="@img/icons/wallet.svg" alt="" />
-              </div>
-              <div class="wallet__info">
-                <div class="wallet__label fw-700">Wallet</div>
-                <div class="wallet__value dropdown__icon fw-700">
-                  0xm4•••5sbpp
+            <template #body>
+              <div class="chains fw-700">
+                <div
+                  v-for="chainItem of chains"
+                  class="chain flex align-center"
+                  @click="switchNetwork(chainItem.id)"
+                  :class="{ active: chain.id === chainItem.id }"
+                >
+                  <div class="chain__icon flex-center lh-0">
+                    <img
+                      :src="`/images/chains/${chain.id === chainItem.id ? 'active' : chainItem.network}.svg`"
+                      :alt="chainItem.name"
+                    />
+                  </div>
+                  <div>{{ chainItem.name }}</div>
                 </div>
               </div>
-            </div>
-          </template>
+            </template>
+          </dropdown>
 
-          <template #body>
-            <div class="profile fw-700">
-              <NuxtLink to="/character" class="profile__item flex align-center">
-                <img src="@img/icons/profile.svg" alt="" />
-                <span>Profile</span>
-              </NuxtLink>
-              <div class="profile__divider"></div>
-              <div class="profile__item flex align-center">
-                <img src="@img/icons/disconnect.svg" alt="" />
-                <span>Disconnect</span>
+          <dropdown md="right" class="wallet">
+            <template #trigger>
+              <div class="wallet__dropdown flex align-center">
+                <div class="wallet__icon flex align-center justify-center">
+                  <img
+                    :src="`images/icons/${authWallet ? 'wallet' : 'email'}-placeholder.svg`"
+                    alt=""
+                  />
+                </div>
+                <div class="wallet__info">
+                  <div class="wallet__label fw-700">
+                    {{authWallet ? "Wallet" : "E-mail"}}
+                  </div>
+                  <div class="wallet__value dropdown__icon fw-700">
+                    <template v-if="authWallet">
+                      {{ authWallet.slice(0, 3) + '...' + authWallet.slice(-3) }}
+                    </template>
+                    <template v-else>
+                      {{ user.email }}
+                    </template>
+                  </div>
+                </div>
               </div>
-            </div>
-          </template>
-        </dropdown>
-      </div>
+            </template>
 
-      <button
+            <template #body>
+              <div class="profile fw-700">
+                <div class="profile__mobile">
+                  <!-- Profile Wallet -->
+                  <div class="wallet__summary flex align-center">
+                    <div class="wallet__icon flex align-center justify-center">
+                      <img
+                        :src="`images/icons/${authWallet ? 'wallet' : 'email'}-placeholder.svg`"
+                        alt=""
+                      />
+                    </div>
+                    <div class="wallet__info flex-grow">
+                      <div class="wallet__label fw-700">
+                        {{ authWallet ? "Wallet" : "E-mail" }}
+                      </div>
+                      <div class="wallet__value fw-700">
+                        <template v-if="authWallet">
+                          {{ authWallet.slice(0, 3) + '...' + authWallet.slice(-3) }}
+                        </template>
+                        <template v-else>
+                          {{ user.email }}
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Profile stats -->
+                  <div class="stats profile__stats flex align-center">
+                    <tooltip
+                      v-for="{ value, type } of stats"
+                      class="stat stats__item flex align-center fw-700"
+                      :class="`stat_${type}`"
+                      placement="bottom"
+                      :text="type"
+                      :isArrow="false"
+                    >
+                      {{ value }}
+                    </tooltip>
+                  </div>
+                </div>
+
+                <div class="profile__item flex align-center">
+                  <img src="@img/icons/profile.svg" alt="" />
+                  <span>Profile</span>
+                </div>
+                <div class="profile__divider"></div>
+                <!-- -->
+                <div
+                  @click="isConnected ? disconnect() : signOut()"
+                  class="profile__item flex align-center"
+                >
+                  <img src="@img/icons/disconnect.svg" alt="" />
+                  <span>Disconnect</span>
+                </div>
+              </div>
+            </template>
+          </dropdown>
+        </div>
+      </client-only>
+
+      <!-- <button
         class="burger"
         :class="{active: isBurgerActive}"
         @click="isBurgerActive = !isBurgerActive"
       >
         <span></span>
-      </button>
+      </button> -->
     </div>
   </header>
 </template>
@@ -196,27 +313,96 @@ const activeChain = ref(chains[0]);
 .header {
   padding-top: 8px;
   padding-bottom: 8px;
+  @media(max-width: $sm) {
+    padding: 0;
+  }
   &__inner {
-    @media(max-width: $lg) {
-      & > *:not(.logo) {
+    box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.55);
+    @media(max-width: $sm) {
+      height: 56px;
+      margin: 0;
+      padding: 10px 16px;
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      z-index: 999;
+      &:before, &:after {
         display: none;
       }
     }
-    box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.55);
+  }
+
+  &__logo {
+    @media(max-width: $md) {
+      margin-right: auto;
+    }
+  }
+
+  &__stats {
+    @media(max-width: $md) {
+      display: none;
+    }
+  }
+
+  &__connect {
+    font-size: 13px;
+    letter-spacing: -0.26px;
+    border-radius: 12px;
+    margin-right: 20px;
+    padding: 13px 10px 11px;
+    @media(max-width: $md) {
+      // order: 1;
+      padding: 9px 10px 8px;
+      margin-right: 10px;
+      // margin-right: 0;
+      // margin-left: 12px;
+    }
   }
 }
 
 .nav {
   margin-left: 24px;
   margin-right: 24px;
+  @media(max-width: $lg) {
+    position: fixed;
+    justify-content: space-evenly;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    background: linear-gradient(180deg, #2A274B 0%, #1D1A32 100%);
+    box-shadow: 0px 8px 32px 0px rgba(0, 0, 0, 0.55);
+    margin: 0;
+    padding: 0 2px;
+  }
   &__link {
     font-size: 14px;
+    @media(max-width: $lg) {
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      padding: 12px 6px 12px;
+    }
+    @media(max-width: $sm) {
+      font-size: 11px;
+      letter-spacing: -0.22px;
+    }
     & + & {
       margin-left: 36px;
+      @media(max-width: $lg) {
+        marign-left: 0;
+      }
     }
 
     img {
       margin-right: 10px;
+      height: 20px;
+      @media(max-width: $lg) {
+        margin-right: 0;
+        height: 24px;
+        margin-bottom: 8px;
+      }
     }
   }
 }
@@ -226,6 +412,9 @@ const activeChain = ref(chains[0]);
   &__item {
     & + & {
       margin-left: 24px;
+      @media(max-width: $sm) {
+        margin-left: 15px;
+      }
     }
   }
 }
@@ -262,30 +451,14 @@ const activeChain = ref(chains[0]);
   }
 }
 
-.dropdowns {
-  position: relative;
-  margin-left: 12px;
-  padding-left: 12px;
-  &:before {
-    content: '';
-    position: absolute;
-    background-color: $gray700;
-    opacity: 0.3;
-    width: 1px;
-    height: 26px;
-    top: 50%;
-    margin-top: -13px;
-    left: 0;
-  }
-}
-
 .chains {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-  // display: flex;
-  // flex-wrap: wrap;
   font-size: 14px;
+  @media(max-width: $md) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .chain {
@@ -380,9 +553,14 @@ const activeChain = ref(chains[0]);
     padding: 8px 10px;
     transition: $transition;
     cursor: pointer;
-    &:hover {
-      background-color: $gray600;
-      border-radius: 8px;
+    @media(max-width: $md) {
+      padding: 12px 4px;
+    }
+    @media(hover:hover) {
+      &:hover {
+        background-color: $gray600;
+        border-radius: 8px;
+      }
     }
     img {
       margin-right: 8px;
@@ -398,12 +576,50 @@ const activeChain = ref(chains[0]);
     height: 1px;
     background-color: $gray600;
     margin: 5px 0 12px;
+    @media(max-width: $md) {
+      margin: 0;
+    }
+  }
+
+  &__mobile {
+    display: none;
+    @media(max-width: $md) {
+      display: block;
+    }
+  }
+
+  &__stats {
+    padding: 12px 0;
+    margin-top: 12px;
+    border-top: 1px solid $gray600;
+    border-bottom: 1px solid $gray600;
   }
 }
 
 .wallet {
+  &__wrap {
+    position: relative;
+    margin-left: 12px;
+    padding-left: 12px;
+    flex-shrink: 0;
+    &:before {
+      content: '';
+      position: absolute;
+      background-color: $gray700;
+      opacity: 0.3;
+      width: 1px;
+      height: 26px;
+      top: 50%;
+      margin-top: -13px;
+      left: 0;
+    }
+  }
+
   & + & {
-    margin-left: 28px;
+    margin-left: 20px;
+    @media(max-width: $sm) {
+      margin-left: 12px;
+    }
   }
 
   &__icon {
@@ -431,6 +647,10 @@ const activeChain = ref(chains[0]);
     width: 110px;
     overflow: hidden;
     white-space: nowrap;
+    @media(max-width: $md) {
+      width: 150px;
+      text-overflow: ellipsis;
+    }
     &:before {
       content: '';
       position: absolute;
@@ -442,6 +662,47 @@ const activeChain = ref(chains[0]);
       height: 100%;
       background: $gray600;
       background: linear-gradient(to right, rgba(#201e39,0) 0%, #201e39 85%);
+      @media(max-width: $md) {
+        display: none;
+      }
+    }
+  }
+
+  &__dropdown {
+    @media(max-width: $md) {
+      .wallet {
+        &__info {
+          display: none;
+        }
+        &__icon {
+          position: relative;
+          margin-right: 0;
+          padding: 3px;
+          border-radius: 128px;
+          height: 30px;
+          width: 46px;
+          justify-content: flex-start;
+          img {
+            max-width: 24px;
+            max-height: 24px;
+          }
+
+          &:after {
+            content: "";
+            position: absolute;
+            right: 9px;
+            top: auto;
+            width: 4px;
+            height: 12px;
+            background: url('@img/icons/dropdown.svg') no-repeat center center;
+            background-size: contain;
+
+            .active & {
+              filter: invert(100%) sepia(100%) saturate(38%) hue-rotate(321deg) brightness(110%) contrast(110%);
+            }
+          }
+        }
+      }
     }
   }
 }

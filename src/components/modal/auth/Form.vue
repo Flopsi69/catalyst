@@ -1,20 +1,44 @@
 <script setup>
+import { SiweMessage } from "siwe";
 // import { useModalStore } from '~/stores/modal';
 // const { close } = useModalStore();
 
 import close from "@img/icons/close.svg?component"
 
+const { $modal } = useNuxtApp();
+const toast = useToast();
+
 const isShowPassword = ref(false)
 const currentTab = ref('signup');
-
 const authData = reactive({
   email: '',
   password: '',
   confirmPassword: '',
-  isAgree: false
+  isAgree: false,
+  isAgreeError: false
 });
 
 
+// Web3
+const { address, isConnected } = useAccount();
+const { connectAsync, connectors } = useConnect({
+    onSuccess({account, connector: { name }}) {
+      console.log('Connect', name)
+      toast.success(`${name}: ${account.slice(0, 6)}***${account.slice(-4)}\nSuccessfully connected!`)
+    }
+})
+const { disconnect } = useDisconnect({
+  onError(error) {
+    console.log('error', error)
+    toast.error(error.shortMessage)
+  },
+  onSuccess(data) {
+    useToast()("Wallet disconnected!")
+  },
+});
+const { signMessageAsync } = useSignMessage()
+
+// Web2
 const validatePassword = reactive([
   {
     caption: 'Minimum',
@@ -54,14 +78,211 @@ const validatePassword = reactive([
 ]);
 
 
-const validateForm = () => {
+const isValidatedForm = (type) => {
   const { email, password, confirmPassword, isAgree } = authData;
-  const isEmailValid = email.length > 0;
-  const isPasswordValid = password.length > 0;
-  const isConfirmPasswordValid = confirmPassword.length > 0;
-  const isAgreeValid = isAgree;
+  authData.isAgreeError = false;
+  console.log(type, password, confirmPassword)
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-  return isEmailValid && isPasswordValid && isConfirmPasswordValid && isAgreeValid;
+  if (!emailPattern.test(email)) {
+    toast.error(`Email Invalid!`)
+    return false;
+  }
+
+  for (let rule of validatePassword) {
+    if (!rule.validate(password)) {
+      toast.error(`Password Invalid! ${rule.caption}: ${rule.condition}`)
+      return false;
+    }
+  }
+
+  if (type === 'signup') {
+    if (password !== confirmPassword) {
+      toast.error(`Password and Confirm Password are not equal!`)
+      return false;
+    }
+
+    if (!isAgree) {
+      authData.isAgreeError = true;
+      toast.error(`You must agree with Terms & Conditions!`)
+      return false;
+    }
+
+  }
+
+
+
+  return true;
+}
+
+const supabase = useSupabaseAuthClient();
+const user = useSupabaseUser();
+
+async function signOut() {
+  if (user.value) {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      return toast.error(error.message)
+    }
+
+    toast.info("Successfully signed out!");
+  }
+}
+
+async function authGoogle() {
+  const { error, data } = await supabase.auth.signInWithOAuth({
+    provider: 'google'
+  })
+
+  console.log('dataGoogle', data)
+  console.log('errorGoogle', error)
+
+  if (error) {
+    return toast.error(error.message)
+  }
+
+  // // window.reload();
+  // toast.success("You are successfully logged in!")
+  // $modal.close();
+}
+
+async function authUser() {
+  if (user.value) {
+    signOut();
+    return false;
+  }
+
+  const credentions = {
+    email: 'example@email.com',
+    password: 'example',
+  }
+
+  // !1Aaaaaaa
+  if (!isValidatedForm(currentTab.value)) return false;
+
+  if (currentTab.value === 'signup') {
+    // TODO
+    const { error } = await supabase.auth.signUp(authData)
+
+    if (error) {
+      return toast.error(error.message)
+    }
+
+    toast.success('Successfully registered!')
+  } else {
+    const { data, error } = await supabase.auth.signInWithPassword(authData)
+
+    if (error) {
+      return toast.error(error.message)
+    }
+
+    toast.success("You are successfully logged in!")
+  }
+
+  $modal.close();
+  navigateTo('/character');
+}
+
+async function authWeb3() {
+  try {
+    if (!isConnected.value) {
+      console.log('connectors', connectors.value[0])
+      await connectAsync({connector: connectors.value[0]})
+    }
+
+    if (!address.value) {
+      toast.error('Connect your wallet!')
+      return false;
+    }
+
+    const message = new SiweMessage({
+      domain: window.location.host,
+      address: address.value,
+      statement: "Sign in with Ethereum to the app.",
+      uri: window.location.origin,
+      version: "1",
+      chainId: '1'
+    })
+
+    const signature = await signMessageAsync({
+      message: message.prepareMessage(),
+    })
+
+    console.log('message', message)
+    console.log('signature', signature)
+
+    const { user, authData } = await $fetch('/api/auth/wallet', {
+      method: 'POST',
+      body: {
+        message,
+        signature
+      }
+    })
+
+    if (!authData) {
+      throw new Error('Something went wrong! Try again later.')
+    }
+
+    console.log('User', user)
+
+    const { error } = await supabase.auth.signInWithPassword({email: authData.email, password: authData.password });
+
+
+    if (error) {
+      return toast.error(error.message)
+    }
+
+    toast.success("You are successfully logged in!")
+    $modal.close();
+    navigateTo('/character');
+
+
+    // signIn("web3", {
+    //   message: JSON.stringify(message),
+    //   signature
+    //   // callbackUrl,
+    // })
+  } catch (err) {
+    console.log('errorCatch', err)
+    const errorMessage = err.shortMessage ? err.shortMessage : err.message ? err.message : err;
+
+    toast.error(errorMessage)
+  }
+}
+
+async function authGoogle_old() {
+  try {
+    await signIn('google', { redirect: false })
+  } catch (err) {
+    const errorMessage = err.shortMessage ? err.shortMessage : err.message ? err.message : err;
+
+    toast.error(errorMessage)
+    console.log('error', err)
+  }
+}
+
+async function authUser_old() {
+  try {
+    if (currentTab.value === 'signin') {
+      const data = await signIn('standart-credentials', {email: authData.email, password: authData.password, redirect: false})
+      // console.log('fire', data)
+      if (data.error) {
+        // console.log(data.error)
+        // Do your custom error handling here
+        toast.error(data.error)
+      } else {
+        // console.log('fire3', url)
+        // No error, continue with the sign in, e.g., by following the returned redirect:
+        // return navigateTo(url, { external: true })
+      }
+    }
+    } catch (err) {
+    const errorMessage = err.shortMessage ? err.shortMessage : err.message ? err.message : err;
+
+    toast.error(errorMessage)
+    console.log('error', err)
+  }
 }
 </script>
 
@@ -69,7 +290,6 @@ const validateForm = () => {
   <div class="auth">
     <div class="auth__head text-center">
       <img class="auth__logo" src="@img/logo.svg" alt="" />
-
       <div @click="$modal.close" class="modal__close auth__close lh-0">
         <close />
       </div>
@@ -93,13 +313,14 @@ const validateForm = () => {
         </div>
       </div>
 
-      <div class="form">
+      <form class="form">
         <div class="input__group">
           <label class="label input__label" for="">E-mail</label>
           <input
             v-model="authData.email"
             class="input form__input"
             type="email"
+            autocomplete="email"
           />
         </div>
 
@@ -110,6 +331,7 @@ const validateForm = () => {
             v-model="authData.password"
             class="input form__input"
             :type="isShowPassword ? 'text' : 'password'"
+            autocomplete="new-password"
           />
 
           <div class="validation transition bg-dark fw-700">
@@ -138,6 +360,7 @@ const validateForm = () => {
             v-model="authData.confirmPassword"
             class="input form__input"
             :type="isShowPassword ? 'text' : 'password'"
+            autocomplete="new-password"
           />
 
           <div class="validation transition bg-dark fw-700">
@@ -159,7 +382,10 @@ const validateForm = () => {
           />
         </div>
 
-        <button class="btn btn-blue btn-arrow w-100 form__submit">
+        <button
+          @click.prevent="authUser"
+          class="btn btn-blue btn-arrow w-100 form__submit"
+        >
           <span>
             {{ currentTab === 'signup' ? 'Register' : 'Continue' }}
           </span>
@@ -169,20 +395,27 @@ const validateForm = () => {
           <span class="uppercase fw-700 color-blueG">Or</span>
         </div>
 
-        <button class="btn btn-trans w-100 form__btn flex-center">
+        <button
+          @click.prevent="authGoogle"
+          class="btn btn-trans w-100 form__btn flex-center"
+        >
           <img src="@img/icons/google-auth.svg" alt="" />
           Continue with Google
         </button>
 
-        <button class="btn btn-trans w-100 form__btn flex-center">
+        <button
+          @click.prevent="authWeb3"
+          class="btn btn-trans w-100 form__btn flex-center"
+        >
           <img src="@img/icons/metamask-auth.svg" alt="" />
           Metamask
         </button>
 
         <checkbox
           v-if="currentTab === 'signup'"
-          v-model="authData.agreeCheckbox"
+          v-model="authData.isAgree"
           class="agree"
+          :class="{'error': authData.isAgreeError && !authData.isAgree }"
         >
           <div class="agree__label fw-700">
             By register, I agree to the AlfaCatalyst
@@ -191,7 +424,7 @@ const validateForm = () => {
             >
           </div>
         </checkbox>
-      </div>
+      </form>
 
       <!-- <ModalAuthSignup v-show="currentTab === 'signup'" />
       <ModalAuthSignin v-show="currentTab === 'signin'" /> -->

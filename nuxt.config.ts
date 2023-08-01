@@ -1,3 +1,6 @@
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
+import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: [
@@ -8,10 +11,26 @@ export default defineNuxtConfig({
         defaultImport: 'url',
       },
     ],
+    '@nuxtjs/supabase',
+    // '@sidebase/nuxt-auth',
+    '@use-wagmi/nuxt',
     '@nuxt/image',
     ['@pinia/nuxt', { autoImports: ['defineStore'] }],
     'nuxt-swiper',
   ],
+
+  // auth: {
+  //   baseURL: process.env.AUTH_ORIGIN,
+  //   provider: {
+  //     type: 'authjs',
+  //     // addDefaultCallbackUrl: false,
+  //   },
+  //   // baseURL: 'http://localhost:3000/api/auth',
+  //   globalAppMiddleware: {
+  //     isEnabled: true,
+  //     // addDefaultCallbackUrl: false
+  //   },
+  // },
 
   imports: {
     dirs: ['stores'],
@@ -50,6 +69,12 @@ export default defineNuxtConfig({
           href: 'https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500;600;700;800;900&display=swap',
         },
       ],
+      script: [
+        {
+          children:
+            "setTimeout(() => {document.documentElement.classList.add('transition-activated')}, 800)",
+        },
+      ],
     },
   },
 
@@ -61,6 +86,20 @@ export default defineNuxtConfig({
         scss: {
           additionalData: '@import "@/assets/scss/variables";',
         },
+      },
+    },
+    optimizeDeps: {
+      esbuildOptions: {
+        define: {
+          global: 'globalThis', // fix nuxt3 global
+        },
+        plugins: [
+          NodeGlobalsPolyfillPlugin({
+            process: true, // fix nuxt3 process
+            buffer: true,
+          }),
+          NodeModulesPolyfillPlugin(),
+        ],
       },
     },
   },

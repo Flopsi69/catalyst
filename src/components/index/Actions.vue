@@ -54,8 +54,8 @@ const actions = [
       v-for="action in actions"
       :key="action.title"
     >
-      <NuxtLink
-        to="/quests"
+      <div
+        @click="$modal.show('auth')"
         class="action__inner w-100"
         :style="`background-image: url(${action.bg})`"
       >
@@ -68,7 +68,7 @@ const actions = [
             alt=""
           />
         </div>
-      </NuxtLink>
+      </div>
     </SwiperSlide>
   </Swiper>
 

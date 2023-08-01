@@ -25,6 +25,13 @@ function countdownTimer(duration) {
   }, 1000);
 }
 
+
+const { data: character} = await useFetch('/api/character');
+console.log('character', character.value);
+if (!character.value) {
+  navigateTo('/character');
+}
+
 onMounted(() => {
   countdownTimer(3510);
 });
@@ -32,28 +39,40 @@ onMounted(() => {
 
 <template>
   <!-- 1 -->
-  <NuxtLink to="/character" class="metric player">
+  <div v-if="character" class="metric player">
+    <img
+      v-if='character.sex === "male"'
+      class="player__image player__image_male"
+      src="@img/temp/man.gif"
+      alt=""
+    />
+    <img
+      v-if='character.sex === "female"'
+      class="player__image player__image_female"
+      src="@img/temp/woman.png"
+      alt=""
+    />
+
     <div class="metric__info text-center">
       <div class="metric__logo">
         <div class="metric__lvl lh-1 fw-700 flex justify-center align-center">
-          60
+          1
         </div>
-        <!-- <img src="@img/rewards/gold.png" alt="" /> -->
       </div>
 
-      <div class="metric__title uppercase fw-900">Paladin</div>
+      <div class="metric__title uppercase fw-900">{{character.nickname}}</div>
 
       <div class="metric__progress flex">
         <span></span>
       </div>
 
       <div class="metric__value flex justify-center fw-700 align-end">
-        <span class="metric__value-current color-blueG">1500</span>
+        <span class="metric__value-current color-blueG">0</span>
         <span class="metric__value-divider">/</span>
         <span class="metric__value-total">3000</span>
       </div>
     </div>
-  </NuxtLink>
+  </div>
 
   <!-- 2 -->
   <div class="metric">
@@ -72,7 +91,7 @@ onMounted(() => {
       </div>
 
       <div class="metric__value flex justify-center fw-700 align-end">
-        <span class="metric__value-current color-blueG">1500</span>
+        <span class="metric__value-current color-blueG">0</span>
         <span class="metric__value-divider">/</span>
         <span class="metric__value-total">3000</span>
       </div>
@@ -81,33 +100,25 @@ onMounted(() => {
 
   <!-- 3 -->
   <div class="metric">
+    <div
+      class="metric__level metric__level_red text-center fw-700 uppercase lh-1"
+    >
+      <div class="metric__level-value">5</div>
+      <div class="metric__level-caption">lvl</div>
+    </div>
+
     <div class="metric__info text-center">
       <div class="metric__logo">
         <img src="@img/rewards/dungeon.png" alt="" />
       </div>
 
-      <div class="metric__title uppercase fw-500">Dungeon name</div>
+      <div class="metric__title uppercase fw-500">Enter the dungeon</div>
 
       <div class="metric__countdown fw-700 uppercase">
-        {{hours}}<span class="color-gray900">:</span
-        >{{ minutes
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        }}<span class="color-gray900">:</span>
+        {{ hours }}
+        <span class="color-gray900">:</span>
+        {{ minutes }}
+        <span class="color-gray900">:</span>
         <span class="color-blueG">{{ seconds }}</span>
       </div>
     </div>
@@ -115,12 +126,19 @@ onMounted(() => {
 
   <!-- 4 -->
   <div class="metric">
+    <div
+      class="metric__level metric__level_red text-center fw-700 uppercase lh-1"
+    >
+      <div class="metric__level-value">10</div>
+      <div class="metric__level-caption">lvl</div>
+    </div>
+
     <div class="metric__info text-center">
       <div class="metric__logo">
         <img src="@img/rewards/guild.png" alt="" />
       </div>
 
-      <div class="metric__title uppercase fw-500">Guild name</div>
+      <div class="metric__title uppercase fw-500">Join the guild</div>
 
       <button class="btn btn-blue metric__btn">Guild Master</button>
     </div>
@@ -136,7 +154,7 @@ onMounted(() => {
   background: $darkGradient;
   background-size: cover;
   background-position: bottom;
-  &:before {
+  &:not(.player):before {
     content: "";
     position: absolute;
     left: 0;
@@ -151,7 +169,7 @@ onMounted(() => {
     opacity: 0;
     transition: $transition;
   }
-  &:hover:before {
+  &:not(.player):hover:before {
     opacity: 1;
   }
   &:nth-child(1)  {
@@ -165,6 +183,11 @@ onMounted(() => {
   }
   &:nth-child(4)  {
     background-image: url('@img/bg/metric-guild.png');
+  }
+
+  &__info {
+    position: relative;
+    z-index: 2;
   }
 
   &__title {
@@ -204,7 +227,30 @@ onMounted(() => {
     letter-spacing: -0.32px;
   }
 
+  &__level {
+    position: absolute;
+    width: 42px;
+    height: 37px;
+    right: 30px;
+    top: 0;
+    padding-top: 4px;
+    background: url('@img/bg/lvl.svg') center no-repeat;
+    background-size: contain;
+    letter-spacing: -0.02em;
+    font-size: 13px;
+    @media(max-width: $sm) {
+      right: 0;
+    }
+    &_red {
+      background-image: url('@img/bg/lvl-red.svg');
+    }
+    &-caption {
+      font-size: 11px;
+    }
+  }
+
   &__progress {
+    overflow: hidden;
     background: $dark;
     box-shadow: inset 0px 4px 12px #3F4D80;
     border-radius: 128px;
@@ -216,7 +262,7 @@ onMounted(() => {
       height: 7px;
     }
     span {
-      width: 50%;
+      width: 1%;
       border-radius: 128px;
       background: $blueG;
     }
@@ -261,6 +307,33 @@ onMounted(() => {
     @media(max-width: $sm) {
       font-size: 12px;
       padding: 8px 16px;
+    }
+  }
+}
+
+.player {
+  overflow: hidden;
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(#000, .6);
+    filter: blur(24px);
+    height: 60px;
+    z-index: 1;
+  }
+  &__image {
+    position: absolute;
+    pointer-events: none;
+    top: 15%;
+    left: -10%;
+    right: 0;
+    transform: scale(1.2);
+    max-height: initial;
+    &_female {
+      left: 0;
     }
   }
 }

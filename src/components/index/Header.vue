@@ -4,20 +4,27 @@ const langs = reactive([
     title: 'English',
     brief: 'en',
     url: '#',
-  },
-  {
-    title: 'Russian',
-    brief: 'Ru',
-    url: '#',
-  },
-  {
-    title: 'Spanish',
-    brief: 'Sp',
-    url: '#',
   }
 ]);
 
+const toast = useToast();
+
 const activeLang = ref(langs[0]);
+const user = useSupabaseUser();
+const supabase = useSupabaseAuthClient();
+
+
+async function signOut() {
+  if (user.value) {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      return toast.error(error.message)
+    }
+
+    toast.info("Successfully signed out!");
+  }
+}
 </script>
 
 <template>
@@ -46,17 +53,17 @@ const activeLang = ref(langs[0]);
               @click="activeLang = lang"
             >
               {{lang.title}}
-              <!-- <img src="@img/icons/check-blue.svg" alt="" /> -->
             </div>
           </template>
         </dropdown>
 
         <!-- CTA -->
+        <!-- @click="status === 'authenticated' || user ? signOut() : $modal.show('auth')" -->
         <button
-          @click="$modal.show('auth')"
+          @click="user ? signOut() : $modal.show('auth')"
           class="btn btn-blue btn_square uppercase header__btn"
         >
-          Join platform
+          {{ user ? 'Log Out' : 'Join platform' }}
         </button>
       </div>
     </div>

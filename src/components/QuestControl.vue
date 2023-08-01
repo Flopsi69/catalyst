@@ -15,9 +15,9 @@ const sort = ref('trending')
           <div class="rewards__caption uppercase fw-900">Daily reward</div>
 
           <div class="rewards__stars flex align-center lh-0">
-            <div class="rewards__star active"></div>
-            <div class="rewards__star active"></div>
-            <div class="rewards__star active"></div>
+            <div class="rewards__star"></div>
+            <div class="rewards__star"></div>
+            <div class="rewards__star"></div>
             <div class="rewards__star"></div>
             <div class="rewards__star"></div>
             <div class="rewards__star"></div>

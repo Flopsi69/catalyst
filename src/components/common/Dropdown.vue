@@ -4,6 +4,10 @@ defineProps({
     type: String,
     default: 'left',
   },
+  md: {
+    type: String,
+    default: null
+  }
 });
 const isActive = ref(false);
 const dropdown = ref(null)
@@ -33,7 +37,7 @@ onMounted(() => {
     <div
       v-show="isActive"
       class="dropdown__body"
-      :class="`dropdown__body_${placement}`"
+      :class="[`dropdown__body_${placement}`, md ? `dropdown__body_md-${md}` : '']"
     >
       <slot name="body"> </slot>
     </div>
@@ -53,6 +57,9 @@ onMounted(() => {
     background: rgba(22, 21, 40, 0.7);
     box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.10), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 15px 24px 0px rgba(0, 0, 0, 0.19), 0px 51px 80px 0px rgba(0, 0, 0, 0.29);
     backdrop-filter: blur(16px);
+    @media(max-width: $md) {
+      background: rgba(22, 21, 40, 0.8);
+    }
     &_left {
       left: 0;
     }
@@ -61,6 +68,15 @@ onMounted(() => {
     }
     &_center {
       left: 50%;
+      transform: translateX(-50%);
+    }
+    &_md-right {
+      right: 0;
+      left: initial;
+    }
+    &_md-center {
+      left: 50%;
+      right: initial;
       transform: translateX(-50%);
     }
   }

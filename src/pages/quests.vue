@@ -1,4 +1,144 @@
-<script lang="ts" setup></script>
+<script setup>
+definePageMeta({
+  middleware: 'auth'
+});
+
+const questList = reactive([
+  {
+    title: 'Ethereum wetlands',
+    caption: 'AlfaCatalyst',
+    img: 'wetlands.png',
+    lvl: 1,
+    isActive: true,
+    rewards: [
+      {
+        value: 'Mystery box',
+        icon: 'mystery.png',
+      }
+    ],
+  },
+  {
+    title: 'P2P forest',
+    caption: 'Partner Label',
+    img: 'forest.png',
+    lvl: 10,
+    isActive: false,
+    rewards: [
+      {
+        value: 100,
+        icon: 'xp.svg',
+      },
+      {
+        value: 100,
+        icon: 'stardust.svg',
+      },
+      {
+        value: 200,
+        icon: 'gold.svg',
+      }
+    ],
+  },
+  {
+    title: 'Foothills IDO',
+    caption: 'Partner Label',
+    img: 'foothills.png',
+    lvl: 15,
+    isActive: false,
+    rewards: [
+      {
+        value: 100,
+        icon: 'xp.svg',
+      },
+      {
+        value: 100,
+        icon: 'stardust.svg',
+      },
+      {
+        value: 'NFT',
+        icon: 'nft.svg',
+      }
+    ],
+  },
+  {
+    title: 'Ice Platform',
+    caption: 'Partner Label',
+    img: 'ice-platform.png',
+    lvl: 20,
+    isActive: false,
+    rewards: [
+      {
+        value: 100,
+        icon: 'xp.svg',
+      },
+      {
+        value: 100,
+        icon: 'stardust.svg',
+      },
+      {
+        value: '50 000',
+        icon: 'tether.svg',
+      }
+    ],
+  },
+  {
+    title: 'Desert of Regulation',
+    caption: 'Partner Label',
+    img: 'desert.png',
+    lvl: 25,
+    isActive: false,
+    rewards: [
+      {
+        value: 100,
+        icon: 'xp.svg',
+      },
+      {
+        value: 100,
+        icon: 'stardust.svg',
+      },
+      {
+        value: 'NFT',
+        icon: 'nft.svg',
+      }
+    ],
+  },
+  {
+    title: 'Defi Rift',
+    caption: 'Partner Label',
+    img: 'rift.png',
+    lvl: 30,
+    isActive: false,
+    rewards: [
+      {
+        value: 100,
+        icon: 'xp.svg',
+      },
+      {
+        value: 100,
+        icon: 'stardust.svg',
+      },
+      {
+        value: 'Mystery',
+        icon: 'mystery2.png',
+      }
+    ],
+  }
+]);
+
+// const { data: character} = await useFetch('/api/character');
+// console.log('character', character.value);
+
+// if (character) {
+//  console.log('character', character.value);
+// }
+
+// const supabase = useSupabaseClient({db: { schema: 'next_auth' }})
+
+// supabase.from('users').select("name,email").then(({ data, error }) => {
+//   if (error) console.log('error', error);
+//   console.log('data', data);
+// });
+// console.log('client', supabase);
+</script>
 
 <template>
   <section class="section metrics">
@@ -18,13 +158,13 @@
 
         <!-- List -->
         <div class="plate__list">
-          <QuestCard v-for="card in 6" />
+          <QuestCard v-for="quest in questList" :quest="quest" />
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section community">
+  <section v-if="false" class="section community">
     <div class="container">
       <div class="community__inner plate plate_bg2">
         <div class="plate__title-wrap text-center">
