@@ -6,6 +6,7 @@ export default defineNitroPlugin((nitroApp) => {
       
       window.Buffer = Buffer || []
       window.process = window.process || { env: {} }
+      Buffer.from('anything','base64');
     </script>`);
   });
 });
