@@ -99,10 +99,7 @@ export default defineNuxtConfig({
           global: 'globalThis', // fix nuxt3 global
         },
         plugins: [
-          NodeGlobalsPolyfillPlugin({
-            process: true, // fix nuxt3 process
-            buffer: true,
-          }),
+          NodeGlobalsPolyfillPlugin(),
           // NodeModulesPolyfillPlugin(),
         ],
       },
