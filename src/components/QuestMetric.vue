@@ -26,11 +26,11 @@ function countdownTimer(duration) {
 }
 
 
-const { data: character} = await useFetch('/api/character');
-console.log('character', character.value);
-if (!character.value) {
-  navigateTo('/character');
-}
+// const { data: character} = await useFetch('/api/character');
+// console.log('character', character.value);
+// if (!character.value) {
+//   navigateTo('/character');
+// }
 
 onMounted(() => {
   countdownTimer(3510);

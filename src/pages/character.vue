@@ -15,6 +15,7 @@ definePageMeta({
   middleware: ['auth']
 });
 
+console.log('testik')
 const { data: character} = await useFetch('/api/character');
 console.log('character', character.value);
 

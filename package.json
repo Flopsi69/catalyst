@@ -28,6 +28,7 @@
     "@esotericsoftware/spine-webgl": "^4.2.17",
     "@supabase/gotrue-js": "^2.46.1",
     "buffer": "^6.0.3",
+    "esbuild-darwin-arm64": "^0.15.18",
     "ethers": "^6.6.4",
     "jsonwebtoken": "^9.0.1",
     "next-auth": "4.21.1",
