@@ -1,7 +1,8 @@
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
+import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
 // import nodePolyfills from 'rollup-plugin-polyfill-node';
-import nodePolyfills from 'rollup-plugin-node-polyfills';
+// import nodePolyfills from 'rollup-plugin-node-polyfills';
 
 // import inject from '@rollup/plugin-inject';
 
@@ -112,12 +113,7 @@ export default defineNuxtConfig({
     },
     build: {
       rollupOptions: {
-        plugins: [
-          nodePolyfills(),
-          // nodePolyfills({
-          //   include: ['buffer', 'process'],
-          // }),
-        ],
+        plugins: [rollupNodePolyFill()],
         // plugins: [inject({ Buffer: ['buffer', 'Buffer'] })],
       },
     },
