@@ -1,6 +1,6 @@
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
-import { Buffer } from 'buffer';
+import inject from '@rollup/plugin-inject';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -103,8 +103,13 @@ export default defineNuxtConfig({
             process: true, // fix nuxt3 process
             buffer: true,
           }),
-          NodeModulesPolyfillPlugin(),
+          // NodeModulesPolyfillPlugin(),
         ],
+      },
+    },
+    build: {
+      rollupOptions: {
+        plugins: [inject({ Buffer: ['buffer', 'Buffer'] })],
       },
     },
   },
