@@ -107,6 +107,11 @@ export default defineNuxtConfig({
         ],
       },
     },
+    resolve: {
+      alias: {
+        stream: 'stream-browserify',
+      },
+    },
     build: {
       rollupOptions: {
         plugins: [inject({ Buffer: ['buffer', 'Buffer'] })],
