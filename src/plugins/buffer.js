@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer';
 
-export default defineNuxtPlugin((nuxtApp) => {
-  globalThis.Buffer = Buffer;
-});
+globalThis.Buffer = Buffer;
+
+export default defineNuxtPlugin((nuxtApp) => {});
