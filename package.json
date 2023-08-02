@@ -14,7 +14,6 @@
     "@sidebase/nuxt-auth": "^0.6.0-beta.3",
     "@types/node": "^18.14.2",
     "@use-wagmi/nuxt": "^1.1.0",
-    "esbuild-darwin-arm64": "^0.15.18",
     "nuxt": "3.6.5",
     "nuxt-svgo": "^3.1.0",
     "pinia": "^2.1.4",
