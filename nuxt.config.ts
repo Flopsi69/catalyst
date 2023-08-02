@@ -1,6 +1,6 @@
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
-import inject from '@rollup/plugin-inject';
+import { Buffer } from 'buffer';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -37,11 +37,7 @@ export default defineNuxtConfig({
     dirs: ['stores'],
   },
 
-  plugins: [
-    inject({
-      Buffer: ['buffer', 'Buffer'],
-    }),
-  ],
+  // plugins: [{ src: '~/plugins/particles', mode: 'client', ssr: false }],
 
   alias: {
     '@img': '/assets/images',
@@ -57,7 +53,6 @@ export default defineNuxtConfig({
   },
 
   rootDir: './src/',
-
   app: {
     head: {
       charset: 'utf-8',
@@ -75,6 +70,7 @@ export default defineNuxtConfig({
         },
       ],
       script: [
+        { children: `window.Buffer = ${Buffer} || []` },
         {
           children:
             "setTimeout(() => {document.documentElement.classList.add('transition-activated')}, 800)",
@@ -98,7 +94,6 @@ export default defineNuxtConfig({
       },
     },
     optimizeDeps: {
-      include: ['buffer'],
       esbuildOptions: {
         define: {
           global: 'globalThis', // fix nuxt3 global
