@@ -1,5 +1,6 @@
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
+import inject from '@rollup/plugin-inject';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -36,7 +37,11 @@ export default defineNuxtConfig({
     dirs: ['stores'],
   },
 
-  // plugins: [{ src: '~/plugins/particles', mode: 'client', ssr: false }],
+  plugins: [
+    inject({
+      Buffer: ['buffer', 'Buffer'],
+    }),
+  ],
 
   alias: {
     '@img': '/assets/images',
@@ -93,6 +98,7 @@ export default defineNuxtConfig({
       },
     },
     optimizeDeps: {
+      include: ['buffer'],
       esbuildOptions: {
         define: {
           global: 'globalThis', // fix nuxt3 global
