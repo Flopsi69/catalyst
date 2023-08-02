@@ -1,5 +1,5 @@
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
-import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
+// import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
 import inject from '@rollup/plugin-inject';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -107,16 +107,11 @@ export default defineNuxtConfig({
         ],
       },
     },
-    resolve: {
-      alias: {
-        stream: 'stream-browserify',
-      },
-    },
-    build: {
-      rollupOptions: {
-        plugins: [inject({ Buffer: ['buffer', 'Buffer'] })],
-      },
-    },
+    // build: {
+    //   rollupOptions: {
+    //     plugins: [inject({ Buffer: ['buffer', 'Buffer'] })],
+    //   },
+    // },
   },
 
   components: ['~/components', '~/components/common'],
