@@ -12,7 +12,7 @@ import { navigateTo } from "nuxt/app";
 
 definePageMeta({
   layout: false,
-  middleware: ['auth']
+  // middleware: ['auth']
 });
 
 console.log('testik')
