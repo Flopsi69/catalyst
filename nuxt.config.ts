@@ -70,7 +70,7 @@ export default defineNuxtConfig({
         },
       ],
       script: [
-        { children: `window.Buffer = ${Buffer} || []` },
+        // { children: `window.Buffer = ${Buffer} || []` }
         {
           children:
             "setTimeout(() => {document.documentElement.classList.add('transition-activated')}, 800)",
