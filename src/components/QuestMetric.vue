@@ -25,8 +25,8 @@ function countdownTimer(duration) {
   }, 1000);
 }
 
-// const { data: character} = await useFetch('/api/character');
-// console.log('character', character.value);
+const { data: character} = await useFetch('/api/character');
+console.log('character', character.value);
 // if (!character.value) {
 //   navigateTo('/character');
 // }

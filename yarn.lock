@@ -965,6 +965,15 @@
   resolved "https://registry.yarnpkg.com/@panva/hkdf/-/hkdf-1.1.1.tgz#ab9cd8755d1976e72fc77a00f7655a64efe6cd5d"
   integrity sha512-dhPeilub1NuIG0X5Kvhh9lH4iW3ZsHlnzwgwbOlgwQ2wG1IqFzsgHqmKPk3WzsdWAeaxKJxgM0+W433RmN45GA==
 
+"@parcel/watcher-wasm@2.3.0-alpha.1":
+  version "2.3.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@parcel/watcher-wasm/-/watcher-wasm-2.3.0-alpha.1.tgz#2c1b655be3d488c55456d22e7d1db2047d5b2529"
+  integrity sha512-wo6065l1MQ6SJPPchYw/q8J+pFL40qBXLu4Td2CXeQ/+mUk8NenNqC75P/P1Cyvpam0kfk91iszd+XL+xKDQww==
+  dependencies:
+    is-glob "^4.0.3"
+    micromatch "^4.0.5"
+    napi-wasm "^1.1.0"
+
 "@pinia/nuxt@^0.4.11":
   version "0.4.11"
   resolved "https://registry.yarnpkg.com/@pinia/nuxt/-/nuxt-0.4.11.tgz#1b3f728ae112d45deff5971376e05b8a8d64f720"
@@ -3708,6 +3717,20 @@ h3@^1.6.4, h3@^1.6.6, h3@^1.7.1:
     ufo "^1.1.2"
     uncrypto "^0.1.3"
 
+h3@^1.8.0-rc.2:
+  version "1.8.0-rc.2"
+  resolved "https://registry.yarnpkg.com/h3/-/h3-1.8.0-rc.2.tgz#6def715c8de53ee0f5423ce9b1fdef49a18609cd"
+  integrity sha512-2VSDQOuVElZ7QCSTbti5fTkfyrsOIYSG9SXQQ+xO/dI3O2n2k6cbA1/rapNOJZtC2tO7cN8N/JlGhlUsFh5LoA==
+  dependencies:
+    cookie-es "^1.0.0"
+    defu "^6.1.2"
+    destr "^2.0.0"
+    iron-webcrypto "^0.8.0"
+    radix3 "^1.0.1"
+    ufo "^1.1.2"
+    uncrypto "^0.1.3"
+    unenv "^1.6.1"
+
 has-flag@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-3.0.0.tgz#b5d454dc2199ae225699f3467e5a07f3b955bafd"
@@ -3908,6 +3931,11 @@ iron-webcrypto@^0.7.0:
   resolved "https://registry.yarnpkg.com/iron-webcrypto/-/iron-webcrypto-0.7.1.tgz#7323e1f32fbc5d3e1f25a228fdbf0bcde3c276c6"
   integrity sha512-K/UmlEhPCPXEHV5hAtH5C0tI5JnFuOrv4yO/j7ODPl3HaiiHBLbOLTde+ieUaAyfCATe4LoAnclyF+hmSCOVmQ==
 
+iron-webcrypto@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/iron-webcrypto/-/iron-webcrypto-0.8.0.tgz#21bb7727c7bcd086bd7b7becf5266d1865d04acb"
+  integrity sha512-gScdcWHjTGclCU15CIv2r069NoQrys1UeUFFfaO1hL++ytLHkVw7N5nXJmFf3J2LEDMz1PkrvC0m62JEeu1axQ==
+
 is-arguments@^1.0.4:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/is-arguments/-/is-arguments-1.1.1.tgz#15b3f88fda01f2a97fec84ca761a560f123efa9b"
@@ -3974,7 +4002,7 @@ is-generator-function@^1.0.7:
   dependencies:
     has-tostringtag "^1.0.0"
 
-is-glob@^4.0.1, is-glob@~4.0.1:
+is-glob@^4.0.1, is-glob@^4.0.3, is-glob@~4.0.1:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/is-glob/-/is-glob-4.0.3.tgz#64f61e42cbbb2eec2071a9dac0b28ba1e65d5084"
   integrity sha512-xelSayHH36ZgE7ZWhli7pW34hNbNl8Ojv5KVmkJD4hBdD3th8Tfk9vYasLM+mXWOZhFkgZfxhLSnrwRr4elSSg==
@@ -4220,21 +4248,23 @@ lilconfig@^2.1.0:
   integrity sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==
 
 listhen@^1.0.4:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/listhen/-/listhen-1.1.2.tgz#c95082b0fdbd50d73abeab748893768dbefa7db8"
-  integrity sha512-rLX5V57oonazmc6zoZ2LzfbSOfGzDOLdQ/eTEh/d3f1xYMACH1yIU8nr0YGl2WiR+l31o3QCN4/VH2dUNyYvTA==
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/listhen/-/listhen-1.2.2.tgz#f0b3b616e2d2f6632853f7aa35137bd6bb5b8d82"
+  integrity sha512-fQaXe+DAQ5QiYP1B4uXfAgwqIwNS+0WMIwRd5l2a3npQAEhlCJ1pN11d41yHtbeReE7oRtfL+h6Nzxq+Wc4vIg==
   dependencies:
+    "@parcel/watcher-wasm" "2.3.0-alpha.1"
     citty "^0.1.2"
     clipboardy "^3.0.0"
     consola "^3.2.3"
     defu "^6.1.2"
     get-port-please "^3.0.1"
+    h3 "^1.8.0-rc.2"
     http-shutdown "^1.2.2"
     jiti "^1.19.1"
     mlly "^1.4.0"
     node-forge "^1.3.1"
     pathe "^1.1.1"
-    ufo "^1.1.2"
+    ufo "^1.2.0"
 
 lit-element@^3.3.0:
   version "3.3.3"
@@ -4415,7 +4445,7 @@ merge2@^1.3.0, merge2@^1.4.1:
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.4.1.tgz#4368892f885e907455a6fd7dc55c0c9d404990ae"
   integrity sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==
 
-micromatch@^4.0.2, micromatch@^4.0.4:
+micromatch@^4.0.2, micromatch@^4.0.4, micromatch@^4.0.5:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-4.0.5.tgz#bc8999a7cbbf77cdc89f132f6e467051b49090c6"
   integrity sha512-DMy+ERcEW2q8Z2Po+WNXuw3c5YaUSFjAO5GsJqfEl7UjvtIuFKO6ZrKvcItdy98dwFI2N1tg3zNIdKaQT+aNdA==
@@ -4580,6 +4610,11 @@ napi-build-utils@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/napi-build-utils/-/napi-build-utils-1.0.2.tgz#b1fddc0b2c46e380a0b7a76f984dd47c41a13806"
   integrity sha512-ONmRUqK7zj7DWX0D9ADe03wbwOBZxNAfF20PlGfCWQcD3+/MakShIHrMqx9YwPTfxDdF1zLeL+RGZiR9kGMLdg==
+
+napi-wasm@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/napi-wasm/-/napi-wasm-1.1.0.tgz#bbe617823765ae9c1bc12ff5942370eae7b2ba4e"
+  integrity sha512-lHwIAJbmLSjF9VDRm9GoVOy9AGp3aIvkjv+Kvz9h16QR3uSVYH78PNQUnT2U4X53mhlnV2M7wrhibQ3GHicDmg==
 
 neo-async@^2.6.2:
   version "2.6.2"
@@ -6669,7 +6704,7 @@ typescript@^5.1.6:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.1.6.tgz#02f8ac202b6dad2c0dd5e0913745b47a37998274"
   integrity sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==
 
-ufo@^1.1.1, ufo@^1.1.2:
+ufo@^1.1.1, ufo@^1.1.2, ufo@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/ufo/-/ufo-1.2.0.tgz#28d127a087a46729133fdc89cb1358508b3f80ba"
   integrity sha512-RsPyTbqORDNDxqAdQPQBpgqhWle1VcTSou/FraClYlHf6TZnQcGslpLcAphNR+sQW4q5lLWLbOsRlh9j24baQg==
@@ -6708,7 +6743,7 @@ undici@^5.22.1:
   dependencies:
     busboy "^1.6.0"
 
-unenv@^1.5.1:
+unenv@^1.5.1, unenv@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/unenv/-/unenv-1.6.1.tgz#7d0787442b31e78481f1066c8d06e418c4263237"
   integrity sha512-cjQnvJctZluBwOCBtFT4ZRR1cCJOVrcDK/TXzdqc6I+ZKWBFVDs6JjH0qkK6d8RsFSRHbQkWRgSzu66e52FHBA==
