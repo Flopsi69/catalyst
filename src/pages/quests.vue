@@ -124,8 +124,11 @@ const questList = reactive([
   }
 ]);
 
-// const { data: character} = await useFetch('/api/character');
-// console.log('character', character.value);
+const { data: character } = await useFetch('/api/character');
+if (!character.value) {
+  navigateTo('/character');
+}
+console.log('character', character.value);
 
 // if (character) {
 //  console.log('character', character.value);
@@ -143,7 +146,7 @@ const questList = reactive([
 <template>
   <section class="section metrics">
     <div class="container metrics__container">
-      <QuestMetric />
+      <QuestMetric :character="character" />
     </div>
   </section>
 
