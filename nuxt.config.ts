@@ -1,6 +1,6 @@
-// import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
-// import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
-// import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
+import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
+import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
 // import nodePolyfills from 'rollup-plugin-polyfill-node';
 // import nodePolyfills from 'rollup-plugin-node-polyfills';
 
@@ -26,24 +26,11 @@ export default defineNuxtConfig({
         },
       },
     ],
-    // '@sidebase/nuxt-auth',
     '@use-wagmi/nuxt',
     '@nuxt/image',
     ['@pinia/nuxt', { autoImports: ['defineStore'] }],
     // 'nuxt-swiper',
   ],
-  // auth: {
-  //   baseURL: process.env.AUTH_ORIGIN,
-  //   provider: {
-  //     type: 'authjs',
-  //     // addDefaultCallbackUrl: false,
-  //   },
-  //   // baseURL: 'http://localhost:3000/api/auth',
-  //   globalAppMiddleware: {
-  //     isEnabled: true,
-  //     // addDefaultCallbackUrl: false
-  //   },
-  // },
 
   imports: {
     dirs: ['stores'],
@@ -111,17 +98,17 @@ export default defineNuxtConfig({
           global: 'globalThis', // fix nuxt3 global
         },
         plugins: [
-          // NodeGlobalsPolyfillPlugin({
-          //   buffer: true,
-          //   process: true,
-          // }),
-          // NodeModulesPolyfillPlugin(),
+          NodeGlobalsPolyfillPlugin({
+            buffer: true,
+            process: true,
+          }),
+          NodeModulesPolyfillPlugin(),
         ],
       },
     },
     build: {
       rollupOptions: {
-        // plugins: [rollupNodePolyFill()],
+        plugins: [rollupNodePolyFill()],
         // plugins: [inject({ Buffer: ['Buffer', 'Buffer'], process: 'process' })],
       },
     },
