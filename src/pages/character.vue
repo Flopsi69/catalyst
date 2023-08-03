@@ -19,6 +19,7 @@ const user = useSupabaseUser();
 
 console.log('user', user.value.id)
 
+try {
 const { data: character, error } = await useAsyncData('character',
   async () => supabase.from('characters')
       .select('*')
@@ -26,13 +27,16 @@ const { data: character, error } = await useAsyncData('character',
       .limit(1)
     .single(), { transform: result => result.data }
 )
-
-
+console.log(2)
 if (character.value) {
   navigateTo('/quests');
 } else if (error.value) {
   console.log('error', error.value)
 }
+} catch (error) {
+  console.log(error)
+}
+
 // const { data: character, error } = await useFetch('/api/character');
 
 // console.log('error', error.value)
@@ -90,10 +94,19 @@ async function handlePlay() {
     return false;
   }
 
+  const characterData = {
+    race: activeRace.value.type,
+    nickname: nickname.value,
+    sex: activeSex.value,
+    userId: user.value.id
+  }
+
+  console.log('characterData', characterData)
+
   const { data: char, error: characterError } = await useAsyncData('character',
-  async () => upabase
+  async () => supabase
       .from('characters')
-      .insert({ ...characterData, userId: id })
+      .insert(characterData)
       .select()
       .single(), { transform: result => result.data }
   )
