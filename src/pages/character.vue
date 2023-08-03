@@ -15,7 +15,9 @@ definePageMeta({
 });
 
 console.log('testik2')
-const { data: character, error } = await useFetch('/api/character');
+const { data: character, error } = await useFetch('/api/character', {
+  headers: useRequestHeaders(['cookie'])
+});
 
 console.log('error', error.value)
 console.log('character', character.value);
