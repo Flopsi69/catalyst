@@ -24,6 +24,11 @@ export default defineNuxtConfig({
           login: '/',
           callback: '/',
         },
+        clientOptions: {
+          auth: {
+            flowType: 'implicit',
+          },
+        },
       },
     ],
     // '@sidebase/nuxt-auth',
