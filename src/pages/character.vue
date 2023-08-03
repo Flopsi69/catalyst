@@ -14,15 +14,30 @@ definePageMeta({
   // middleware: ['auth']
 });
 
-console.log('testik2')
-const { data: character, error } = await useFetch('/api/character');
+const supabase = useSupabaseClient();
+const user = useSupabaseUser();
 
+console.log('user', user.value)
+
+const { data: character, error } = await useAsyncData('character',
+  async () => supabase.from('characters')
+      .select('*')
+      .eq('userId', user.value.id)
+      .limit(1)
+    .single(), { transform: result => result.data }
+)
+
+
+console.log('testik2', character.value)
 console.log('error', error.value)
-console.log('character', character.value);
+// const { data: character, error } = await useFetch('/api/character');
 
-if (character.value) {
-  // navigateTo('/quests');
-}
+// console.log('error', error.value)
+// console.log('character', character.value);
+
+// if (character.value) {
+//   // navigateTo('/quests');
+// }
 
 const toast = useToast();
 

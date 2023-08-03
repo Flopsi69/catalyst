@@ -278,6 +278,12 @@ async function authUser_old() {
     console.log('error', err)
   }
 }
+
+watchEffect(() => {
+  if (user.value) {
+    navigateTo('/character');
+  }
+})
 </script>
 
 <template>
