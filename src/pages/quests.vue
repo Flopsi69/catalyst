@@ -124,11 +124,11 @@ const questList = reactive([
   }
 ]);
 
-const { data: character } = await useFetch('/api/character');
-if (!character.value) {
-  navigateTo('/character');
-}
-console.log('character', character.value);
+// const { data: character } = await useFetch('/api/character');
+// if (!character.value) {
+//   navigateTo('/character');
+// }
+// console.log('character', character.value);
 
 // if (character) {
 //  console.log('character', character.value);
