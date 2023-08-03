@@ -24,15 +24,17 @@ export default defineNuxtConfig({
           login: '/',
           callback: '/',
         },
-        clientOptions: {
-          auth: {
-            flowType: 'implicit',
-          },
-        },
         cookieOptions: {
           maxAge: 60 * 60 * 80,
           sameSite: 'none',
           secure: false,
+        },
+        clientOptions: {
+          auth: {
+            flowType: 'pkce',
+            detectSessionInUrl: false,
+            persistSession: false,
+          },
         },
       },
     ],
