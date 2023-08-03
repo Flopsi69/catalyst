@@ -36,6 +36,12 @@ export default defineNuxtConfig({
     dirs: ['stores'],
   },
 
+  nitro: {
+    prerender: {
+      failOnError: false,
+    },
+  },
+
   // plugins: [{ src: '~/plugins/particles', mode: 'client', ssr: false }],
 
   alias: {
