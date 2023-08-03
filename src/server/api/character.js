@@ -8,17 +8,12 @@ export default eventHandler(async (event) => {
   const cookies = parseCookies(event);
   const method = getMethod(event);
   console.log('cookies3', cookies['sb-refresh-token']);
-  const supabase = await serverSupabaseClient(event);
+  const supabase = serverSupabaseServiceRole(event);
 
-  supabase.auth.setSession(
-    {
-      refresh_token: cookies['sb-refresh-token'],
-      access_token: cookies['sb-access-token'],
-    },
-    {
-      auth: { persistSession: false },
-    }
-  );
+  supabase.auth.setSession({
+    refresh_token: cookies['sb-refresh-token'],
+    access_token: cookies['sb-access-token'],
+  });
 
   const user = await serverSupabaseUser(event);
   console.log('method', method, user, user.id);
