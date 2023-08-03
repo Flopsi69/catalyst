@@ -8,14 +8,13 @@ import incrypt from "@img/character/incrypt-descr.png";
 import paladin from "@img/character/paladin-descr.png";
 import human from "@img/character/human.png";
 import iconArrow from "@img/icons/arrow-bold.svg?component";
-import { navigateTo } from "nuxt/app";
 
 definePageMeta({
   layout: false,
   // middleware: ['auth']
 });
 
-console.log('testik')
+console.log('testik2')
 const { data: character, error } = await useFetch('/api/character', {
   onRequestError({ request, options, error }) {
     console.log('ReqError', error)
@@ -28,7 +27,7 @@ const { data: character, error } = await useFetch('/api/character', {
   }
 });
 
-console.log('error', error)
+console.log('error', error.value)
 console.log('character', character.value);
 
 if (character.value) {
