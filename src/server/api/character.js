@@ -48,7 +48,7 @@ export default eventHandler(async (event) => {
       .single();
 
     console.log('CharAdd', character);
-    console.log('CharError', character);
+    console.log('CharError', error);
 
     // throw createError({
     //   statusMessage: 'Character added',

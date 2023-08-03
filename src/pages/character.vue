@@ -18,8 +18,8 @@ const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 
 console.log('user', user.value.id)
+const test = useNuxtData()
 
-try {
 const { data: character, error } = await useAsyncData('character',
   async () => supabase.from('characters')
       .select('*')
@@ -27,14 +27,12 @@ const { data: character, error } = await useAsyncData('character',
       .limit(1)
     .single(), { transform: result => result.data }
 )
+
 console.log(2)
 if (character.value) {
   navigateTo('/quests');
 } else if (error.value) {
   console.log('error', error.value)
-}
-} catch (error) {
-  console.log(error)
 }
 
 // const { data: character, error } = await useFetch('/api/character');
@@ -50,7 +48,7 @@ const toast = useToast();
 
 const activeRace = ref(null);
 const activeClass = ref(null);
-const activeSex = ref(null);
+const activeSex = ref('male');
 const nickname = ref('');
 const stepsCount = ref(3);
 const step = ref(1);
@@ -111,7 +109,7 @@ async function handlePlay() {
   //     .single(), { transform: result => result.data }
   // )
 
-  const character = await $fetch('/api/character', {
+  const res = await $fetch('/api/character', {
     method: 'post',
     body: {
       race: activeRace.value.type,
@@ -120,7 +118,16 @@ async function handlePlay() {
     }
   })
 
-  console.log(character)
+  console.log(res)
+
+  // if (character.value) {
+  //   console.log('characterError', characterError.value)
+  // }
+  // if (character.value) {
+  //   toast.success(`Welcome to the game, ${char.value.nickname}!`);
+  //   console.log('characterCreated', char.value);
+  //   navigateTo('/quests')
+  // }
 
   // if (characterError.value) {
   //   console.log('characterError', characterError.value)
