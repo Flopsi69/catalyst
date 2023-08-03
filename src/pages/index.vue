@@ -20,7 +20,7 @@ const user = useSupabaseUser();
 
 watchEffect(() => {
   if (user.value) {
-    navigateTo('/quests');
+    navigateTo('/character');
   }
 })
 </script>

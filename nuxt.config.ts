@@ -37,7 +37,6 @@ export default defineNuxtConfig({
   },
 
   ssr: false,
-
   // nitro: {
   //   prerender: {
   //     failOnError: false,
