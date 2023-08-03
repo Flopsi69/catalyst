@@ -181,7 +181,7 @@ async function authUser() {
   }
 
   $modal.close();
-  navigateTo('/character');
+  // navigateTo('/character');
 }
 
 async function authWeb3() {
@@ -229,7 +229,7 @@ async function authWeb3() {
 
     toast.success("You are successfully logged in!")
     $modal.close();
-    navigateTo('/character');
+    // navigateTo('/character');
 
 
     // signIn("web3", {
