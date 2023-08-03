@@ -103,31 +103,33 @@ async function handlePlay() {
 
   console.log('characterData', characterData)
 
-  const { data: char, error: characterError } = await useAsyncData('character',
-  async () => supabase
-      .from('characters')
-      .insert(characterData)
-      .select()
-      .single(), { transform: result => result.data }
-  )
+  // const { data: char, error: characterError } = await useAsyncData('character',
+  // async () => supabase
+  //     .from('characters')
+  //     .insert(characterData)
+  //     .select()
+  //     .single(), { transform: result => result.data }
+  // )
 
-  // const character = await $fetch('/api/character', {
-  //   method: 'post',
-  //   body: {
-  //     race: activeRace.value.type,
-  //     nickname: nickname.value,
-  //     sex: activeSex.value,
-  //   }
-  // })
+  const character = await $fetch('/api/character', {
+    method: 'post',
+    body: {
+      race: activeRace.value.type,
+      nickname: nickname.value,
+      sex: activeSex.value,
+    }
+  })
 
-  if (characterError.value) {
-    console.log('characterError', characterError.value)
-  }
-  if (char.value) {
-    toast.success(`Welcome to the game, !${char.value.nickname}`);
-    console.log('characterCreated', char.value);
-    navigateTo('/quests')
-  }
+  console.log(character)
+
+  // if (characterError.value) {
+  //   console.log('characterError', characterError.value)
+  // }
+  // if (char.value) {
+  //   toast.success(`Welcome to the game, ${char.value.nickname}!`);
+  //   console.log('characterCreated', char.value);
+  //   navigateTo('/quests')
+  // }
 }
 </script>
 
