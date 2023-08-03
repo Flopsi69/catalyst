@@ -1,23 +1,14 @@
 import {
   serverSupabaseServiceRole,
   serverSupabaseUser,
-  serverSupabaseClient,
 } from '#supabase/server';
 
 export default eventHandler(async (event) => {
   const method = getMethod(event);
-  const cookie = parseCookies(event);
-  const supabase = await serverSupabaseClient(event);
-  const { data } = await supabase.auth.getUser();
+  const supabase = serverSupabaseServiceRole(event);
+  const { id } = await serverSupabaseUser(event);
 
-  console.log(cookie);
-  return { cookie, ...data };
-  console.log('user', user);
-
-  // const user = await serverSupabaseUser(event);
-  const id = user?.id;
-
-  console.log('id', id);
+  console.log('id', id, 'method', method);
   if (!id) {
     throw createError({
       statusMessage: 'Not logged in',

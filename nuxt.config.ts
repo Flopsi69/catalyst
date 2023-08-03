@@ -22,19 +22,7 @@ export default defineNuxtConfig({
         redirect: false,
         redirectOptions: {
           login: '/',
-          callback: '/',
-        },
-        cookieOptions: {
-          maxAge: 60 * 60 * 80,
-          sameSite: 'none',
-          secure: false,
-        },
-        clientOptions: {
-          auth: {
-            flowType: 'pkce',
-            detectSessionInUrl: false,
-            persistSession: false,
-          },
+          callback: '/character',
         },
       },
     ],
