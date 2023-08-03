@@ -90,16 +90,27 @@ async function handlePlay() {
     return false;
   }
 
-  const character = await $fetch('/api/character', {
-    method: 'post',
-    body: {
-      race: activeRace.value.type,
-      nickname: nickname.value,
-      sex: activeSex.value,
-    }
-  })
+  const { data: char, error: characterError } = await useAsyncData('character',
+  async () => upabase
+      .from('characters')
+      .insert({ ...characterData, userId: id })
+      .select()
+      .single(), { transform: result => result.data }
+  )
 
-  if (character) {
+  // const character = await $fetch('/api/character', {
+  //   method: 'post',
+  //   body: {
+  //     race: activeRace.value.type,
+  //     nickname: nickname.value,
+  //     sex: activeSex.value,
+  //   }
+  // })
+
+  if (characterError.value) {
+    console.log('characterError', characterError.value)
+  }
+  if (char.value) {
     console.log('character', character);
     navigateTo('/quests')
   }
