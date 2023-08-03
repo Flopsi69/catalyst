@@ -50,7 +50,7 @@ watch(user, () => {
 
       <div class="container jumb__container">
         <IndexIntro class="jumb__info" />
-        <IndexActions class="jumb__actions" />
+        <!-- <IndexActions class="jumb__actions" /> -->
 
         <img class="jumb__knight" src="@img/knight.png" alt="" />
       </div>

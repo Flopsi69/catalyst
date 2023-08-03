@@ -30,7 +30,7 @@ export default defineNuxtConfig({
     '@use-wagmi/nuxt',
     '@nuxt/image',
     ['@pinia/nuxt', { autoImports: ['defineStore'] }],
-    'nuxt-swiper',
+    // 'nuxt-swiper',
   ],
   // auth: {
   //   baseURL: process.env.AUTH_ORIGIN,
