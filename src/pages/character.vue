@@ -28,8 +28,11 @@ const { data: character, error } = await useAsyncData('character',
 )
 
 
-console.log('testik2', character.value)
-console.log('error', error.value)
+if (character.value) {
+  navigateTo('/quests');
+} else if (error.value) {
+  console.log('error', error.value)
+}
 // const { data: character, error } = await useFetch('/api/character');
 
 // console.log('error', error.value)

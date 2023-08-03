@@ -35,13 +35,36 @@ function countdownTimer(duration) {
 //   },
 // });
 
-const { data: character, error } = await useFetch('/api/character');
-console.log('character', character.value);
-console.log('characterError', error.value);
-if (!character.value) {
-  console.debug('navigate to character')
-  // navigateTo('/character');
+// const { data: character, error } = await useFetch('/api/character');
+// console.log('character', character.value);
+// console.log('characterError', error.value);
+// if (!character.value) {
+//   console.debug('navigate to character')
+//   // navigateTo('/character');
+// }
+
+
+const supabase = useSupabaseClient();
+const user = useSupabaseUser();
+
+console.log('user', user.value.id)
+
+const { data: character, error } = await useAsyncData('character',
+  async () => supabase.from('characters')
+      .select('*')
+      .eq('userId', user.value.id)
+      .limit(1)
+    .single(), { transform: result => result.data }
+)
+
+if (error.value) {
+  console.error('error', error.value)
 }
+
+if (!character.value) {
+  await navigateTo('/character');
+}
+
 
 onMounted(() => {
   countdownTimer(3510);
