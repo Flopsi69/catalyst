@@ -5,9 +5,21 @@ import {
 } from '#supabase/server';
 
 export default eventHandler(async (event) => {
+  const cookies = parseCookies(event);
   const method = getMethod(event);
+  console.log('cookies3', cookies['sb-refresh-token']);
   const supabase = await serverSupabaseClient(event);
-  console.log('client', supabase);
+
+  supabase.auth.setSession(
+    {
+      refresh_token: cookies['sb-refresh-token'],
+      access_token: cookies['sb-access-token'],
+    },
+    {
+      auth: { persistSession: false },
+    }
+  );
+
   const user = await serverSupabaseUser(event);
   console.log('method', method, user, user.id);
   const id = user?.id;
