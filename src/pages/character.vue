@@ -119,11 +119,6 @@ async function handlePlay() {
 
 <template>
   <main class="main flex-center">
-    <!-- <div class="debug debug_brief">
-      <p>Nick: {{ nickname }} {{ nickname.length }}</p>
-      <p>Race: {{ activeRace }}</p>
-      <p>Sex: {{ activeSex }}</p>
-    </div> -->
     <div class="main__desk container flex justify-between">
       <!-- <img src="@img/bg/character-video-placeholder.png" alt="" /> -->
       <div class="params plate">

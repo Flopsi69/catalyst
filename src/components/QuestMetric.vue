@@ -74,7 +74,6 @@ onMounted(() => {
 <template>
   <!-- 1 -->
   <div v-if="character" class="metric player">
-    {{ character }}
     <img
       v-if='character.sex === "male"'
       class="player__image player__image_male"

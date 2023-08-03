@@ -281,7 +281,7 @@ async function authUser_old() {
 
 watchEffect(() => {
   if (user.value) {
-    navigateTo('/character');
+    navigateTo('/quests');
   }
 })
 </script>

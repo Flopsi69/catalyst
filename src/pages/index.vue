@@ -12,29 +12,22 @@ const particlesLoaded = async container => {
 
 definePageMeta({
   layout: false,
-  // middleware: 'guest'
+  middleware: 'guest'
 });
 
 const { address } = useAccount();
 const user = useSupabaseUser();
-
-watch(user, () => {
-  if (user.value?.app_metadata?.provider === 'google') {
-    // navigateTo('/quests')
-  }
-  // emit('updateRace', user);
-});
 </script>
 
 <template>
   <IndexHeader />
 
-  <client-only>
+  <!-- <client-only>
     <div v-if="user || address" class="debug">
       <p v-if="address">Address: {{ address }}</p>
       <p v-if="user">User: {{ user.id }}</p>
     </div>
-  </client-only>
+  </client-only> -->
 
   <main class="main">
     <section class="section jumb">
