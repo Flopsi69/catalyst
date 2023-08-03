@@ -1,5 +1,5 @@
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
-import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
+// import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
+// import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
 // import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
 // import nodePolyfills from 'rollup-plugin-polyfill-node';
 // import nodePolyfills from 'rollup-plugin-node-polyfills';
@@ -103,18 +103,18 @@ export default defineNuxtConfig({
           global: 'globalThis', // fix nuxt3 global
         },
         plugins: [
-          NodeGlobalsPolyfillPlugin({
-            buffer: true,
-            process: true,
-          }),
-          NodeModulesPolyfillPlugin(),
+          // NodeGlobalsPolyfillPlugin({
+          //   buffer: true,
+          //   process: true,
+          // }),
+          // NodeModulesPolyfillPlugin(),
         ],
       },
     },
     build: {
       rollupOptions: {
         // plugins: [rollupNodePolyFill()],
-        // plugins: [inject({ Buffer: ['buffer', 'Buffer'] })],
+        // plugins: [inject({ Buffer: ['Buffer', 'Buffer'], process: 'process' })],
       },
     },
   },
