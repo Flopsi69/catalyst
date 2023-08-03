@@ -124,7 +124,7 @@ async function handlePlay() {
     console.log('characterError', characterError.value)
   }
   if (char.value) {
-    console.log('character', cahr.value);
+    console.log('characterCreated', char.value);
     navigateTo('/quests')
   }
 }
