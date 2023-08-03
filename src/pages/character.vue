@@ -17,7 +17,7 @@ definePageMeta({
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 
-console.log('user', user.value)
+console.log('user', user.value.id)
 
 const { data: character, error } = await useAsyncData('character',
   async () => supabase.from('characters')
