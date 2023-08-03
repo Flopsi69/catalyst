@@ -5,10 +5,10 @@ import {
 
 export default eventHandler(async (event) => {
   const method = getMethod(event);
-  const supabase = serverSupabaseServiceRole(event);
-  const { id } = await serverSupabaseUser(event);
-  console.log('method', method, id);
-  if (!id) {
+  const supabase = await serverSupabaseClient(event);
+  const user = await serverSupabaseUser(event);
+  console.log('method', method, user, user.id);
+  if (!user?.id) {
     throw createError({
       statusMessage: 'Not logged in',
       status: 400,
