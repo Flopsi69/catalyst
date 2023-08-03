@@ -12,7 +12,7 @@ const particlesLoaded = async container => {
 
 definePageMeta({
   layout: false,
-  middleware: 'guest'
+  // middleware: 'guest'
 });
 
 const { address } = useAccount();
@@ -20,7 +20,7 @@ const user = useSupabaseUser();
 
 watch(user, () => {
   if (user.value?.app_metadata?.provider === 'google') {
-    navigateTo('/quests')
+    // navigateTo('/quests')
   }
   // emit('updateRace', user);
 });
