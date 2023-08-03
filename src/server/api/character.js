@@ -6,13 +6,12 @@ import {
 
 export default eventHandler(async (event) => {
   const method = getMethod(event);
-  const cookie = getCookie(event);
+  const cookie = parseCookies(event);
   const supabase = await serverSupabaseClient(event);
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data } = await supabase.auth.getUser();
 
-  return { ...cookie, ...data };
+  console.log(cookie);
+  return { cookie, ...data };
   console.log('user', user);
 
   // const user = await serverSupabaseUser(event);
