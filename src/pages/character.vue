@@ -16,7 +16,19 @@ definePageMeta({
 });
 
 console.log('testik')
-const { data: character} = await useFetch('/api/character');
+const { data: character, error } = await useFetch('/api/character', {
+  onRequestError({ request, options, error }) {
+    console.log('ReqError', error)
+    console.log(options)
+  },
+  onResponseError({ request, response, options }) {
+    console.log('ResError', response)
+    console.log(options)
+    // Handle the response errors
+  }
+});
+
+console.log('error', error)
 console.log('character', character.value);
 
 if (character.value) {
