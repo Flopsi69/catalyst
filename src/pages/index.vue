@@ -17,6 +17,12 @@ definePageMeta({
 
 const { address } = useAccount();
 const user = useSupabaseUser();
+
+watchEffect(() => {
+  if (user.value) {
+    navigateTo('/quests');
+  }
+})
 </script>
 
 <template>
@@ -43,7 +49,7 @@ const user = useSupabaseUser();
 
       <div class="container jumb__container">
         <IndexIntro class="jumb__info" />
-        <!-- <IndexActions class="jumb__actions" /> -->
+        <IndexActions class="jumb__actions" />
 
         <img class="jumb__knight" src="@img/knight.png" alt="" />
       </div>

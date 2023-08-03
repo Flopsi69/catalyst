@@ -141,10 +141,6 @@ async function authGoogle() {
   if (error) {
     return toast.error(error.message)
   }
-
-  // // window.reload();
-  // toast.success("You are successfully logged in!")
-  // $modal.close();
 }
 
 async function authUser() {
@@ -163,11 +159,13 @@ async function authUser() {
 
   if (currentTab.value === 'signup') {
     // TODO
-    const { error } = await supabase.auth.signUp(authData)
+    const { error, ...res } = await supabase.auth.signUp(authData)
 
     if (error) {
       return toast.error(error.message)
     }
+
+    console.log('res', res)
 
     toast.success('Successfully registered! Confirm your email to continue.')
     $modal.close();
@@ -181,7 +179,7 @@ async function authUser() {
     toast.success("You are successfully logged in!")
   }
 
-  // $modal.close();
+  $modal.close();
   // navigateTo('/character');
 }
 
@@ -229,7 +227,7 @@ async function authWeb3() {
     }
 
     toast.success("You are successfully logged in!")
-    // $modal.close();
+    $modal.close();
     // navigateTo('/character');
 
 
@@ -279,12 +277,6 @@ async function authUser_old() {
     console.log('error', err)
   }
 }
-
-watchEffect(() => {
-  if (user.value) {
-    navigateTo('/quests');
-  }
-})
 </script>
 
 <template>

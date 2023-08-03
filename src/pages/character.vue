@@ -124,6 +124,7 @@ async function handlePlay() {
     console.log('characterError', characterError.value)
   }
   if (char.value) {
+    toast.success(`Welcome to the game, !${char.value.nickname}`);
     console.log('characterCreated', char.value);
     navigateTo('/quests')
   }
