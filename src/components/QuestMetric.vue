@@ -58,7 +58,7 @@ const { data: character, error } = await useAsyncData('character',
 )
 
 if (error.value) {
-  console.error('error', error.value)
+  console.error('errorCharacter', error.value)
 }
 
 if (!character.value) {
