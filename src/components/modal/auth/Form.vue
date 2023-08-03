@@ -1,5 +1,5 @@
 <script setup>
-import { SiweMessage } from "siwe";
+// import { SiweMessage } from "siwe";
 import {useToast} from "vue-toastification";
 // import { useModalStore } from '~/stores/modal';
 // const { close } = useModalStore();
