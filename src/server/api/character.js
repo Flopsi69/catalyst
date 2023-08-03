@@ -6,15 +6,19 @@ import {
 
 export default eventHandler(async (event) => {
   const method = getMethod(event);
+  const cookie = getCookie(event);
   const supabase = await serverSupabaseClient(event);
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  return { ...cookie, ...data };
   console.log('user', user);
 
   // const user = await serverSupabaseUser(event);
   const id = user?.id;
+
+  console.log('id', id);
   if (!id) {
     throw createError({
       statusMessage: 'Not logged in',
