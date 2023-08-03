@@ -169,7 +169,8 @@ async function authUser() {
       return toast.error(error.message)
     }
 
-    toast.success('Successfully registered!')
+    toast.success('Successfully registered! Confirm your email to continue.')
+    $modal.close();
   } else {
     const { data, error } = await supabase.auth.signInWithPassword(authData)
 
@@ -180,7 +181,7 @@ async function authUser() {
     toast.success("You are successfully logged in!")
   }
 
-  $modal.close();
+  // $modal.close();
   // navigateTo('/character');
 }
 
@@ -228,7 +229,7 @@ async function authWeb3() {
     }
 
     toast.success("You are successfully logged in!")
-    $modal.close();
+    // $modal.close();
     // navigateTo('/character');
 
 
