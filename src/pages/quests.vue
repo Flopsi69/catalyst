@@ -146,7 +146,7 @@ const questList = reactive([
 <template>
   <section class="section metrics">
     <div class="container metrics__container">
-      <QuestMetric :character="character" />
+      <QuestMetric />
     </div>
   </section>
 

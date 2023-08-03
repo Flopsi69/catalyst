@@ -13,7 +13,7 @@ const toast = useToast();
 
 const activeLang = ref(langs[0]);
 const user = useSupabaseUser();
-const supabase = useSupabaseAuthClient();
+const supabase = useSupabaseClient();
 
 async function signOut() {
   if (user.value) {

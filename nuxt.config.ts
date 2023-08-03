@@ -16,14 +16,21 @@ export default defineNuxtConfig({
         defaultImport: 'url',
       },
     ],
-    '@nuxtjs/supabase',
+    [
+      '@nuxtjs/supabase',
+      {
+        redirectOptions: {
+          login: '/',
+          callback: '/confirm',
+        },
+      },
+    ],
     // '@sidebase/nuxt-auth',
     '@use-wagmi/nuxt',
     '@nuxt/image',
     ['@pinia/nuxt', { autoImports: ['defineStore'] }],
     'nuxt-swiper',
   ],
-
   // auth: {
   //   baseURL: process.env.AUTH_ORIGIN,
   //   provider: {

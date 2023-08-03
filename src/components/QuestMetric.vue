@@ -25,14 +25,17 @@ function countdownTimer(duration) {
   }, 1000);
 }
 
-defineProps({
-  character: {
-    type: Object,
-    required: true,
-  },
-});
+// defineProps({
+//   character: {
+//     type: Object,
+//     required: true,
+//     default: {
 
-const { data: character} = await useFetch('/api/character');
+//     }
+//   },
+// });
+
+const { data: character } = await useFetch('/api/character');
 console.log('character', character.value);
 if (!character.value) {
   console.debug('navigate to character')

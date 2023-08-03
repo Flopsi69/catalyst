@@ -1,5 +1,5 @@
 <script setup>
-// import { SiweMessage } from "siwe";
+// import { SiweMessage } = require('siwe');
 import {useToast} from "vue-toastification";
 // import { useModalStore } from '~/stores/modal';
 // const { close } = useModalStore();
@@ -82,7 +82,6 @@ const validatePassword = reactive([
 const isValidatedForm = (type) => {
   const { email, password, confirmPassword, isAgree } = authData;
   authData.isAgreeError = false;
-  console.log(type, password, confirmPassword)
   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   if (!emailPattern.test(email)) {
@@ -116,7 +115,7 @@ const isValidatedForm = (type) => {
   return true;
 }
 
-const supabase = useSupabaseAuthClient();
+const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 
 async function signOut() {
@@ -188,7 +187,6 @@ async function authUser() {
 async function authWeb3() {
   try {
     if (!isConnected.value) {
-      console.log('connectors', connectors.value[0])
       await connectAsync({connector: connectors.value[0]})
     }
 
@@ -210,9 +208,6 @@ async function authWeb3() {
       message: message.prepareMessage(),
     })
 
-    console.log('message', message)
-    console.log('signature', signature)
-
     const { user, authData } = await $fetch('/api/auth/wallet', {
       method: 'POST',
       body: {
@@ -224,8 +219,6 @@ async function authWeb3() {
     if (!authData) {
       throw new Error('Something went wrong! Try again later.')
     }
-
-    console.log('User', user)
 
     const { error } = await supabase.auth.signInWithPassword({email: authData.email, password: authData.password });
 

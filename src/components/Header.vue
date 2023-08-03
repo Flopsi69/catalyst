@@ -91,7 +91,7 @@ const { error, isLoading, pendingChainId, switchNetwork } =
 
 const user = useSupabaseUser();
 console.log(user.value)
-const supabase = useSupabaseAuthClient();
+const supabase = useSupabaseClient();
 
 
 async function signOut() {
@@ -120,8 +120,6 @@ watch(chain,
 const authWallet = computed(() => {
   return address.value || user.value?.user_metadata?.walletAddress
 })
-
-console.log('authWallet', authWallet.value)
 </script>
 
 <template>
