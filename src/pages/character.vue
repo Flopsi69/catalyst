@@ -15,23 +15,13 @@ definePageMeta({
 });
 
 console.log('testik2')
-const { data: character, error } = await useFetch('/api/character', {
-  onRequestError({ request, options, error }) {
-    console.log('ReqError', error)
-    console.log(options)
-  },
-  onResponseError({ request, response, options }) {
-    console.log('ResError', response)
-    console.log(options)
-    // Handle the response errors
-  }
-});
+const { data: character, error } = await useFetch('/api/character');
 
 console.log('error', error.value)
 console.log('character', character.value);
 
 if (character.value) {
-  navigateTo('/quests');
+  // navigateTo('/quests');
 }
 
 const toast = useToast();

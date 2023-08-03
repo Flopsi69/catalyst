@@ -15,6 +15,7 @@ definePageMeta({
   middleware: 'guest'
 });
 
+const { address } = useAccount();
 const user = useSupabaseUser();
 
 watch(user, () => {
@@ -27,13 +28,13 @@ watch(user, () => {
 
 <template>
   <IndexHeader />
-  <!-- 
+
   <client-only>
     <div v-if="user || address" class="debug">
       <p v-if="address">Address: {{ address }}</p>
       <p v-if="user">User: {{ user.id }}</p>
     </div>
-  </client-only> -->
+  </client-only>
 
   <main class="main">
     <section class="section jumb">
