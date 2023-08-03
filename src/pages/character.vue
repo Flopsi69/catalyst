@@ -11,7 +11,7 @@ import iconArrow from "@img/icons/arrow-bold.svg?component";
 
 definePageMeta({
   layout: false,
-  // middleware: ['auth']
+  middleware: 'auth'
 });
 
 const supabase = useSupabaseClient();
