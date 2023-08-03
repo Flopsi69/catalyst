@@ -36,7 +36,7 @@ export default defineNuxtConfig({
     dirs: ['stores'],
   },
 
-  ssr: false,
+  // ssr: false,
 
   // nitro: {
   //   prerender: {
