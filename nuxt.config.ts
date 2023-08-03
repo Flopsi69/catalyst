@@ -29,6 +29,11 @@ export default defineNuxtConfig({
             flowType: 'implicit',
           },
         },
+        cookieOptions: {
+          maxAge: 60 * 60 * 80,
+          sameSite: 'none',
+          secure: false,
+        },
       },
     ],
     // '@sidebase/nuxt-auth',
