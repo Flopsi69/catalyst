@@ -18,7 +18,6 @@ const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 
 console.log('user', user.value.id)
-const test = useNuxtData()
 
 const { data: character, error } = await useAsyncData('character',
   async () => supabase.from('characters')
@@ -101,42 +100,31 @@ async function handlePlay() {
 
   console.log('characterData', characterData)
 
-  // const { data: char, error: characterError } = await useAsyncData('character',
-  // async () => supabase
-  //     .from('characters')
-  //     .insert(characterData)
-  //     .select()
-  //     .single(), { transform: result => result.data }
-  // )
+  const { data: char, error: characterError } = await useAsyncData('character',
+  async () => supabase
+      .from('characters')
+      .insert(characterData)
+      .select()
+      .single(), { transform: result => result.data }
+  )
 
-  const res = await $fetch('/api/character', {
-    method: 'post',
-    body: {
-      race: activeRace.value.type,
-      nickname: nickname.value,
-      sex: activeSex.value,
-    }
-  })
+  // const character = await $fetch('/api/character', {
+  //   method: 'post',
+  //   body: {
+  //     race: activeRace.value.type,
+  //     nickname: nickname.value,
+  //     sex: activeSex.value,
+  //   }
+  // })
 
-  console.log(res)
-
-  // if (character.value) {
-  //   console.log('characterError', characterError.value)
-  // }
-  // if (character.value) {
-  //   toast.success(`Welcome to the game, ${char.value.nickname}!`);
-  //   console.log('characterCreated', char.value);
-  //   navigateTo('/quests')
-  // }
-
-  // if (characterError.value) {
-  //   console.log('characterError', characterError.value)
-  // }
-  // if (char.value) {
-  //   toast.success(`Welcome to the game, ${char.value.nickname}!`);
-  //   console.log('characterCreated', char.value);
-  //   navigateTo('/quests')
-  // }
+  if (characterError.value) {
+    console.log('characterError', characterError.value)
+  }
+  if (char.value) {
+    toast.success(`Welcome to the game, ${char.value.nickname}!`);
+    console.log('characterCreated', char.value);
+    navigateTo('/quests')
+  }
 }
 </script>
 
