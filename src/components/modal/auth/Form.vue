@@ -200,27 +200,29 @@ async function authWeb3() {
       chainId: chain.value.id
     })
 
+
+
     const signature = await signMessageAsync({
-      message: message.prepareMessage(),
+      message: await message.prepareMessage(),
     })
 
     console.log('message', message)
 
-    const verify = await message.verify({
-      signature,
-      domain: new URL(window.location).host,
-    });
+    // const verify = await message.verify({
+    //   signature
+    // });
 
-    console.log('verify', verify)
+    // console.log('verify', verify)
 
-    // const { user, authData } = await $fetch('/api/auth/wallet', {
-    //   method: 'POST',
-    //   body: {
-    //     message,
-    //     signature
-    //   }
-    // })
+    const { user, authData } = await $fetch('/api/auth/wallet', {
+      method: 'POST',
+      body: {
+        message,
+        signature
+      }
+    })
 
+    console.log(user, authData)
     if (true) {
       throw new Error('Something went wrong! Try again later.')
     }
