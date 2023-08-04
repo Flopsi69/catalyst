@@ -77,6 +77,9 @@ export default defineNuxtConfig({
       ],
       script: [
         {
+          src: 'https://bundle.run/buffer@6.0.3',
+        },
+        {
           children:
             "setTimeout(() => {document.documentElement.classList.add('transition-activated')}, 800)",
         },
@@ -99,20 +102,20 @@ export default defineNuxtConfig({
       },
     },
     plugins: [
-      nodePolyfills({
-        // To exclude specific polyfills, add them to this list.
-        exclude: [
-          'fs', // Excludes the polyfill for `fs` and `node:fs`.
-        ],
-        // Whether to polyfill specific globals.
-        globals: {
-          Buffer: true, // can also be 'build', 'dev', or false
-          global: true,
-          process: true,
-        },
-        // Whether to polyfill `node:` protocol imports.
-        protocolImports: true,
-      }),
+      // nodePolyfills({
+      //   // To exclude specific polyfills, add them to this list.
+      //   exclude: [
+      //     'fs', // Excludes the polyfill for `fs` and `node:fs`.
+      //   ],
+      //   // Whether to polyfill specific globals.
+      //   globals: {
+      //     Buffer: true, // can also be 'build', 'dev', or false
+      //     global: true,
+      //     process: true,
+      //   },
+      //   // Whether to polyfill `node:` protocol imports.
+      //   protocolImports: true,
+      // }),
     ],
     optimizeDeps: {
       esbuildOptions: {
