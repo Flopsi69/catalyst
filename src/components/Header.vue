@@ -166,139 +166,139 @@ const authWallet = computed(() => {
       </div>
 
       <!-- Wallet -->
-      <client-only>
-        <div v-if="user" class="wallet__wrap flex align-center">
-          <button
-            v-if="!isConnected"
-            @click="isConnected ? disconnect() : connect({connector: connectors[0]})"
-            class="btn btn-blue btn-icon header__connect"
-          >
-            <img src="@img/icons/wallet.svg" alt="" />
-            {{ isConnected ? "Disconnect" : "Connect" }} Wallet
-          </button>
+      <!-- <client-only> -->
+      <div v-if="user" class="wallet__wrap flex align-center">
+        <button
+          v-if="!isConnected"
+          @click="isConnected ? disconnect() : connect({connector: connectors[0]})"
+          class="btn btn-blue btn-icon header__connect"
+        >
+          <img src="@img/icons/wallet.svg" alt="" />
+          {{ isConnected ? "Disconnect" : "Connect" }} Wallet
+        </button>
 
-          <dropdown v-if="isConnected && chain" md="right" class="wallet">
-            <template #trigger>
-              <div class="network wallet__dropdown flex align-center">
-                <div class="wallet__icon flex align-center justify-center">
-                  <img
-                    :src="`/images/chains/${!chain || chain.unsupported ? 'unsupported' : chain.network}.svg`"
-                    alt=""
-                  />
-                </div>
-                <div class="wallet__info">
-                  <div class="wallet__label fw-700">Network</div>
-                  <div class="wallet__value dropdown__icon fw-700">
-                    {{ chain?.name }}
-                  </div>
+        <dropdown v-if="isConnected && chain" md="right" class="wallet">
+          <template #trigger>
+            <div class="network wallet__dropdown flex align-center">
+              <div class="wallet__icon flex align-center justify-center">
+                <img
+                  :src="`/images/chains/${!chain || chain.unsupported ? 'unsupported' : chain.network}.svg`"
+                  alt=""
+                />
+              </div>
+              <div class="wallet__info">
+                <div class="wallet__label fw-700">Network</div>
+                <div class="wallet__value dropdown__icon fw-700">
+                  {{ chain?.name }}
                 </div>
               </div>
-            </template>
+            </div>
+          </template>
 
-            <template #body>
-              <div class="chains fw-700">
-                <div
-                  v-for="chainItem of chains"
-                  class="chain flex align-center"
-                  @click="switchNetwork(chainItem.id)"
-                  :class="{ active: chain.id === chainItem.id }"
-                >
-                  <div class="chain__icon flex-center lh-0">
+          <template #body>
+            <div class="chains fw-700">
+              <div
+                v-for="chainItem of chains"
+                class="chain flex align-center"
+                @click="switchNetwork(chainItem.id)"
+                :class="{ active: chain.id === chainItem.id }"
+              >
+                <div class="chain__icon flex-center lh-0">
+                  <img
+                    :src="`/images/chains/${chain.id === chainItem.id ? 'active' : chainItem.network}.svg`"
+                    :alt="chainItem.name"
+                  />
+                </div>
+                <div>{{ chainItem.name }}</div>
+              </div>
+            </div>
+          </template>
+        </dropdown>
+
+        <dropdown md="right" class="wallet">
+          <template #trigger>
+            <div class="wallet__dropdown flex align-center">
+              <div class="wallet__icon flex align-center justify-center">
+                <img
+                  :src="`/images/icons/${authWallet ? 'wallet' : 'email'}-placeholder.svg`"
+                  alt=""
+                />
+              </div>
+              <div class="wallet__info">
+                <div class="wallet__label fw-700">
+                  {{authWallet ? "Wallet" : "E-mail"}}
+                </div>
+                <div class="wallet__value dropdown__icon fw-700">
+                  <template v-if="authWallet">
+                    {{ authWallet.slice(0, 3) + '...' + authWallet.slice(-3) }}
+                  </template>
+                  <template v-else>
+                    {{ user.email }}
+                  </template>
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <template #body>
+            <div class="profile fw-700">
+              <div v-if="false" class="profile__mobile">
+                <!-- Profile Wallet -->
+                <div class="wallet__summary flex align-center">
+                  <div class="wallet__icon flex align-center justify-center">
                     <img
-                      :src="`/images/chains/${chain.id === chainItem.id ? 'active' : chainItem.network}.svg`"
-                      :alt="chainItem.name"
+                      :src="`/images/icons/${authWallet ? 'wallet' : 'email'}-placeholder.svg`"
+                      alt=""
                     />
                   </div>
-                  <div>{{ chainItem.name }}</div>
-                </div>
-              </div>
-            </template>
-          </dropdown>
-
-          <dropdown md="right" class="wallet">
-            <template #trigger>
-              <div class="wallet__dropdown flex align-center">
-                <div class="wallet__icon flex align-center justify-center">
-                  <img
-                    :src="`/images/icons/${authWallet ? 'wallet' : 'email'}-placeholder.svg`"
-                    alt=""
-                  />
-                </div>
-                <div class="wallet__info">
-                  <div class="wallet__label fw-700">
-                    {{authWallet ? "Wallet" : "E-mail"}}
-                  </div>
-                  <div class="wallet__value dropdown__icon fw-700">
-                    <template v-if="authWallet">
-                      {{ authWallet.slice(0, 3) + '...' + authWallet.slice(-3) }}
-                    </template>
-                    <template v-else>
-                      {{ user.email }}
-                    </template>
-                  </div>
-                </div>
-              </div>
-            </template>
-
-            <template #body>
-              <div class="profile fw-700">
-                <div v-if="false" class="profile__mobile">
-                  <!-- Profile Wallet -->
-                  <div class="wallet__summary flex align-center">
-                    <div class="wallet__icon flex align-center justify-center">
-                      <img
-                        :src="`/images/icons/${authWallet ? 'wallet' : 'email'}-placeholder.svg`"
-                        alt=""
-                      />
+                  <div class="wallet__info flex-grow">
+                    <div class="wallet__label fw-700">
+                      {{ authWallet ? "Wallet" : "E-mail" }}
                     </div>
-                    <div class="wallet__info flex-grow">
-                      <div class="wallet__label fw-700">
-                        {{ authWallet ? "Wallet" : "E-mail" }}
-                      </div>
-                      <div class="wallet__value fw-700">
-                        <template v-if="authWallet">
-                          {{ authWallet.slice(0, 3) + '...' + authWallet.slice(-3) }}
-                        </template>
-                        <template v-else>
-                          {{ user.email }}
-                        </template>
-                      </div>
+                    <div class="wallet__value fw-700">
+                      <template v-if="authWallet">
+                        {{ authWallet.slice(0, 3) + '...' + authWallet.slice(-3) }}
+                      </template>
+                      <template v-else>
+                        {{ user.email }}
+                      </template>
                     </div>
                   </div>
-
-                  <!-- Profile stats -->
-                  <div class="stats profile__stats flex align-center">
-                    <tooltip
-                      v-for="{ value, type } of stats"
-                      class="stat stats__item flex align-center fw-700"
-                      :class="`stat_${type}`"
-                      placement="bottom"
-                      :text="type"
-                      :isArrow="false"
-                    >
-                      {{ value }}
-                    </tooltip>
-                  </div>
                 </div>
 
-                <div class="profile__item flex align-center">
-                  <img src="@img/icons/profile.svg" alt="" />
-                  <span>Profile</span>
-                </div>
-                <div class="profile__divider"></div>
-                <!-- -->
-                <div
-                  @click="isConnected ? disconnect() : signOut()"
-                  class="profile__item flex align-center"
-                >
-                  <img src="@img/icons/disconnect.svg" alt="" />
-                  <span>Disconnect</span>
+                <!-- Profile stats -->
+                <div class="stats profile__stats flex align-center">
+                  <tooltip
+                    v-for="{ value, type } of stats"
+                    class="stat stats__item flex align-center fw-700"
+                    :class="`stat_${type}`"
+                    placement="bottom"
+                    :text="type"
+                    :isArrow="false"
+                  >
+                    {{ value }}
+                  </tooltip>
                 </div>
               </div>
-            </template>
-          </dropdown>
-        </div>
-      </client-only>
+
+              <div class="profile__item flex align-center">
+                <img src="@img/icons/profile.svg" alt="" />
+                <span>Profile</span>
+              </div>
+              <div class="profile__divider"></div>
+              <!-- -->
+              <div
+                @click="isConnected ? disconnect() : signOut()"
+                class="profile__item flex align-center"
+              >
+                <img src="@img/icons/disconnect.svg" alt="" />
+                <span>Disconnect</span>
+              </div>
+            </div>
+          </template>
+        </dropdown>
+      </div>
+      <!-- </client-only> -->
 
       <!-- <button
         class="burger"
