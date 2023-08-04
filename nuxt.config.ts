@@ -4,6 +4,7 @@
 // import nodePolyfills from 'rollup-plugin-polyfill-node';
 // import nodePolyfills from 'rollup-plugin-node-polyfills';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import { Buffer } from 'buffer/';
 
 // import inject from '@rollup/plugin-inject';
 
@@ -77,7 +78,7 @@ export default defineNuxtConfig({
         },
       ],
       script: [
-        // { children: `window.Buffer = ${Buffer} || []` }
+        { children: `window.Buffer = ${Buffer};` },
         {
           children:
             "setTimeout(() => {document.documentElement.classList.add('transition-activated')}, 800)",
