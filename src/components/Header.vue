@@ -182,7 +182,7 @@ const authWallet = computed(() => {
               <div class="network wallet__dropdown flex align-center">
                 <div class="wallet__icon flex align-center justify-center">
                   <img
-                    :src="`/images/chains/${chain.unsupported ? 'unsupported' : chain.network}.svg`"
+                    :src="`/images/chains/${!chain || chain.unsupported ? 'unsupported' : chain.network}.svg`"
                     alt=""
                   />
                 </div>
