@@ -19,14 +19,13 @@ const user = useSupabaseUser();
 
 console.log('user', user.value.id)
 
-// const { data: character, error } = await useAsyncData('character',
-//   async () => supabase.from('characters')
-//       .select('*')
-//       .eq('userId', user.value.id)
-//       .limit(1)
-//     .single(), { transform: result => result.data }
-// )
+const { data: character, error } = await useAsyncData('character', async() => supabase.from('characters')
+      .select('*')
+      .eq('userId', user.value.id).maybeSingle()
+    , { transform: result => result.data }
+)
 
+console.log(character.value, error.value)
 // const {data: character, error} = await supabase.from('characters')
 //       .select('*')
 //       .eq('userId', user.value.id)
@@ -34,11 +33,12 @@ console.log('user', user.value.id)
 //     .single()
 
 // console.log(2)
-// if (character) {
-//   navigateTo('/quests');
-// } else if (error.value) {
-//   console.log('error', error)
-// }
+if (character.value) {
+  navigateTo('/quests');
+  console.log('charUser', character.value)
+} else if (error.value) {
+  console.log('charError', error.value)
+}
 
 // const { data: character, error } = await useFetch('/api/character');
 
@@ -106,13 +106,15 @@ async function handlePlay() {
 
   console.log('characterData', characterData)
 
-  const { data: char, error: characterError } = await useAsyncData('character',
+  const { data: char, error: charError } = await useAsyncData('addCharacter',
   async () => supabase
       .from('characters')
       .insert(characterData)
       .select()
       .single(), { transform: result => result.data }
   )
+
+  console.log(char.value, charError.value)
 
   // const character = await $fetch('/api/character', {
   //   method: 'post',
@@ -123,13 +125,13 @@ async function handlePlay() {
   //   }
   // })
 
-  if (characterError.value) {
-    console.log('characterError', characterError.value)
+  if (charError.value) {
+    console.log('charError', charError.value)
   }
   if (char.value) {
     toast.success(`Welcome to the game, ${char.value.nickname}!`);
     console.log('characterCreated', char.value);
-    navigateTo('/quests')
+    await navigateTo('/quests')
   }
 }
 </script>

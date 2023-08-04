@@ -129,18 +129,24 @@ const user = useSupabaseUser();
 
 console.log('user', user.value.id)
 
-const { data: character, error } = await useAsyncData('character',
-  async () => supabase.from('characters')
+const { data: character, error } = await useAsyncData('character', async() => supabase.from('characters')
       .select('*')
-      .eq('userId', user.value.id)
-      .limit(1)
-    .single(), { transform: result => result.data }
+      .eq('userId', user.value.id).maybeSingle()
+    , { transform: result => result.data }
 )
+
+// if (error) {
+//   console.error('errorCharacter', error)
+// }
+// console.log('questCharacter', character)
+// if (!character) {
+//   await navigateTo('/character');
+// }
 
 if (error.value) {
   console.error('errorCharacter', error.value)
 }
-
+console.log('questCharacter', character.value)
 if (!character.value) {
   await navigateTo('/character');
 }

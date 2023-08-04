@@ -104,7 +104,7 @@ async function signOut() {
   }
 
   toast.info("Successfully signed out!");
-  navigateTo('/');
+  await navigateTo('/');
 }
 
 watch(chain,
@@ -118,8 +118,6 @@ watch(chain,
 )
 
 const authWallet = computed(() => {
-  console.log('Compaddress', address.value)
-  console.log('CompwalletADDRESS', user.value?.user_metadata?.walletAddress)
   return address.value || user.value?.user_metadata?.walletAddress
 })
 </script>
@@ -242,7 +240,7 @@ const authWallet = computed(() => {
 
           <template #body>
             <div class="profile fw-700">
-              <div v-if="false" class="profile__mobile">
+              <div class="profile__mobile">
                 <!-- Profile Wallet -->
                 <div class="wallet__summary flex align-center">
                   <div class="wallet__icon flex align-center justify-center">

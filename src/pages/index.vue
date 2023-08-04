@@ -18,9 +18,9 @@ definePageMeta({
 const { address } = useAccount();
 const user = useSupabaseUser();
 
-watchEffect(() => {
+watchEffect(async () => {
   if (user.value) {
-    navigateTo('/character');
+    await navigateTo('/quests');
   }
 })
 </script>
