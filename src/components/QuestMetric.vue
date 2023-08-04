@@ -25,15 +25,13 @@ function countdownTimer(duration) {
   }, 1000);
 }
 
-// defineProps({
-//   character: {
-//     type: Object,
-//     required: true,
-//     default: {
-
-//     }
-//   },
-// });
+defineProps({
+  character: {
+    type: Object,
+    required: true,
+    default: {}
+  },
+});
 
 // const { data: character, error } = await useFetch('/api/character');
 // console.log('character', character.value);
@@ -44,27 +42,6 @@ function countdownTimer(duration) {
 // }
 
 
-const supabase = useSupabaseClient();
-const user = useSupabaseUser();
-
-console.log('user', user.value.id)
-
-const { data: character, error } = await useAsyncData('character',
-  async () => supabase.from('characters')
-      .select('*')
-      .eq('userId', user.value.id)
-      .limit(1)
-    .single(), { transform: result => result.data }
-)
-
-if (error.value) {
-  console.error('errorCharacter', error.value)
-}
-
-if (!character.value) {
-  await navigateTo('/character');
-}
-
 
 onMounted(() => {
   countdownTimer(3510);
@@ -73,7 +50,7 @@ onMounted(() => {
 
 <template>
   <!-- 1 -->
-  <div v-if="character" class="metric player">
+  <div v-if="character?.sex" class="metric player">
     <img
       v-if='character.sex === "male"'
       class="player__image player__image_male"

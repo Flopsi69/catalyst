@@ -124,29 +124,32 @@ const questList = reactive([
   }
 ]);
 
-// const { data: character } = await useFetch('/api/character');
-// if (!character.value) {
-//   navigateTo('/character');
-// }
-// console.log('character', character.value);
+const supabase = useSupabaseClient();
+const user = useSupabaseUser();
 
-// if (character) {
-//  console.log('character', character.value);
-// }
+console.log('user', user.value.id)
 
-// const supabase = useSupabaseClient({db: { schema: 'next_auth' }})
+const { data: character, error } = await useAsyncData('character',
+  async () => supabase.from('characters')
+      .select('*')
+      .eq('userId', user.value.id)
+      .limit(1)
+    .single(), { transform: result => result.data }
+)
 
-// supabase.from('users').select("name,email").then(({ data, error }) => {
-//   if (error) console.log('error', error);
-//   console.log('data', data);
-// });
-// console.log('client', supabase);
+if (error.value) {
+  console.error('errorCharacter', error.value)
+}
+
+if (!character.value) {
+  await navigateTo('/character');
+}
 </script>
 
 <template>
   <section class="section metrics">
     <div class="container metrics__container">
-      <QuestMetric />
+      <QuestMetric :character="character" />
     </div>
   </section>
 

@@ -19,20 +19,26 @@ const user = useSupabaseUser();
 
 console.log('user', user.value.id)
 
-const { data: character, error } = await useAsyncData('character',
-  async () => supabase.from('characters')
-      .select('*')
-      .eq('userId', user.value.id)
-      .limit(1)
-    .single(), { transform: result => result.data }
-)
+// const { data: character, error } = await useAsyncData('character',
+//   async () => supabase.from('characters')
+//       .select('*')
+//       .eq('userId', user.value.id)
+//       .limit(1)
+//     .single(), { transform: result => result.data }
+// )
 
-console.log(2)
-if (character.value) {
-  navigateTo('/quests');
-} else if (error.value) {
-  console.log('error', error.value)
-}
+// const {data: character, error} = await supabase.from('characters')
+//       .select('*')
+//       .eq('userId', user.value.id)
+//       .limit(1)
+//     .single()
+
+// console.log(2)
+// if (character) {
+//   navigateTo('/quests');
+// } else if (error.value) {
+//   console.log('error', error)
+// }
 
 // const { data: character, error } = await useFetch('/api/character');
 
