@@ -15,13 +15,9 @@ function countdownTimer(duration) {
     minutes.value = minutes.value < 10 ? "0" + minutes.value : minutes.value;
     seconds.value = seconds.value < 10 ? "0" + seconds.value : seconds.value;
 
-    // display.textContent = hours + ":" + minutes + ":" + seconds;
-
     if (--timer < 0) {
       timer = duration;
     }
-
-    // console.log(hours.value + ":" + minutes.value + ":" + seconds.value)
   }, 1000);
 }
 
@@ -33,16 +29,6 @@ defineProps({
   },
 });
 
-// const { data: character, error } = await useFetch('/api/character');
-// console.log('character', character.value);
-// console.log('characterError', error.value);
-// if (!character.value) {
-//   console.debug('navigate to character')
-//   // navigateTo('/character');
-// }
-
-
-
 onMounted(() => {
   countdownTimer(3510);
 });
@@ -52,15 +38,7 @@ onMounted(() => {
   <!-- 1 -->
   <div v-if="character?.sex" class="metric player">
     <img
-      v-if='character.sex === "male"'
-      class="player__image player__image_male"
-      src="@img/temp/man.gif"
-      alt=""
-    />
-    <img
-      v-if='character.sex === "female"'
-      class="player__image player__image_female"
-      src="@img/temp/woman.png"
+      :src="`/images/character/${activeSex === 'male' ? 'man.gif': 'woman.png'}`"
       alt=""
     />
 

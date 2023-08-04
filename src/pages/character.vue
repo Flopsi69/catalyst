@@ -17,43 +17,26 @@ definePageMeta({
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 
-console.log('user', user.value.id)
-
 const { data: character, error } = await useAsyncData('character', async() => supabase.from('characters')
       .select('*')
       .eq('userId', user.value.id).maybeSingle()
     , { transform: result => result.data }
 )
 
-console.log(character.value, error.value)
-// const {data: character, error} = await supabase.from('characters')
-//       .select('*')
-//       .eq('userId', user.value.id)
-//       .limit(1)
-//     .single()
-
-// console.log(2)
 if (character.value) {
   navigateTo('/quests');
-  console.log('charUser', character.value)
+  console.log('CharacterGeT:', character.value)
 } else if (error.value) {
-  console.log('charError', error.value)
+  console.log('CharacterGeTError:', error.value)
 }
-
-// const { data: character, error } = await useFetch('/api/character');
-
-// console.log('error', error.value)
-// console.log('character', character.value);
-
-// if (character.value) {
-//   // navigateTo('/quests');
-// }
 
 const toast = useToast();
 
 const activeRace = ref(null);
 const activeClass = ref(null);
 const activeSex = ref('male');
+
+console.log(activeSex.value);
 const nickname = ref('');
 const stepsCount = ref(3);
 const step = ref(1);
@@ -104,9 +87,7 @@ async function handlePlay() {
     userId: user.value.id
   }
 
-  console.log('characterData', characterData)
-
-  const { data: char, error: charError } = await useAsyncData('addCharacter',
+  const { data: char, error: charError } = await useAsyncData('character',
   async () => supabase
       .from('characters')
       .insert(characterData)
@@ -114,23 +95,12 @@ async function handlePlay() {
       .single(), { transform: result => result.data }
   )
 
-  console.log(char.value, charError.value)
-
-  // const character = await $fetch('/api/character', {
-  //   method: 'post',
-  //   body: {
-  //     race: activeRace.value.type,
-  //     nickname: nickname.value,
-  //     sex: activeSex.value,
-  //   }
-  // })
-
   if (charError.value) {
-    console.log('charError', charError.value)
+    console.log('CharacterPostError:', charError.value)
   }
   if (char.value) {
+    console.log('CharacterPost', char.value)
     toast.success(`Welcome to the game, ${char.value.nickname}!`);
-    console.log('characterCreated', char.value);
     await navigateTo('/quests')
   }
 }
@@ -139,7 +109,6 @@ async function handlePlay() {
 <template>
   <main class="main flex-center">
     <div class="main__desk container flex justify-between">
-      <!-- <img src="@img/bg/character-video-placeholder.png" alt="" /> -->
       <div class="params plate">
         <div class="params__logo lh-0">
           <img src="@img/logo-blue.png" alt="" />
@@ -192,12 +161,14 @@ async function handlePlay() {
           </div>
         </div>
 
-        <ClientOnly>
-          <div class="avatar" :class="`avatar_${activeSex}`" id="avatar">
-            <img v-if="activeSex === 'male'" src="@img/temp/man.gif" alt="" />
-            <img v-else src="@img/temp/woman.png" alt="" />
-          </div>
-        </ClientOnly>
+        <!-- <ClientOnly> -->
+        <div class="avatar" :class="`avatar_${activeSex}`" id="avatar">
+          <img
+            :src="`/images/character/${activeSex === 'male' ? 'man.gif': 'woman.png'}`"
+            alt=""
+          />
+        </div>
+        <!-- </ClientOnly> -->
 
         <div v-if="false" class="character__class plate">
           <div class="class__caption text-center fw-700">
@@ -233,8 +204,10 @@ async function handlePlay() {
 
     <div class="main__mob container">
       <div class="avatar" :class="`avatar_${activeSex}`" id="avatar">
-        <img v-if="activeSex === 'male'" src="@img/temp/man.gif" alt="" />
-        <img v-else src="@img/temp/woman.png" alt="" />
+        <img
+          :src="`/images/character/${activeSex === 'male' ? 'man.gif': 'woman.png'}`"
+          alt=""
+        />
       </div>
 
       <div class="steps">

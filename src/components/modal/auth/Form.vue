@@ -135,9 +135,6 @@ async function authGoogle() {
     provider: 'google'
   })
 
-  console.log('dataGoogle', data)
-  console.log('errorGoogle', error)
-
   if (error) {
     return toast.error(error.message)
   }
@@ -164,8 +161,6 @@ async function authUser() {
     if (error) {
       return toast.error(error.message)
     }
-
-    console.log('res', res)
 
     toast.success('Successfully registered! Confirm your email to continue.')
     $modal.close();
@@ -241,40 +236,6 @@ async function authWeb3() {
     const errorMessage = err.shortMessage ? err.shortMessage : err.message ? err.message : err;
 
     toast.error(errorMessage)
-  }
-}
-
-async function authGoogle_old() {
-  try {
-    await signIn('google', { redirect: false })
-  } catch (err) {
-    const errorMessage = err.shortMessage ? err.shortMessage : err.message ? err.message : err;
-
-    toast.error(errorMessage)
-    console.log('error', err)
-  }
-}
-
-async function authUser_old() {
-  try {
-    if (currentTab.value === 'signin') {
-      const data = await signIn('standart-credentials', {email: authData.email, password: authData.password, redirect: false})
-      // console.log('fire', data)
-      if (data.error) {
-        // console.log(data.error)
-        // Do your custom error handling here
-        toast.error(data.error)
-      } else {
-        // console.log('fire3', url)
-        // No error, continue with the sign in, e.g., by following the returned redirect:
-        // return navigateTo(url, { external: true })
-      }
-    }
-    } catch (err) {
-    const errorMessage = err.shortMessage ? err.shortMessage : err.message ? err.message : err;
-
-    toast.error(errorMessage)
-    console.log('error', err)
   }
 }
 </script>
