@@ -33,7 +33,6 @@ const actions = [
     :slides-per-view="'auto'"
     rewind
     :init="false"
-    @init="console.log('fire')"
     :breakpoints="{
       0: {
         centeredSlides: true,

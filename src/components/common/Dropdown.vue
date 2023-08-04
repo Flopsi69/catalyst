@@ -27,10 +27,7 @@ onMounted(() => {
     ref="dropdown"
     :class="{'active': isActive }"
   >
-    <div
-      class="dropdown__trigger"
-      @click.prevent="isActive = !isActive; console.log('fireee')"
-    >
+    <div class="dropdown__trigger" @click.prevent="isActive = !isActive">
       <slot name="trigger" :isActive="isActive"> </slot>
     </div>
 
