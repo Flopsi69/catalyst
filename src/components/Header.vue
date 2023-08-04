@@ -177,19 +177,19 @@ const authWallet = computed(() => {
           {{ isConnected ? "Disconnect" : "Connect" }} Wallet
         </button>
 
-        <dropdown v-if="isConnected && chain" md="right" class="wallet">
+        <dropdown v-if="isConnected" md="right" class="wallet">
           <template #trigger>
             <div class="network wallet__dropdown flex align-center">
               <div class="wallet__icon flex align-center justify-center">
                 <img
-                  :src="`/images/chains/${!chain || chain.unsupported ? 'unsupported' : chain.network}.svg`"
+                  :src="`/images/chains/${ chain.unsupported ? 'unsupported' : chain.network}.svg`"
                   alt=""
                 />
               </div>
               <div class="wallet__info">
                 <div class="wallet__label fw-700">Network</div>
                 <div class="wallet__value dropdown__icon fw-700">
-                  {{ chain?.name }}
+                  {{ chain.name }}
                 </div>
               </div>
             </div>
