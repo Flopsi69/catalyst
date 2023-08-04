@@ -27,7 +27,7 @@ const actions = [
 </script>
 
 <template>
-  <Swiper
+  <!-- <Swiper
     class="actions w-100"
     :modules="[SwiperAutoplay]"
     :slides-per-view="'auto'"
@@ -70,7 +70,7 @@ const actions = [
         </div>
       </div>
     </SwiperSlide>
-  </Swiper>
+  </Swiper> -->
 
   <!-- <div class="actions">
     <div v-for="action in actions" class="action flex">
