@@ -768,7 +768,7 @@
   resolved "https://registry.npmjs.org/@noble/hashes/-/hashes-1.3.0.tgz"
   integrity sha512-ilHEACi9DwqJB0pw7kv+Apvh50jiiSyR/cQ3y4W7lOR5mhvn/50FLUfsnfJz0BDZtl/RR16kXvptiv6q1msYZg==
 
-"@noble/hashes@1.3.1", "@noble/hashes@^1.1.2", "@noble/hashes@^1.3.0", "@noble/hashes@~1.3.0":
+"@noble/hashes@1.3.1", "@noble/hashes@^1.3.0", "@noble/hashes@~1.3.0":
   version "1.3.1"
   resolved "https://registry.npmjs.org/@noble/hashes/-/hashes-1.3.1.tgz"
   integrity sha512-EbqwksQwz9xDRGfDST86whPBgM65E0OH/pCgqW0GBVzO22bNE+NuIbeTb714+IfSjU3aRk47EUvXIb5bTsenKA==
@@ -1136,12 +1136,11 @@
     rpc-websockets "^7.5.1"
     superstruct "^0.14.2"
 
-"@spruceid/siwe-parser@*":
-  version "2.0.2"
-  resolved "https://registry.npmjs.org/@spruceid/siwe-parser/-/siwe-parser-2.0.2.tgz"
-  integrity sha512-9WuA0ios2537cWYu39MMeH0O2KdrMKgKlOBUTWRTXQjCYu5B+mHCA0JkCbFaJ/0EjxoVIcYCXIW/DoPEpw+PqA==
+"@spruceid/siwe-parser@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@spruceid/siwe-parser/-/siwe-parser-2.0.0.tgz#fb316b9115e9116bac528c5cbfed18787119bede"
+  integrity sha512-zXlPBRKaT9ecxhhLQqn/StAWlXvQBlFDFnIAlM7ceMVx/1NVZZ65GdW9A28tYGbhpesYxNYpsqegGsBcrWuASg==
   dependencies:
-    "@noble/hashes" "^1.1.2"
     apg-js "^4.1.1"
     uri-js "^4.4.1"
     valid-url "^1.0.9"
@@ -3526,10 +3525,10 @@ eth-rpc-errors@^4.0.2:
   dependencies:
     fast-safe-stringify "^2.0.6"
 
-ethers@^6.6.4:
-  version "6.6.7"
-  resolved "https://registry.npmjs.org/ethers/-/ethers-6.6.7.tgz"
-  integrity sha512-1SdT3W5/IPAcx9l5/+9qKRYR/iqVIdNQIct18yeh+XvN+I4RK44mvOsAerMwJYCAwdQfsOgf3OkfozeuMInbtQ==
+ethers@^6.3.0:
+  version "6.7.0"
+  resolved "https://registry.yarnpkg.com/ethers/-/ethers-6.7.0.tgz#0f772c31a9450de28aa518b181c8cb269bbe7fd1"
+  integrity sha512-pxt5hK82RNwcTX2gOZP81t6qVPVspnkpeivwEgQuK9XUvbNtghBnT8GNIb/gPh+WnVSfi8cXC9XlfT8sqc6D6w==
   dependencies:
     "@adraffy/ens-normalize" "1.9.2"
     "@noble/hashes" "1.1.2"
@@ -6390,12 +6389,12 @@ sisteransi@^1.0.5:
   resolved "https://registry.npmjs.org/sisteransi/-/sisteransi-1.0.5.tgz"
   integrity sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==
 
-siwe@^2.1.4:
-  version "2.1.4"
-  resolved "https://registry.npmjs.org/siwe/-/siwe-2.1.4.tgz"
-  integrity sha512-Dke1Qqa3mgiLm3vjqw/+SQ7dl8WV/Pfk3AlQBF94cBFydTYhztngqYrikzE3X5UTsJ6565dfVbQptszsuYZNYg==
+siwe@2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/siwe/-/siwe-2.0.5.tgz#784083018e9dfd3ca6139a9f58fab50b89ba6886"
+  integrity sha512-PZku0+V915YvzVuProsC+RD6unKBo3208X/+t9ARk1WHjYMbtGnxuyBuMASdmLFI3nqJiorko5qrT0ihCFwlHQ==
   dependencies:
-    "@spruceid/siwe-parser" "*"
+    "@spruceid/siwe-parser" "2.0.0"
     "@stablelib/random" "^1.0.1"
     uri-js "^4.4.1"
     valid-url "^1.0.9"
