@@ -23,6 +23,7 @@ const authData = reactive({
 
 // Web3
 const { address, isConnected } = useAccount();
+const { chain } = useNetwork();
 const { connectAsync, connectors } = useConnect({
     onSuccess({account, connector: { name }}) {
       console.log('Connect', name)
@@ -196,7 +197,7 @@ async function authWeb3() {
       statement: "Sign in with Ethereum to the app.",
       uri: window.location.origin,
       version: "1",
-      chainId: '1'
+      chainId: chain.value.id
     })
 
     const signature = await signMessageAsync({
