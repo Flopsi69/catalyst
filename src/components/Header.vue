@@ -90,7 +90,6 @@ const { error, isLoading, pendingChainId, switchNetwork } =
   });
 
 const user = useSupabaseUser();
-console.log(user.value)
 const supabase = useSupabaseClient();
 
 

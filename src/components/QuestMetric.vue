@@ -37,10 +37,8 @@ onMounted(() => {
 <template>
   <!-- 1 -->
   <div v-if="character?.sex" class="metric player">
-    <img
-      :src="`/images/character/${activeSex === 'male' ? 'man.gif': 'woman.png'}`"
-      alt=""
-    />
+    <img v-if="activeSex === 'male'" src="/images/character/man.gif" />
+    <img v-else src="/images/character/woman.png" />
 
     <div class="metric__info text-center">
       <div class="metric__logo">
@@ -70,7 +68,7 @@ onMounted(() => {
         <div class="metric__lvl lh-1 fw-700 flex justify-center align-center">
           18
         </div>
-        <img src="@img/rewards/battle.png" alt="" />
+        <img src="@img/rewards/battle.png" />
       </div>
 
       <div class="metric__title uppercase fw-500">Battle pass</div>
@@ -98,7 +96,7 @@ onMounted(() => {
 
     <div class="metric__info text-center">
       <div class="metric__logo">
-        <img src="@img/rewards/dungeon.png" alt="" />
+        <img src="@img/rewards/dungeon.png" />
       </div>
 
       <div class="metric__title uppercase fw-500">Enter the dungeon</div>
@@ -124,7 +122,7 @@ onMounted(() => {
 
     <div class="metric__info text-center">
       <div class="metric__logo">
-        <img src="@img/rewards/guild.png" alt="" />
+        <img src="@img/rewards/guild.png" />
       </div>
 
       <div class="metric__title uppercase fw-500">Join the guild</div>

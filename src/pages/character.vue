@@ -111,7 +111,7 @@ async function handlePlay() {
     <div class="main__desk container flex justify-between">
       <div class="params plate">
         <div class="params__logo lh-0">
-          <img src="@img/logo-blue.png" alt="" />
+          <img src="@img/logo-blue.png" />
         </div>
 
         <div class="params__races-wrap">
@@ -134,7 +134,7 @@ async function handlePlay() {
         </button>
 
         <button class="btn btn-blue params__randomize flex-center w-100 soon">
-          <img src="@img/icons/randomize.svg" alt="" />
+          <img src="@img/icons/randomize.svg" />
           Randomize
         </button>
       </div>
@@ -163,10 +163,8 @@ async function handlePlay() {
 
         <!-- <ClientOnly> -->
         <div class="avatar" :class="`avatar_${activeSex}`" id="avatar">
-          <img
-            :src="`/images/character/${activeSex === 'male' ? 'man.gif': 'woman.png'}`"
-            alt=""
-          />
+          <img v-if="activeSex === 'male'" src="/images/character/man.gif" />
+          <img v-else src="/images/character/woman.png" />
         </div>
         <!-- </ClientOnly> -->
 
@@ -185,7 +183,7 @@ async function handlePlay() {
           class="race plate flex flex-column overflow-hidden"
         >
           <div class="race__head flex align-center">
-            <img class="race__logo" :src="race.img" alt="" />
+            <img class="race__logo" :src="race.img" />
             <div class="race__title fw-900 uppercase">{{ race.title }}</div>
           </div>
           <div class="race__descr fw-700">
@@ -204,10 +202,8 @@ async function handlePlay() {
 
     <div class="main__mob container">
       <div class="avatar" :class="`avatar_${activeSex}`" id="avatar">
-        <img
-          :src="`/images/character/${activeSex === 'male' ? 'man.gif': 'woman.png'}`"
-          alt=""
-        />
+        <img v-if="activeSex === 'male'" src="/images/character/man.gif" />
+        <img v-else src="/images/character/woman.png" />
       </div>
 
       <div class="steps">
