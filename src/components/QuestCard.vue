@@ -39,7 +39,7 @@ const props = defineProps({
         <div v-for="reward in quest.rewards" class="card__metric">
           <img
             class="card__metric-icon"
-            :src="`images/rewards/icon-${reward.icon}`"
+            :src="`/images/rewards/icon-${reward.icon}`"
             alt=""
           />
           <span class="card__metric-value">{{ reward.value }}</span>

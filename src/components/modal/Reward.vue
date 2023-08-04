@@ -43,7 +43,7 @@ const rewards = reactive([
         :text="reward.type"
       >
         <div class="reward__item-icon lh-0">
-          <img :src="`images/rewards/${reward.type}.png`" alt="" />
+          <img :src="`/images/rewards/${reward.type}.png`" alt="" />
         </div>
         <div class="reward__item-amount fw-900">{{ reward.amount }}</div>
       </tooltip>
