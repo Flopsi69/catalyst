@@ -213,7 +213,7 @@ async function authWeb3() {
     // });
 
     // console.log('verify', verify)
-    fetch('/api/auth/wallet', {
+    await fetch('/api/auth/wallet', {
       method: 'POST',
       application: 'application/json',
       body: JSON.stringify({
