@@ -37,8 +37,16 @@ onMounted(() => {
 <template>
   <!-- 1 -->
   <div v-if="character?.sex" class="metric player">
-    <img v-if="activeSex === 'male'" src="/images/character/man.gif" />
-    <img v-else src="/images/character/woman.png" />
+    <img
+      v-if="activeSex === 'male'"
+      class="player__image player__image_male"
+      src="/images/character/man.gif"
+    />
+    <img
+      v-else
+      class="player__image player__image_female"
+      src="/images/character/woman.png"
+    />
 
     <div class="metric__info text-center">
       <div class="metric__logo">
