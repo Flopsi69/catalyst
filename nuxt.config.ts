@@ -1,9 +1,9 @@
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
+// import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 // import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
 // import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
 // import nodePolyfills from 'rollup-plugin-polyfill-node';
 // import nodePolyfills from 'rollup-plugin-node-polyfills';
-// import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 // import inject from '@rollup/plugin-inject';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -99,20 +99,20 @@ export default defineNuxtConfig({
       },
     },
     plugins: [
-      // nodePolyfills({
-      //   // To exclude specific polyfills, add them to this list.
-      //   exclude: [
-      //     'fs', // Excludes the polyfill for `fs` and `node:fs`.
-      //   ],
-      //   // Whether to polyfill specific globals.
-      //   globals: {
-      //     Buffer: true, // can also be 'build', 'dev', or false
-      //     global: true,
-      //     process: true,
-      //   },
-      //   // Whether to polyfill `node:` protocol imports.
-      //   protocolImports: true,
-      // }),
+      nodePolyfills({
+        // To exclude specific polyfills, add them to this list.
+        exclude: [
+          'fs', // Excludes the polyfill for `fs` and `node:fs`.
+        ],
+        // Whether to polyfill specific globals.
+        globals: {
+          Buffer: true, // can also be 'build', 'dev', or false
+          global: true,
+          process: true,
+        },
+        // Whether to polyfill `node:` protocol imports.
+        protocolImports: true,
+      }),
     ],
     optimizeDeps: {
       esbuildOptions: {
@@ -120,10 +120,10 @@ export default defineNuxtConfig({
           global: 'globalThis', // fix nuxt3 global
         },
         plugins: [
-          NodeGlobalsPolyfillPlugin({
-            buffer: true,
-            process: true,
-          }),
+          // NodeGlobalsPolyfillPlugin({
+          //   buffer: true,
+          //   process: true,
+          // }),
         ],
       },
     },
