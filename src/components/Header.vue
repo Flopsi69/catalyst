@@ -118,7 +118,8 @@ watch(chain,
 )
 
 const authWallet = computed(() => {
-  return address.value || user.value?.user_metadata?.walletAddress
+  return 'test';
+  // address.value || user.value?.user_metadata?.walletAddress
 })
 </script>
 
