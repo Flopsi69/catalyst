@@ -204,19 +204,28 @@ async function authWeb3() {
       message: message.prepareMessage(),
     })
 
-    const { user, authData } = await $fetch('/api/auth/wallet', {
-      method: 'POST',
-      body: {
-        message,
-        signature
-      }
-    })
+    console.log('message', message)
 
-    if (!authData) {
+    const verify = await message.verify({
+      signature,
+      domain: new URL(window.location).host,
+    });
+
+    console.log('verify', verify)
+
+    // const { user, authData } = await $fetch('/api/auth/wallet', {
+    //   method: 'POST',
+    //   body: {
+    //     message,
+    //     signature
+    //   }
+    // })
+
+    if (true) {
       throw new Error('Something went wrong! Try again later.')
     }
 
-    const { error } = await supabase.auth.signInWithPassword({email: authData.email, password: authData.password });
+    // const { error } = await supabase.auth.signInWithPassword({email: authData.email, password: authData.password });
 
 
     if (error) {

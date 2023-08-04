@@ -29,7 +29,7 @@ export default eventHandler(async (event) => {
       .from('profiles')
       .select('*')
       .eq('walletAddress', result.address)
-      .single();
+      .maybeSingle();
 
     console.log('userSelect', data);
     console.log('userError', error);
