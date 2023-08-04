@@ -213,16 +213,27 @@ async function authWeb3() {
     // });
 
     // console.log('verify', verify)
-
-    const { user, authData } = await $fetch('/api/auth/wallet', {
+    fetch('/api/auth/wallet', {
       method: 'POST',
-      body: {
+      application: 'application/json',
+      body: JSON.stringify({
         message,
         signature
-      }
+      })
+    }).then(res => res.json()).then(res => {
+      console.log('res', res)
+    }).catch(err => {
+      console.log('err', err)
     })
+    // const { user, authData } = await $fetch('/api/auth/wallet', {
+    //   method: 'POST',
+    //   body: {
+    //     message,
+    //     signature
+    //   }
+    // })
 
-    console.log(user, authData)
+    // console.log(user.value, authData.value)
     if (true) {
       throw new Error('Something went wrong! Try again later.')
     }
