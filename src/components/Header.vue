@@ -218,7 +218,7 @@ const authWallet = computed(() => {
               <div class="wallet__dropdown flex align-center">
                 <div class="wallet__icon flex align-center justify-center">
                   <img
-                    :src="`images/icons/${authWallet ? 'wallet' : 'email'}-placeholder.svg`"
+                    :src="`/images/icons/${authWallet ? 'wallet' : 'email'}-placeholder.svg`"
                     alt=""
                   />
                 </div>
@@ -245,7 +245,7 @@ const authWallet = computed(() => {
                   <div class="wallet__summary flex align-center">
                     <div class="wallet__icon flex align-center justify-center">
                       <img
-                        :src="`images/icons/${authWallet ? 'wallet' : 'email'}-placeholder.svg`"
+                        :src="`/images/icons/${authWallet ? 'wallet' : 'email'}-placeholder.svg`"
                         alt=""
                       />
                     </div>
