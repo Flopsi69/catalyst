@@ -177,7 +177,7 @@ const authWallet = computed(() => {
             {{ isConnected ? "Disconnect" : "Connect" }} Wallet
           </button>
 
-          <dropdown v-if="isConnected" md="right" class="wallet">
+          <dropdown v-if="isConnected && chain" md="right" class="wallet">
             <template #trigger>
               <div class="network wallet__dropdown flex align-center">
                 <div class="wallet__icon flex align-center justify-center">
