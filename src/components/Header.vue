@@ -189,7 +189,7 @@ const authWallet = computed(() => {
                 <div class="wallet__info">
                   <div class="wallet__label fw-700">Network</div>
                   <div class="wallet__value dropdown__icon fw-700">
-                    {{ chain.name }}
+                    {{ chain?.name }}
                   </div>
                 </div>
               </div>
