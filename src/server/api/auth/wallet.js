@@ -2,7 +2,9 @@ import { serverSupabaseServiceRole } from '#supabase/server';
 
 export default defineEventHandler(async (event) => {
   const supabase = serverSupabaseServiceRole(event);
-  const { message, signature } = await readBody(event);
+  const res = await readBody(event);
+  console.log('res', res);
+  const { message, signature } = res;
 
   const sole = 'Web3Connect';
   const address = message.address;
