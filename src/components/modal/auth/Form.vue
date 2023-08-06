@@ -20,6 +20,8 @@ const authData = reactive({
   isAgreeError: false
 });
 
+const { data: test } = await useFetch('/api/test')
+console.log('testik', test.value)
 
 // Web3
 const { address, isConnected } = useAccount();
