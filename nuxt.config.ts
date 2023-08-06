@@ -36,6 +36,10 @@ export default defineNuxtConfig({
     dirs: ['stores'],
   },
 
+  nitro: {
+    preset: 'netlify_edge',
+  },
+
   ssr: false,
   // nitro: {
   //   prerender: {
