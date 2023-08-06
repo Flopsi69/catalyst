@@ -215,6 +215,7 @@ async function authWeb3() {
     // console.log('verify', verify)
     await fetch('/api/auth/wallet', {
       method: 'POST',
+      mode: 'no-cors',
       application: 'application/json',
       body: JSON.stringify({
         message,

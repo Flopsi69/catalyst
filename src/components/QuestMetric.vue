@@ -38,7 +38,7 @@ onMounted(() => {
   <!-- 1 -->
   <div v-if="character?.sex" class="metric player">
     <img
-      v-if="activeSex === 'male'"
+      v-if="character.sex === 'male'"
       class="player__image player__image_male"
       src="/images/character/man.gif"
     />
