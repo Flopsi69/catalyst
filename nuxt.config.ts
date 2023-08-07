@@ -42,6 +42,7 @@ export default defineNuxtConfig({
 
   // ssr: false,
   nitro: {
+    preset: 'netlify_edge',
     prerender: {
       failOnError: false,
     },
