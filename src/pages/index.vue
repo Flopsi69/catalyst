@@ -18,6 +18,9 @@ definePageMeta({
 const { address } = useAccount();
 const user = useSupabaseUser();
 
+const { data } = await useFetch('/api/test')
+console.log('testik1', data.value)
+
 watchEffect(async () => {
   if (user.value) {
     await navigateTo('/quests');
