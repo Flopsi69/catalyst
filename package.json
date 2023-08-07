@@ -17,7 +17,7 @@
     "@types/node": "^18.14.2",
     "@use-wagmi/nuxt": "^1.1.0",
     "buffer": "^6.0.3",
-    "nuxt": "3.6.5",
+    "nuxt": "3.3.2",
     "nuxt-svgo": "^3.1.0",
     "pinia": "^2.1.4",
     "sass": "^1.58.3",
