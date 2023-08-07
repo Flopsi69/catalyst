@@ -37,7 +37,7 @@ export default defineNuxtConfig({
   },
 
   nitro: {
-    preset: 'netlify_edge',
+    preset: 'service-worker',
   },
 
   ssr: false,
