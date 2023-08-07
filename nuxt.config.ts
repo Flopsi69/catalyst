@@ -40,7 +40,7 @@ export default defineNuxtConfig({
     preset: 'service-worker',
   },
 
-  ssr: false,
+  // ssr: false,
   // nitro: {
   //   prerender: {
   //     failOnError: false,
