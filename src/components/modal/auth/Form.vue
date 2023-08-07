@@ -28,8 +28,9 @@ console.error('testik', error)
 }
 
 try {
-  const res = await fetch('/api/test')
-console.log('testik3', res)
+  await fetch('/api/test').then(res => res.json()).then(res => {
+    console.log('testik3', res)
+  })
 } catch (error) {
   console.error('testik3', error)
 }
