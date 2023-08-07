@@ -36,16 +36,16 @@ export default defineNuxtConfig({
     dirs: ['stores'],
   },
 
-  nitro: {
-    preset: 'service-worker',
-  },
+  // nitro: {
+  //   preset: 'service-worker',
+  // },
 
   // ssr: false,
-  // nitro: {
-  //   prerender: {
-  //     failOnError: false,
-  //   },
-  // },
+  nitro: {
+    prerender: {
+      failOnError: false,
+    },
+  },
 
   // plugins: [{ src: '~/plugins/particles', mode: 'client', ssr: false }],
 
