@@ -21,7 +21,10 @@ const authData = reactive({
 });
 
 const { data } = await $fetch('/api/test')
-console.log('testik', data.value)
+console.log('testik', data)
+
+const res = await fetch('/api/test')
+console.log('testik3', res)
 
 // Web3
 const { address, isConnected } = useAccount();
