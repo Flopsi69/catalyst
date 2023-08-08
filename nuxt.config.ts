@@ -41,12 +41,12 @@ export default defineNuxtConfig({
   // },
 
   // ssr: false,
-  nitro: {
-    preset: 'netlify_edge',
-    prerender: {
-      failOnError: false,
-    },
-  },
+  // nitro: {
+  //   preset: 'netlify_edge',
+  //   prerender: {
+  //     failOnError: false,
+  //   },
+  // },
 
   // plugins: [{ src: '~/plugins/particles', mode: 'client', ssr: false }],
 
