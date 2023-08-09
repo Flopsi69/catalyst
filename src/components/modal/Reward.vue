@@ -5,22 +5,38 @@ const isOpened = ref(false)
 
 const rewards = reactive([
   {
-    type: 'chest',
+    name: 'Mystery_Box',
     amount: 1,
+    img: 'icon-mystery.png',
   },
-  {
-    type: 'poison',
-    amount: 2,
-  },
-  {
-    type: 'stone',
-    amount: 100,
-  },
-  {
-    type: 'xp',
-    amount: 55,
-  }
+  // {
+  //   type: 'chest',
+  //   amount: 1,
+  // },
+  // {
+  //   type: 'poison',
+  //   amount: 2,
+  // },
+  // {
+  //   type: 'stone',
+  //   amount: 100,
+  // },
+  // {
+  //   type: 'xp',
+  //   amount: 55,
+  // }
 ]);
+
+const { $modal } = useNuxtApp();
+
+const openReward = () => {
+  if (isOpened.value) {
+    $modal.close();
+    return false;
+  }
+
+  isOpened.value = true
+}
 </script>
 
 <template>
@@ -40,10 +56,10 @@ const rewards = reactive([
       <tooltip
         v-for="reward of rewards"
         class="reward__item flex-center"
-        :text="reward.type"
+        :text="reward.name"
       >
         <div class="reward__item-icon lh-0">
-          <img :src="`/images/rewards/${reward.type}.png`" alt="" />
+          <img :src="`/images/rewards/${reward.img}`" alt="" />
         </div>
         <div class="reward__item-amount fw-900">{{ reward.amount }}</div>
       </tooltip>
@@ -56,10 +72,10 @@ const rewards = reactive([
     </div>
 
     <button
-      @click="isOpened = !isOpened"
+      @click="openReward"
       class="reward__btn btn btn-blue btn-arrow w-100"
     >
-      <span> {{ isOpened ? 'Collect it' : 'Open the chest' }} </span>
+      <span> {{ isOpened ? 'Collect it' : 'Open reward' }} </span>
     </button>
   </div>
 </template>
@@ -76,13 +92,14 @@ const rewards = reactive([
   }
 
   &__list {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    grid-template-columns: repeat(4, 90px);
+    // grid-template-columns: repeat(4, 90px);
     gap: 18px;
     margin-top: 35px;
     @media(max-width: $sm) {
-      grid-template-columns: repeat(2, 90px);
+      // grid-template-columns: repeat(2, 90px);
     }
   }
 

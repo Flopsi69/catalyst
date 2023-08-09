@@ -1,4 +1,7 @@
 <script setup>
+import { useToast } from 'vue-toastification';
+
+const toast = useToast();
 const props = defineProps({
   quest: {
     type: Object,
@@ -17,7 +20,6 @@ const props = defineProps({
 
 <template>
   <!-- btn-activator -->
-  <!-- @click.prevent="quest.isActive ? $modal.show('reward') : null" -->
 
   <div
     class="card overflow-hidden"
@@ -50,13 +52,17 @@ const props = defineProps({
         <a
           href="https://twitter.com/intent/user?screen_name=NASA"
           target="_blank"
-          class="btn btn-gray btn-arrow card__btn w-100"
+          class="btn btn-blue btn-arrow card__btn w-100"
+          @click.prevent="toast('Here will be a link to telegram')"
         >
           <span>Join telegram</span>
         </a>
 
-        <button class="btn btn-gray btn-arrow card__btn w-100">
-          <span>Verify</span>
+        <button
+          class="btn btn-blue btn-arrow card__btn w-100"
+          @click.prevent="$modal.show('reward')"
+        >
+          <span>Get Reward</span>
         </button>
       </div>
 
@@ -79,7 +85,7 @@ const props = defineProps({
   display: flex;
   flex-flow: column;
   justify-content: flex-end;
-  cursor: pointer;
+  // cursor: pointer;
   transition: $transition;
   &.disabled {
     pointer-events: none;
@@ -95,13 +101,13 @@ const props = defineProps({
     transition: $transition;
   }
 
-  &:not(.disabled):hover {
-    transform: translateY(-5px);
-    &:before {
-      // background: linear-gradient(180deg, rgba(11, 14, 23, 0) 27%, $gray600 80%);
-      // opacity: 0;
+  &:not(.disabled) {
+    box-shadow: 0 0 10px 4px rgba($blue700, 0.7);
+    &:hover {
+     transform: translateY(-5px);
     }
   }
+
 
 
   &__lvl {

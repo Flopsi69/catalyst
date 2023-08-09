@@ -1,15 +1,17 @@
 <script setup>
-// import { Buffer } from 'buffer/'
 import { SiweMessage } from 'siwe';
 import { useToast } from "vue-toastification";
-// import { useModalStore } from '~/stores/modal';
-// const { close } = useModalStore();
 
 import close from "@img/icons/close.svg?component"
 
 const { $modal } = useNuxtApp();
 const toast = useToast();
 
+// DB
+const supabase = useSupabaseClient();
+const user = useSupabaseUser();
+
+// Web2
 const isShowPassword = ref(false)
 const currentTab = ref('signup');
 const authData = reactive({
@@ -20,43 +22,6 @@ const authData = reactive({
   isAgreeError: false
 });
 
-try {
-  const { data } = await $fetch('/api/test')
-console.log('testik', data)
-} catch (error) {
-console.error('testik', error)
-}
-
-try {
-  await fetch('/api/test').then(res => res.json()).then(res => {
-    console.log('testik3', res)
-  })
-} catch (error) {
-  console.error('testik3', error)
-}
-
-
-// Web3
-const { address, isConnected } = useAccount();
-const { chain } = useNetwork();
-const { connectAsync, connectors } = useConnect({
-    onSuccess({account, connector: { name }}) {
-      console.log('Connect', name)
-      toast.success(`${name}: ${account.slice(0, 6)}***${account.slice(-4)}\nSuccessfully connected!`)
-    }
-})
-const { disconnect } = useDisconnect({
-  onError(error) {
-    console.log('error', error)
-    toast.error(error.shortMessage)
-  },
-  onSuccess(data) {
-    useToast()("Wallet disconnected!")
-  },
-});
-const { signMessageAsync } = useSignMessage()
-
-// Web2
 const validatePassword = reactive([
   {
     caption: 'Minimum',
@@ -95,7 +60,6 @@ const validatePassword = reactive([
   },
 ]);
 
-
 const isValidatedForm = (type) => {
   const { email, password, confirmPassword, isAgree } = authData;
   authData.isAgreeError = false;
@@ -127,53 +91,33 @@ const isValidatedForm = (type) => {
 
   }
 
-
-
   return true;
 }
 
-const supabase = useSupabaseClient();
-const user = useSupabaseUser();
-
-async function signOut() {
-  if (user.value) {
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-      return toast.error(error.message)
+// Web3
+const { address, isConnected } = useAccount();
+const { chain } = useNetwork();
+const { connectAsync, connectors } = useConnect({
+    onSuccess({account, connector: { name }}) {
+      console.log('Connect', name)
+      toast.success(`${name}: ${account.slice(0, 6)}***${account.slice(-4)}\nSuccessfully connected!`)
     }
+})
+const { signMessageAsync } = useSignMessage()
 
-    toast.info("Successfully signed out!");
-  }
-}
 
-async function authGoogle() {
-  const { error, data } = await supabase.auth.signInWithOAuth({
-    provider: 'google'
-  })
-
-  if (error) {
-    return toast.error(error.message)
-  }
-}
-
+// AUTH Handlers
 async function authUser() {
   if (user.value) {
     signOut();
     return false;
   }
 
-  const credentions = {
-    email: 'example@email.com',
-    password: 'example',
-  }
-
-  // !1Aaaaaaa
   if (!isValidatedForm(currentTab.value)) return false;
 
   if (currentTab.value === 'signup') {
-    // TODO
-    const { error, ...res } = await supabase.auth.signUp(authData)
+    const { error } = await supabase.auth.signUp(authData);
+
 
     if (error) {
       return toast.error(error.message)
@@ -182,7 +126,7 @@ async function authUser() {
     toast.success('Successfully registered! Confirm your email to continue.')
     $modal.close();
   } else {
-    const { data, error } = await supabase.auth.signInWithPassword(authData)
+    const { error } = await supabase.auth.signInWithPassword(authData)
 
     if (error) {
       return toast.error(error.message)
@@ -191,7 +135,7 @@ async function authUser() {
     toast.success("You are successfully logged in!")
   }
 
-  $modal.close();
+  // $modal.close();
   // navigateTo('/character');
 }
 
@@ -215,68 +159,64 @@ async function authWeb3() {
       chainId: chain.value.id
     })
 
-
-
     const signature = await signMessageAsync({
       message: await message.prepareMessage(),
     })
 
-    console.log('message', message)
-
-    // const verify = await message.verify({
-    //   signature
-    // });
-
-    // console.log('verify', verify)
-    await fetch('/api/auth/wallet', {
+    const { error, ...user } = await $fetch('/api/auth/wallet', {
       method: 'POST',
-      application: 'application/json',
-      body: JSON.stringify({
+      body: {
         message,
         signature
-      })
-    }).then(res => res.json()).then(res => {
-      console.log('res', res)
-    }).catch(err => {
-      console.log('err', err)
-    })
-    // const { user, authData } = await $fetch('/api/auth/wallet', {
-    //   method: 'POST',
-    //   body: {
-    //     message,
-    //     signature
-    //   }
-    // })
-
-    // console.log(user.value, authData.value)
-    if (true) {
-      throw new Error('Something went wrong! Try again later.')
-    }
-
-    // const { error } = await supabase.auth.signInWithPassword({email: authData.email, password: authData.password });
-
+      }
+    });
 
     if (error) {
-      return toast.error(error.message)
+      return toast.error(error)
+    }
+
+    const { error: errorLogin } = await supabase.auth.signInWithPassword({email: user.email, password: user.token });
+
+    if (errorLogin) {
+      return toast.error(errorLogin.message)
     }
 
     toast.success("You are successfully logged in!")
-    $modal.close();
-    // navigateTo('/character');
-
-
-    // signIn("web3", {
-    //   message: JSON.stringify(message),
-    //   signature
-    //   // callbackUrl,
-    // })
   } catch (err) {
-    console.log('errorCatch', err)
+    console.log('errorCatch', err, err.message)
     const errorMessage = err.shortMessage ? err.shortMessage : err.message ? err.message : err;
 
     toast.error(errorMessage)
   }
 }
+
+async function authGoogle() {
+  const { error, data } = await supabase.auth.signInWithOAuth({
+    provider: 'google'
+  })
+
+  if (error) {
+    return toast.error(error.message)
+  }
+}
+
+async function signOut() {
+  if (user.value) {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      return toast.error(error.message)
+    }
+
+    toast.info("Successfully signed out!");
+  }
+}
+
+watch(user, () => {
+  if (user.value) {
+    $modal.close();
+  }
+}, {immediate: true})
 </script>
 
 <template>

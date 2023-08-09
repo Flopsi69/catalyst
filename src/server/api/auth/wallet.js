@@ -1,16 +1,39 @@
+import { SiweMessage } from 'siwe';
 import { serverSupabaseServiceRole } from '#supabase/server';
 
 export default defineEventHandler(async (event) => {
-  return { status: 'OK' };
   const supabase = serverSupabaseServiceRole(event);
-  const res = await readBody(event);
-  console.log('res', res);
-  const { message, signature } = res;
+  const { message, signature } = await readBody(event);
 
   const sole = 'Web3Connect';
-  const address = message.address;
-  const email = `${address}@web3.wallet`;
-  const password = address.slice(-6) + sole + address.slice(-10, -6);
+  let address,
+    email,
+    password,
+    userData = null;
+  // const address = message.address;
+  // const email = `${address}@web3.wallet`;
+
+  try {
+    console.log(process.env.AUTH_ORIGIN);
+    const { success, data, error } = await new SiweMessage(message).verify({
+      signature,
+    });
+
+    address = data.address;
+    email = `${address}@web3.wallet`;
+    password = address.slice(-6) + sole + address.slice(-10, -6);
+
+    if (!success) {
+      return {
+        error: error.message,
+      };
+    }
+  } catch ({ error }) {
+    console.log(error);
+    return {
+      error: 'Invalid signature',
+    };
+  }
 
   try {
     const { data: user, error } = await supabase
@@ -21,6 +44,7 @@ export default defineEventHandler(async (event) => {
 
     console.log('userSelect', user);
     console.log('userSelectError', error);
+    userData = user;
 
     if (!user) {
       const {
@@ -34,25 +58,22 @@ export default defineEventHandler(async (event) => {
         email_confirm: true,
       });
 
+      userData = user;
       console.log('createUser', user);
       console.log('createUserError', error);
 
       if (error) {
-        throw error;
+        return {
+          error: error.message,
+        };
       }
-
-      console.log(1);
     }
 
-    return {
-      authData: {
-        email,
-        password,
-      },
-      user,
-    };
+    userData.token = password;
+
+    return userData;
   } catch (error) {
-    console.log('errorMessage', error);
+    console.log('errorMessage', error, error.message);
     throw createError({
       statusCode: error.status,
       statusMessage: error.message,

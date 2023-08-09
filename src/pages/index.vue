@@ -15,28 +15,17 @@ definePageMeta({
   middleware: 'guest'
 });
 
-const { address } = useAccount();
 const user = useSupabaseUser();
 
-const { data } = await useFetch('/api/test')
-console.log('testik1', data.value)
-
-watchEffect(async () => {
+watch(user, () => {
   if (user.value) {
-    await navigateTo('/quests');
+    return navigateTo('/quests')
   }
-})
+}, {immediate: true})
 </script>
 
 <template>
   <IndexHeader />
-
-  <!-- <client-only>
-    <div v-if="user || address" class="debug">
-      <p v-if="address">Address: {{ address }}</p>
-      <p v-if="user">User: {{ user.id }}</p>
-    </div>
-  </client-only> -->
 
   <main class="main">
     <section class="section jumb">

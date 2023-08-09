@@ -67,7 +67,7 @@ async function handlePlay() {
 
   if (!nickname.value) {
     error = 'Nickname is required';
-  } else if (nickname.value.length <= 3) {
+  } else if (nickname.value.length < 3) {
     error = 'Nickname is too short. Minimum 3 characters';
   } else if (nickname.value.length > 12) {
     error = 'Nickname is too long. Maximum 12 characters';

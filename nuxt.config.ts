@@ -1,10 +1,9 @@
-// import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 // import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
 // import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
 // import nodePolyfills from 'rollup-plugin-polyfill-node';
 // import nodePolyfills from 'rollup-plugin-node-polyfills';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
-// import inject from '@rollup/plugin-inject';
+// import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -22,7 +21,7 @@ export default defineNuxtConfig({
         redirect: false,
         redirectOptions: {
           login: '/',
-          callback: '/character',
+          callback: '/quests',
         },
       },
     ],
@@ -36,10 +35,6 @@ export default defineNuxtConfig({
     dirs: ['stores'],
   },
 
-  // nitro: {
-  //   preset: 'service-worker',
-  // },
-
   // ssr: false,
   // nitro: {
   //   preset: 'netlify_edge',
@@ -47,8 +42,6 @@ export default defineNuxtConfig({
   //     failOnError: false,
   //   },
   // },
-
-  // plugins: [{ src: '~/plugins/particles', mode: 'client', ssr: false }],
 
   alias: {
     '@img': '/assets/images',
@@ -94,42 +87,42 @@ export default defineNuxtConfig({
         },
       },
     },
-    plugins: [
-      nodePolyfills({
-        // To exclude specific polyfills, add them to this list.
-        exclude: [
-          'fs', // Excludes the polyfill for `fs` and `node:fs`.
-        ],
-        // Whether to polyfill specific globals.
-        globals: {
-          Buffer: true, // can also be 'build', 'dev', or false
-          global: true,
-          process: true,
-        },
-        // Whether to polyfill `node:` protocol imports.
-        protocolImports: true,
-      }),
-    ],
+    // plugins: [
+    // nodePolyfills({
+    //   // To exclude specific polyfills, add them to this list.
+    //   exclude: [
+    //     'fs', // Excludes the polyfill for `fs` and `node:fs`.
+    //   ],
+    //   // Whether to polyfill specific globals.
+    //   globals: {
+    //     Buffer: true, // can also be 'build', 'dev', or false
+    //     global: true,
+    //     process: true,
+    //   },
+    //   // Whether to polyfill `node:` protocol imports.
+    //   protocolImports: true,
+    // }),
+    // ],
     optimizeDeps: {
       esbuildOptions: {
         define: {
-          global: 'globalThis', // fix nuxt3 global
+          global: 'globalThis',
         },
         plugins: [
-          // NodeGlobalsPolyfillPlugin({
-          //   buffer: true,
-          //   process: true,
-          // }),
+          NodeGlobalsPolyfillPlugin({
+            buffer: true,
+            process: true,
+          }),
         ],
       },
     },
-    build: {
-      rollupOptions: {
-        // plugins: [inject({ Buffer: ['buffer', 'Buffer'] })],
-        // plugins: [rollupNodePolyFill()],
-        // plugins: [inject({ Buffer: ['Buffer', 'Buffer'], process: 'process' })],
-      },
-    },
+    // build: {
+    // rollupOptions: {
+    // plugins: [inject({ Buffer: ['buffer', 'Buffer'] })],
+    // plugins: [rollupNodePolyFill()],
+    // plugins: [inject({ Buffer: ['Buffer', 'Buffer'], process: 'process' })],
+    // },
+    // },
   },
 
   components: ['~/components', '~/components/common'],

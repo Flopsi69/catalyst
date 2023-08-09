@@ -228,7 +228,7 @@ if (!character.value) {
     margin-top: 32px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 9px 28px;
+    gap: 12px 28px;
     @media(max-width: $lg) {
       gap: 12px;
     }
