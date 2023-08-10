@@ -1,39 +1,44 @@
-import { SiweMessage } from 'siwe';
+// import { SiweMessage } from 'siwe';
 import { serverSupabaseServiceRole } from '#supabase/server';
 
 export default defineEventHandler(async (event) => {
   const supabase = serverSupabaseServiceRole(event);
-  const { message, signature } = await readBody(event);
+  const {
+    message: { address },
+    signature,
+  } = await readBody(event);
 
   const sole = 'Web3Connect';
-  let address,
-    email,
+  let email,
     password,
     userData = null;
   // const address = message.address;
   // const email = `${address}@web3.wallet`;
 
-  try {
-    console.log(process.env.AUTH_ORIGIN);
-    const { success, data, error } = await new SiweMessage(message).verify({
-      signature,
-    });
+  email = `${address}@web3.wallet`;
+  password = address.slice(-6) + sole + address.slice(-10, -6);
 
-    address = data.address;
-    email = `${address}@web3.wallet`;
-    password = address.slice(-6) + sole + address.slice(-10, -6);
+  // try {
+  //   console.log(process.env.AUTH_ORIGIN);
+  //   const { success, data, error } = await new SiweMessage(message).verify({
+  //     signature,
+  //   });
 
-    if (!success) {
-      return {
-        error: error.message,
-      };
-    }
-  } catch ({ error }) {
-    console.log(error);
-    return {
-      error: 'Invalid signature',
-    };
-  }
+  //   address = data.address;
+  //   email = `${address}@web3.wallet`;
+  //   password = address.slice(-6) + sole + address.slice(-10, -6);
+
+  //   if (!success) {
+  //     return {
+  //       error: error.message,
+  //     };
+  //   }
+  // } catch ({ error }) {
+  //   console.log(error);
+  //   return {
+  //     error: 'Invalid signature',
+  //   };
+  // }
 
   try {
     const { data: user, error } = await supabase
