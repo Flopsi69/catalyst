@@ -3,6 +3,15 @@ definePageMeta({
   middleware: 'auth'
 });
 
+// if (!store.character) {
+//   console.log('fetch character')
+//   const character = await store.getCharacter();
+
+//   if (!character) {
+//     await navigateTo('/character')
+//   }
+// }
+
 const questList = reactive([
   {
     title: 'Ethereum wetlands',
@@ -124,28 +133,37 @@ const questList = reactive([
   }
 ]);
 
-const supabase = useSupabaseClient();
-const user = useSupabaseUser();
+// const supabase = useSupabaseClient();
+// const user = useSupabaseUser();
 
-const { data: character, error } = await useAsyncData('character', async() => supabase.from('characters')
-      .select('*')
-      .eq('userId', user.value.id).maybeSingle()
-    , { transform: result => result.data }
-)
+// if (!store.character) {
+// const character = await store.getCharacter(user.value.id);
 
-if (error.value) {
-  console.log('QuestsCharacterError:', error.value)
-}
-console.log('QuestsCharacter:', character.value)
-if (!character.value) {
-  await navigateTo('/character');
-}
+// console.log(character.value)
+  // const { data: character, error } = await useAsyncData('character', async() => supabase.from('characters')
+  //     .select('*')
+  //     .eq('userId', user.value.id).maybeSingle()
+  //   , { transform: result => result.data }
+  // )
+
+  // if (error.value) {
+  //   console.log('QuestsCharacterError:', error.value)
+  // }
+
+  // if (!character.value) {
+  //   await navigateTo('/character');
+  // }
+
+  // console.log('QuestsCharacter:', character.value)
+
+  // store.setCharacter(character)
+// }
 </script>
 
 <template>
   <section class="section metrics">
     <div class="container metrics__container">
-      <QuestMetric :character="character" />
+      <QuestMetric />
     </div>
   </section>
 

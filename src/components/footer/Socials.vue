@@ -9,7 +9,7 @@ import instagram from "@img/socials/instagram.svg"
 
 const socials = reactive([
   {
-    url: '#',
+    url: 'https://t.me/Alfacatalyst',
     social: 'telegram',
     img: telegram
   },
@@ -49,7 +49,6 @@ const socials = reactive([
 <template>
   <div class="socials">
     <a
-      @click.prevent
       v-for="social of socials"
       :href="social.url"
       class="socials__link flex-center lh-0"

@@ -47,8 +47,8 @@ export default defineEventHandler(async (event) => {
       .eq('walletAddress', address)
       .maybeSingle();
 
-    console.log('userSelect', user);
-    console.log('userSelectError', error);
+    // console.log('userSelect', user);
+    // console.log('userSelectError', error);
     userData = user;
 
     if (!user) {

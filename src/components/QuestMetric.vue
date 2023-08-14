@@ -1,4 +1,6 @@
 <script setup>
+import { storeToRefs } from 'pinia';
+
 let hours = ref('00');
 let minutes = ref('00');
 let seconds = ref('00')
@@ -21,13 +23,17 @@ function countdownTimer(duration) {
   }, 1000);
 }
 
-defineProps({
-  character: {
-    type: Object,
-    required: true,
-    default: {}
-  },
-});
+const store = useCharacterStore();
+if (!store.character) {
+  const character = await store.getCharacter();
+
+  if (!character) {
+    await navigateTo('/character')
+  }
+}
+
+const { character } = storeToRefs(store)
+// console.log('QuestMetric', character.value)
 
 onMounted(() => {
   countdownTimer(3510);

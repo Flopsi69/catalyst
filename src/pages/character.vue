@@ -16,18 +16,14 @@ definePageMeta({
 
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
+const store = useCharacterStore();
 
-const { data: character, error } = await useAsyncData('character', async() => supabase.from('characters')
-      .select('*')
-      .eq('userId', user.value.id).maybeSingle()
-    , { transform: result => result.data }
-)
 
-if (character.value) {
-  navigateTo('/quests');
-  console.log('CharacterGeT:', character.value)
-} else if (error.value) {
-  console.log('CharacterGeTError:', error.value)
+if (!store.character) {
+  await store.getCharacter();
+}
+if (store.character) {
+  await navigateTo('/quests')
 }
 
 const toast = useToast();
@@ -195,7 +191,7 @@ async function handlePlay() {
           @click="handlePlay"
           class="btn btn-blue btn-arrow info__play w-100 uppercase"
         >
-          <span>Play</span>
+          <span>Earn</span>
         </button>
       </div>
     </div>
@@ -338,7 +334,7 @@ async function handlePlay() {
             class="btn btn-blue control__btn flex-center control__btn-next uppercase"
             @click="step < stepsCount ? step++ : handlePlay()"
           >
-            {{ step < stepsCount ? "Next" : "Play" }} {{ step }} /
+            {{ step < stepsCount ? "Next" : "Earn" }} {{ step }} /
             {{ stepsCount }}
             <icon-arrow />
           </button>

@@ -354,6 +354,13 @@ a {
       }
     }
   }
+  &-green {
+    pointer-events: none;
+    &:before {
+      // background: linear-gradient(180deg, #173058 0%, #007474 100%);
+      background: linear-gradient(180deg, #113530 0%, #1baf8b 100%);
+    }
+  }
   &-go {
     display: inline-flex;
     align-items: center;

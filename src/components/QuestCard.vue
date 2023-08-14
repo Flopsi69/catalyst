@@ -1,7 +1,12 @@
 <script setup>
-import { useToast } from 'vue-toastification';
+// import { useToast } from 'vue-toastification';
 
-const toast = useToast();
+// const toast = useToast();
+const store = useCharacterStore();
+if (!store.character) {
+  await store.getCharacter();
+}
+
 const props = defineProps({
   quest: {
     type: Object,
@@ -16,14 +21,32 @@ const props = defineProps({
     })
   }
 })
+
+let isClaimReward = computed(() => store.character?.reg_reward)
+const isTelegramOpen = ref(false);
+
+onMounted(() => {
+  if (sessionStorage.getItem('isTelegramOpen')) {
+    isTelegramOpen.value = true
+  }
+})
+
+function openTelegram() {
+  if (!sessionStorage.getItem('isTelegramOpen')) {
+    sessionStorage.setItem('isTelegramOpen', true);
+    isTelegramOpen.value = true;
+  }
+
+  window.open("https://t.me/Alfacatalyst", "_blank")
+}
 </script>
 
 <template>
   <!-- btn-activator -->
-
   <div
+    v-if="quest.isActive"
     class="card overflow-hidden"
-    :class="[quest.isActive ? 'active' : 'disabled' ]"
+    :class="[isClaimReward ? 'completed' : 'active' ]"
     :style="`background-image: url(/images/quests/${quest.img})`"
   >
     <div class="card__lvl text-center fw-700 uppercase lh-1">
@@ -48,25 +71,63 @@ const props = defineProps({
         </div>
       </div>
 
-      <div v-if="quest.isActive" class="card__buttons">
+      <div v-if="!isClaimReward" class="card__buttons">
         <a
-          href="https://twitter.com/intent/user?screen_name=NASA"
+          href="https://t.me/AlfaCatalyst_Announcements"
           target="_blank"
-          class="btn btn-blue btn-arrow card__btn w-100"
-          @click.prevent="toast('Here will be a link to telegram')"
+          class="btn card__btn w-100 btn-blue btn-arrow"
+          @click.prevent="openTelegram"
         >
-          <span>Join telegram</span>
+          <span>Join TG</span>
         </a>
 
         <button
-          class="btn btn-blue btn-arrow card__btn w-100"
+          class="btn card__btn w-100"
+          :class="[isTelegramOpen ? 'btn-blue btn-arrow' : 'btn-gray']"
           @click.prevent="$modal.show('reward')"
         >
           <span>Get Reward</span>
         </button>
       </div>
 
-      <button v-else class="btn btn-gray btn-arrow card__btn w-100">
+      <button
+        v-else
+        class="btn btn-blue btn-green card__btn w-100"
+        @click.prevent
+      >
+        Completed
+      </button>
+    </div>
+  </div>
+
+  <div
+    v-else
+    class="card overflow-hidden disabled"
+    :style="`background-image: url(/images/quests/${quest.img})`"
+  >
+    <div class="card__lvl text-center fw-700 uppercase lh-1">
+      <div class="card__lvl-value">{{ quest.lvl }}</div>
+      <div class="card__lvl-caption">lvl</div>
+    </div>
+
+    <div class="card__head">
+      <div class="card__title fw-900 uppercase">{{ quest.title }}</div>
+      <div class="card__caption fw-700">{{ quest.caption }}</div>
+    </div>
+
+    <div class="card__info">
+      <div class="card__metrics flex flex-wrap fw-700">
+        <div v-for="reward in quest.rewards" class="card__metric">
+          <img
+            class="card__metric-icon"
+            :src="`/images/rewards/icon-${reward.icon}`"
+            alt=""
+          />
+          <span class="card__metric-value">{{ reward.value }}</span>
+        </div>
+      </div>
+
+      <button @click.prevent class="btn btn-gray card__btn w-100">
         <span>Soon</span>
       </button>
     </div>
@@ -102,13 +163,11 @@ const props = defineProps({
   }
 
   &:not(.disabled) {
-    box-shadow: 0 0 10px 4px rgba($blue700, 0.7);
+    box-shadow: 0 0 10px 4px #2d4f64;
     &:hover {
      transform: translateY(-5px);
     }
   }
-
-
 
   &__lvl {
     position: absolute;
@@ -151,8 +210,8 @@ const props = defineProps({
     padding: 5px 18px 25px;
     background-color: $dark;
     // transition: $transition;
-    .card:not(.disabled):not(.active):hover & {
-      background-color: $gray600;
+    .card:not(.disabled):hover & {
+      // background-color: $gray600;
     }
     // background: linear-gradient(180deg, $dark 0%, $dark 100%);
   }
@@ -188,12 +247,16 @@ const props = defineProps({
     min-height: 44px;
     font-size: 14px;
     line-height: 1.4;
+    display: block;
   }
 
   &__buttons {
     display: flex;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
+    .btn-gray {
+      pointer-events: none;
+    }
   }
 }
 </style>
