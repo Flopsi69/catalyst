@@ -1,12 +1,5 @@
 <script setup>
-// import * as Spine from "@esotericsoftware/spine-webgl";
-
-// import * from "@esotericsoftware/spine-webgl";
-// import manOptions from "~/config/spine/man/options";
 import { useToast } from "vue-toastification";
-import incrypt from "@img/character/incrypt-descr.png";
-import paladin from "@img/character/paladin-descr.png";
-import human from "@img/character/human.png";
 import iconArrow from "@img/icons/arrow-bold.svg?component";
 
 definePageMeta({
@@ -18,47 +11,108 @@ const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 const store = useCharacterStore();
 
-
 if (!store.character) {
   await store.getCharacter();
+  if (store.character) {
+    await navigateTo('/quests')
+  }
 }
-if (store.character) {
-  await navigateTo('/quests')
-}
-
 const toast = useToast();
 
-const activeRace = ref(null);
-const activeClass = ref(null);
-const activeSex = ref('male');
+const raceList = reactive([
+  {
+    type: 'orc',
+    img: 'orc',
+    descr: 'Orcs are one of the oldest and most advanced races'
+  },
+  {
+    type: 'elf',
+    img: 'elf',
+    descr: 'Elfs are one of the oldest and most advanced races'
+  },
+  {
+    type: 'human',
+    img: 'human',
+    descr: 'Humans are one of the oldest and most advanced races'
+  },
+  // {
+  //   type: 'dwarf',
+  //   img: dwarf,
+  //   descr: 'Dwarfs are one of the oldest and most advanced races'
+  // },
+  // {
+  //   type: 'undead',
+  //   img: undead,
+  //   descr: 'Undeads are one of the oldest and most advanced races'
+  // },
+  // {
+  //   type: 'goblin',
+  //   img: goblin,
+  //   descr: 'Goblins are one of the oldest and most advanced races'
+  // },
+])
+const classList = reactive([
+  {
+    type: 'Paladin',
+    img: 'paladin',
+    descr: 'Fearless warriors wearing heavy armor use the magic of light to destroy enemies'
+  },
+  {
+    type: 'Mage',
+    img: 'mage',
+    descr: 'Mages destroy enemies with spells. They do not wear heavy armor, so they are vulnerable in melee fight'
+  },
+  {
+    type: 'Hunter',
+    img: 'hunter',
+    descr: 'Hunters are seasoned trackers. They are excellent with bow, gun and crossbow'
+  }
+])
 
-console.log(activeSex.value);
+const sex = ref('male');
+const face = ref('face1');
+const head = ref('head');
+const race = ref(raceList[2]);
+const characterClass = ref(classList[0]);
+
 const nickname = ref('');
-const stepsCount = ref(3);
+const stepsCount = ref(5);
 const step = ref(1);
 
 
-const racesDescr = reactive([
+const descriptions = reactive([
   {
     title: 'Incrypt',
     descr: 'Incrypt is the world of web3 technomagic of the Middle Ages. During the last war, several elven aircraft carrying poisonous mixtures fell into the Ethereum Swamps, poisoning the soil. A few years later,',
-    img: incrypt
+    img: '/images/character/incrypt-descr.png'
   },
   {
     title: 'Human',
     descr: 'People are interested in the elven ruins. The Magical Council believes that the ruins may contain blueprints for flying devices, research on energy crystals, information on new currencies, equipment for mining them, and other materials that will help mankind achieve technological progress.',
-    img: human
-  },
-  {
-    title: 'Paladin',
-    descr: 'Paladins of the Order of Layla, advocate the preservation of old customs and minimal intrusion of magic into people\'s lives. A paladin is a warrior of Light, the protector of the weak and a tireless opponent of evil. Protecting all that is good and pure in this world, he eradicates all that is evil. His ability to eradicate the undead is particularly strong: these creatures threaten the very existence of all good races, and the Order of Layla simply incinerates them. The existence of all evil is intolerable to a paladin, but demons and the undead certainly rank first among these evils.',
-    img: paladin
+    img: '/images/character/human-descr.png'
   }
+  // {
+  //   title: 'Paladin',
+  //   descr: 'Paladins of the Order of Layla, advocate the preservation of old customs and minimal intrusion of magic into people\'s lives. A paladin is a warrior of Light, the protector of the weak and a tireless opponent of evil. Protecting all that is good and pure in this world, he eradicates all that is evil. His ability to eradicate the undead is particularly strong: these creatures threaten the very existence of all good races, and the Order of Layla simply incinerates them. The existence of all evil is intolerable to a paladin, but demons and the undead certainly rank first among these evils.',
+  //   img: paladin
+  // }
 ]);
 
-
+const heroSrc = computed(() => {
+  return `${sex.value}/${characterClass.value?.img || 'paladin'}-${face.value}${head.value === 'head' ? '' : '-' + head.value}.gif`
+})
 
 async function handlePlay() {
+  console.log('create character', nickname.value);
+  const a = {
+    sex: sex.value,
+    face: face.value,
+    head: head.value,
+    race: toRaw(race.value),
+    class: toRaw(characterClass.value),
+  };
+
+  console.log(a)
   let error = null;
 
   if (!nickname.value) {
@@ -76,11 +130,19 @@ async function handlePlay() {
     return false;
   }
 
+  // todo
   const characterData = {
-    race: activeRace.value.type,
     nickname: nickname.value,
-    sex: activeSex.value,
-    userId: user.value.id
+    sex: sex.value,
+    userId: user.value.id,
+    json: {
+      sex: sex.value,
+      face: face.value,
+      head: head.value,
+      race: race.value,
+      class: characterClass.value,
+    },
+    image: heroSrc.value
   }
 
   const { data: char, error: charError } = await useAsyncData('character',
@@ -106,39 +168,62 @@ async function handlePlay() {
   <main class="main flex-center">
     <div class="main__desk container flex justify-between">
       <div class="params plate">
-        <div class="params__logo lh-0">
-          <img src="@img/logo-blue.png" />
+        <div class="params__section params__logo lh-0">
+          <img src="/images/brand-logo-w.png" alt="" />
+          <!-- <img src="@img/logo-blue.png" /> -->
         </div>
 
-        <div class="params__races-wrap">
-          <div class="caption">Choose a character's race</div>
+        <div class="params__section">
+          <div class="caption">Choose Gender</div>
 
-          <CharacterRace
-            @updateRace="(val)=>{activeRace = val}"
-            class="params__races bg-dark flex-wrap flex-between"
+          <CharacterSex
+            v-model="sex"
+            class="params__plate bg-dark flex-evenly"
           />
         </div>
 
-        <div class="params__props soon">
-          <div class="caption">Character customization</div>
-
-          <CharacterProps class="params__props-list" />
+        <div class="params__section">
+          <div class="caption">Choose Race</div>
+          <CharacterRace
+            v-model="race"
+            :items="raceList"
+            class="params__plate bg-dark flex-wrap flex-between"
+          />
         </div>
 
-        <button class="btn btn-dark params__apply w-100 soon">
+        <div class="params__section">
+          <div class="caption">Choose Class</div>
+          <CharacterClass
+            v-model="characterClass"
+            :items="classList"
+            class="params__plate bg-dark flex-between"
+          />
+        </div>
+
+        <div class="params__section params__props">
+          <div class="caption">Customization</div>
+          <CharacterProps
+            v-model:face="face"
+            v-model:head="head"
+            class="params__props-list"
+          />
+        </div>
+
+        <!-- <button class="btn btn-dark params__apply w-100 soon">
           Customization
         </button>
 
         <button class="btn btn-blue params__randomize flex-center w-100 soon">
           <img src="@img/icons/randomize.svg" />
           Randomize
-        </button>
+        </button> -->
       </div>
 
       <div class="character">
         <div class="character__head ">
           <CharacterSex
-            @updateSex="(val)=>{activeSex= val}"
+            v-if="false"
+            @updateSex="(val)=>{sex= val}"
             class="flex-between"
           />
 
@@ -157,25 +242,14 @@ async function handlePlay() {
           </div>
         </div>
 
-        <!-- <ClientOnly> -->
-        <div class="avatar" :class="`avatar_${activeSex}`" id="avatar">
-          <img v-if="activeSex === 'male'" src="/images/character/man.gif" />
-          <img v-else src="/images/character/woman.png" />
-        </div>
-        <!-- </ClientOnly> -->
-
-        <div v-if="false" class="character__class plate">
-          <div class="class__caption text-center fw-700">
-            Choose a character class
-          </div>
-
-          <CharacterClass class="character__class-list flex-center" />
+        <div class="avatar" :class="`avatar_${sex}`" id="avatar">
+          <img :src="`/images/character/${heroSrc}`" alt="" />
         </div>
       </div>
 
       <div class="info">
         <div
-          v-for="race of racesDescr"
+          v-for="race of descriptions"
           class="race plate flex flex-column overflow-hidden"
         >
           <div class="race__head flex align-center">
@@ -187,6 +261,26 @@ async function handlePlay() {
           </div>
         </div>
 
+        <client-only>
+          <div
+            v-if="characterClass"
+            class="race plate flex flex-column overflow-hidden"
+          >
+            <div class="race__head flex align-center">
+              <img
+                class="race__logo"
+                :src="`/images/character/class/${characterClass.img}.png`"
+              />
+              <div class="race__title fw-900 uppercase">
+                {{ characterClass.type }}
+              </div>
+            </div>
+            <div class="race__descr fw-700">
+              {{ characterClass.descr }}
+            </div>
+          </div>
+        </client-only>
+
         <button
           @click="handlePlay"
           class="btn btn-blue btn-arrow info__play w-100 uppercase"
@@ -197,9 +291,8 @@ async function handlePlay() {
     </div>
 
     <div class="main__mob container">
-      <div class="avatar" :class="`avatar_${activeSex}`" id="avatar">
-        <img v-if="activeSex === 'male'" src="/images/character/man.gif" />
-        <img v-else src="/images/character/woman.png" />
+      <div class="avatar" :class="`avatar_${sex}`" id="avatar">
+        <img :src="`/images/character/${heroSrc}`" alt="" />
       </div>
 
       <div class="steps">
@@ -213,12 +306,9 @@ async function handlePlay() {
               ></div>
             </div>
 
-            <div class="caption">Choose your gender</div>
+            <div class="caption">Choose Gender</div>
 
-            <CharacterSex
-              @updateSex="(val)=>{activeSex= val}"
-              class="flex-center step__sex"
-            />
+            <CharacterSex v-model="sex" class="flex-center step__sex" />
           </div>
 
           <div v-else-if="step === 2" class="plate step__plate">
@@ -230,28 +320,29 @@ async function handlePlay() {
               ></div>
             </div>
 
-            <div class="caption">Choose a character's race</div>
+            <div class="caption">Choose Race</div>
 
             <CharacterRace
-              @updateRace="(val)=>{activeRace = val}"
-              class="flex race-list"
+              v-model="race"
+              :items="raceList"
+              class="flex-center race-list"
             />
 
             <div class="race-list__divider"></div>
 
             <ClientOnly>
-              <template v-if="activeRace">
+              <template v-if="characterClass">
                 <div class="race-list__value uppercase fw-900">
-                  {{ activeRace.type }}
+                  {{ race.type }}
                 </div>
                 <div class="race-list__descr fw-700">
-                  {{ activeRace.descr }}
+                  {{ race.descr }}
                 </div>
               </template>
             </ClientOnly>
           </div>
 
-          <!-- <div v-else-if="step === 3" class="plate step__plate">
+          <div v-else-if="step === 3" class="plate step__plate">
             <div class="pagination flex-center">
               <div
                 v-for="i in stepsCount"
@@ -260,28 +351,29 @@ async function handlePlay() {
               ></div>
             </div>
 
-            <div class="caption">Choose a character class</div>
+            <div class="caption">Choose Class</div>
 
             <CharacterClass
-              @updateRace="(val)=>{activeClass = val}"
-              class="flex-center"
+              v-model="characterClass"
+              :items="classList"
+              class="flex-center race-list"
             />
 
             <div class="race-list__divider"></div>
 
             <ClientOnly>
-              <template v-if="activeClass">
+              <template v-if="characterClass">
                 <div class="race-list__value uppercase fw-900">
-                  {{ activeClass.type }}
+                  {{ characterClass.type }}
                 </div>
                 <div class="race-list__descr fw-700">
-                  {{ activeClass.descr }}
+                  {{ characterClass.descr }}
                 </div>
               </template>
             </ClientOnly>
-          </div> -->
+          </div>
 
-          <!-- <div v-else-if="step === 3" class="plate step__plate">
+          <div v-else-if="step === 4" class="plate step__plate">
             <div class="pagination flex-center">
               <div
                 v-for="i in stepsCount"
@@ -290,9 +382,10 @@ async function handlePlay() {
               ></div>
             </div>
 
-            <CharacterProps />
-          </div> -->
-          <div v-else-if="step === 3" class="plate step__plate">
+            <CharacterProps v-model:face="face" v-model:head="head" />
+          </div>
+
+          <div v-else-if="step === 5" class="plate step__plate">
             <div class="pagination flex-center">
               <div
                 v-for="i in stepsCount"
@@ -334,8 +427,7 @@ async function handlePlay() {
             class="btn btn-blue control__btn flex-center control__btn-next uppercase"
             @click="step < stepsCount ? step++ : handlePlay()"
           >
-            {{ step < stepsCount ? "Next" : "Earn" }} {{ step }} /
-            {{ stepsCount }}
+            {{ step < stepsCount ? "Next" : "Earn" }}
             <icon-arrow />
           </button>
         </div>
@@ -378,6 +470,7 @@ async function handlePlay() {
   }
   &__mob {
     display: none;
+    overflow: hidden;
     @media(max-width: $md) {
       display: block;
     }
@@ -387,7 +480,7 @@ async function handlePlay() {
 .caption {
   font-weight: 700;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   @media(max-width: $md) {
     margin-bottom: 16px;
   }
@@ -414,9 +507,14 @@ async function handlePlay() {
   width: 292px;
   padding: 0 24px 24px;
   margin-top: 50px;
+  &__plate {
+    padding: 15px;
+    border-radius: 32px;
+  }
   &__logo {
     position: relative;
     margin-top: -50px;
+    transform: scale(1.3);
     &:before {
       content: '';
       position: absolute;
@@ -431,16 +529,13 @@ async function handlePlay() {
     }
   }
 
-  &__races {
-    padding: 15px;
-    border-radius: 32px;
-    &-wrap {
+  &__section {
+    & + & {
       margin-top: 24px;
     }
   }
 
   &__props {
-    margin-top: 32px;
     &-list {
       margin-top: 18px;
     }
@@ -461,10 +556,10 @@ async function handlePlay() {
 }
 
 .race-list {
-  overflow-x: auto;
-  padding: 20px 24px;
-  margin: -20px -24px;
-  gap: 12px;
+  // overflow-x: auto;
+  // padding: 20px 24px;
+  // margin: -20px -24px;
+  gap: 24px;
 
   &__divider {
     height: 1px;
@@ -485,21 +580,14 @@ async function handlePlay() {
 }
 
 .character {
-  margin-top: 15px;
+  align-self: center;
   &__head {
     width: 164px;
     margin: auto;
   }
-  &__class {
-    margin-top: 10px;
-    &-list {
-      margin-top: 20px;
-    }
-  }
 }
 
 .name {
-  margin-top: 20px;
   border-radius: 18px;
   background: #000 linear-gradient(to bottom, rgba(0, 0, 0, 0) 5%, #177AF7 50%, rgba(0, 0, 0, 0) 95%);
   @media(max-width: $md) {
@@ -520,19 +608,28 @@ async function handlePlay() {
 
 .avatar {
   text-align: center;
-  margin-top: 30px;
+  margin-top: 60px;
   @media(max-width: 992px) {
     margin-top: 0;
   }
   img {
     max-height: 555px;
     @media(max-width: 992px) {
-      max-height: 70vh;
+      max-height: 60vh;
+      height: 100%;
+      max-width: none;
     }
   }
   &_male {
     img {
-      margin-left: -15%;
+      margin-left: -12%;
+    }
+  }
+  &_female {
+    img {
+      @media(max-width: 992px) {
+        margin-left: -12%;
+      }
     }
   }
 }
@@ -552,9 +649,9 @@ async function handlePlay() {
 }
 
 .race {
-  height: 220px;
+  height: 210px;
   & + & {
-    margin-top: 24px;
+    margin-top: 20px;
   }
 
   &:before {

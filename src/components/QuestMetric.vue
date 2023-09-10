@@ -44,14 +44,8 @@ onMounted(() => {
   <!-- 1 -->
   <div v-if="character?.sex" class="metric player">
     <img
-      v-if="character.sex === 'male'"
-      class="player__image player__image_male"
-      src="/images/character/man.gif"
-    />
-    <img
-      v-else
-      class="player__image player__image_female"
-      src="/images/character/woman.png"
+      :class="`player__image player__image_${character.sex}`"
+      :src="`/images/character/${character.image}`"
     />
 
     <div class="metric__info text-center">
@@ -61,7 +55,7 @@ onMounted(() => {
         </div>
       </div>
 
-      <div class="metric__title uppercase fw-900">{{character.nickname}}</div>
+      <div class="metric__title fw-900">{{character.nickname}}</div>
 
       <div class="metric__progress flex">
         <span></span>

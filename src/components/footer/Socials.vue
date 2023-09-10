@@ -9,7 +9,7 @@ import instagram from "@img/socials/instagram.svg"
 
 const socials = reactive([
   {
-    url: 'https://t.me/Alfacatalyst',
+    url: 'https://t.me/AlfaCatalyst_Announcements',
     social: 'telegram',
     img: telegram
   },

@@ -1,61 +1,59 @@
 <script setup>
+defineProps(['face', 'head'])
+const emit = defineEmits(['update:face', 'update:head'])
+
 const properties = reactive([
   {
-    active: 'Skin Color',
-    list: [
-      'Skin Color 1',
-      'Skin Color 2',
-      'Skin Color 3',
-      'Skin Color 4',
-      'Skin Color 5',
-      'Skin Color 6',
-    ]
-  },
-  {
-    active: 'Face',
+    alias: 'face',
+    active: 'Face 1',
     list: [
       'Face 1',
       'Face 2',
       'Face 3',
-      'Face 4',
-      'Face 5',
-      'Face 6',
     ]
   },
   {
-    active: 'Hair Style',
+    alias: 'head',
+    active: 'Head',
     list: [
-      'Hair Style 1',
-      'Hair Style 2',
-      'Hair Style 3',
-      'Hair Style 4',
-      'Hair Style 5',
-      'Hair Style 6',
-    ]
-  },
-  {
-    active: 'Hair Color',
-    list: [
-      'Hair Color 1',
-      'Hair Color 2',
-      'Hair Color 3',
-      'Hair Color 4',
-      'Hair Color 5',
-      'Hair Color 6',
+      'Head',
+      'Head 1',
+      'Head 2',
+      'Head 3',
     ]
   }
 ])
+
+function toggleProperty(property, direction) {
+  const index = property.list.indexOf(property.active);
+
+  if (direction === 'next') {
+    property.active = property.list[index + 1] || property.list[0];
+  } else {
+    property.active = property.list[index - 1] || property.list[property.list.length - 1];
+  }
+
+  const val = property.active.replace(' ', '').toLowerCase();
+
+  emit(`update:${property.alias}`, val)
+}
 </script>
 
 <template>
   <div class="props fw-700 lh-1">
     <div v-for="property in properties" class="props__item overflow-hidden">
       <div class="property flex-center">
-        <button class="btn btn-gray property__prev property__arrow">
+        <button
+          @click="toggleProperty(property, 'prev')"
+          class="btn btn-gray property__prev property__arrow"
+        >
           <img src="@img/icons/arrow-solid.svg" alt="" />
         </button>
         <div class="property__value">{{ property.active }}</div>
-        <button class="btn btn-gray property__next property__arrow">
+        <button
+          @click="toggleProperty(property, 'next')"
+          class="btn btn-gray property__next property__arrow"
+        >
           <img src="@img/icons/arrow-solid.svg" alt="" />
         </button>
       </div>

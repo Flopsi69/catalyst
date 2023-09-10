@@ -1,63 +1,18 @@
 <script setup>
-import orc from "@img/character/orc.png";
-import elf from "@img/character/elf.png";
-import human from "@img/character/human.png";
-import dwarf from "@img/character/dwarf.png";
-import undead from "@img/character/undead.png";
-import goblin from "@img/character/goblin.png";
-
-const raceList = reactive([
-  {
-    type: 'orc',
-    img: orc,
-    descr: 'Orcs are one of the oldest and most advanced races'
-  },
-  {
-    type: 'elf',
-    img: elf,
-    descr: 'Elfs are one of the oldest and most advanced races'
-  },
-  {
-    type: 'human',
-    img: human,
-    descr: 'Humans are one of the oldest and most advanced races'
-  },
-  {
-    type: 'dwarf',
-    img: dwarf,
-    descr: 'Dwarfs are one of the oldest and most advanced races'
-  },
-  {
-    type: 'undead',
-    img: undead,
-    descr: 'Undeads are one of the oldest and most advanced races'
-  },
-  {
-    type: 'goblin',
-    img: goblin,
-    descr: 'Goblins are one of the oldest and most advanced races'
-  },
-])
-
-const active = ref(raceList.find(r => r.type === 'human'));
-
-const emit = defineEmits(['updateRace']);
-
-watchEffect(() => {
-  emit('updateRace', active.value);
-});
+defineProps(['modelValue', 'items'])
+defineEmits(['update:modelValue'])
 </script>
 
 <template>
   <div class="race__list">
     <tooltip
-      v-for="race in raceList"
+      v-for="race in items"
       class="race flex-center pointer"
-      :class="{ active: active === race, soon: race.type !== 'human' }"
-      @click="active = race;"
+      :class="{ active: modelValue === race, soon: race.type !== 'human' }"
+      @click="$emit('update:modelValue', race)"
       :text="race.type"
     >
-      <img :src="race.img" alt="" />
+      <img :src="`/images/character/races/${race.img}.png`" alt="" />
     </tooltip>
   </div>
 </template>

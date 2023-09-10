@@ -58,10 +58,19 @@ const openReward = async () => {
     </div>
 
     <div class="reward__box">
-      <img v-show="!isOpening" src="@img/rewards/box.png" alt="" />
+      <img
+        v-show="!isOpening && !isOpened"
+        src="/images/rewards/box.png"
+        alt=""
+      />
       <img
         v-show="isOpening && !isOpened"
-        src="@img/rewards/box-open.gif"
+        src="/images/rewards/box-open.gif"
+        alt=""
+      />
+      <img
+        v-show="!isOpening && isOpened"
+        src="/images/rewards/boxl.gif"
         alt=""
       />
     </div>
@@ -205,7 +214,7 @@ const openReward = async () => {
     max-width: 300px;
     margin: 35px auto 0;
     .reward_opened & {
-      margin-top: 0;
+      max-width: 260px;
     }
   }
 

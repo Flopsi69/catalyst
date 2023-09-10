@@ -1,0 +1,48 @@
+
+box.png
+size: 1367,526
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+box
+  rotate: true
+  xy: 578, 2
+  size: 522, 463
+  orig: 522, 476
+  offset: 0, 0
+  index: -1
+glaz
+  rotate: false
+  xy: 1043, 13
+  size: 72, 105
+  orig: 72, 105
+  offset: 0, 0
+  index: -1
+hands
+  rotate: true
+  xy: 1043, 120
+  size: 404, 322
+  orig: 404, 322
+  offset: 0, 0
+  index: -1
+light box
+  rotate: false
+  xy: 2, 4
+  size: 574, 520
+  orig: 596, 542
+  offset: 10, 20
+  index: -1
+light zrach
+  rotate: false
+  xy: 1117, 47
+  size: 68, 71
+  orig: 68, 71
+  offset: 0, 0
+  index: -1
+zrachok
+  rotate: false
+  xy: 1117, 9
+  size: 32, 36
+  orig: 32, 36
+  offset: 0, 0
+  index: -1

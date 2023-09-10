@@ -1,35 +1,36 @@
 <script setup>
-const sex = ref('male');
+defineProps(['modelValue'])
+defineEmits(['update:modelValue'])
 
-const emit = defineEmits(['updateSex']);
-watchEffect(() => {
-  emit('updateSex', sex.value);
-});
+const sexList = ['male', 'female']
 </script>
 
 <template>
   <div class="sex">
     <div
-      class="sex__male sex__item flex-center pointer"
-      :class="{active: sex === 'male'}"
-      @click="sex='male'"
-    >
-      <img v-show="sex === 'male'" src="@img/icons/male-active.svg" alt="" />
-      <img v-show="sex === 'female'" src="@img/icons/male.svg" alt="" />
-    </div>
-
-    <div
-      class="sex__female sex__item flex-center pointer"
-      :class="{active: sex === 'female'}"
-      @click="sex='female'"
+      v-for="sex of sexList"
+      class="sex__item flex-center pointer"
+      :class="{active: modelValue === sex}"
+      @click="$emit('update:modelValue', sex)"
     >
       <img
-        v-show="sex === 'female'"
+        :src="`/images/character/sex/${sex}${modelValue === sex ? '-active' : ''}.svg`"
+        alt=""
+      />
+    </div>
+
+    <!-- <div
+      class="sex__female sex__item flex-center pointer"
+      :class="{active: modelValue === 'female'}"
+      @click="$emit('update:modelValue', 'female')"
+    >
+      <img
+        v-show="modelValue === 'female'"
         src="@img/icons/female-active.svg"
         alt=""
       />
-      <img v-show="sex === 'male'" src="@img/icons/female.svg" alt="" />
-    </div>
+      <img v-show="modelValue === 'male'" src="@img/icons/female.svg" alt="" />
+    </div> -->
   </div>
 </template>
 
@@ -37,8 +38,8 @@ watchEffect(() => {
 .sex {
   &__item {
     position: relative;
-    width: 64px;
-    height: 64px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     transition: $transition;
     &:before {
@@ -47,9 +48,9 @@ watchEffect(() => {
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      width: 64px;
-      height: 64px;
-      background-image: url('@img/icons/sex-bg.svg');
+      width: 60px;
+      height: 60px;
+      background-image: url('/images/character/sex/bg.svg');
       background-position: center;
       background-repeat: no-repeat;
       background-size: contain;
@@ -73,7 +74,7 @@ watchEffect(() => {
       &:before {
         width: 100px;
         height: 100px;
-        background-image: url('@img/icons/sex-bg-active.png');
+        background-image: url('/images/character/sex/bg-active.png');
       }
     }
   }

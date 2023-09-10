@@ -1,39 +1,19 @@
 <script setup>
-import class1 from "@img/character/class1.png";
-import class2 from "@img/character/class2.png";
-
-const classList = reactive([
-  {
-    type: 'Paladin',
-    img: class1,
-    descr: 'Fearless warriors wearing heavy armor use the magic of light to destroy enemies'
-  },
-  {
-    type: 'Wizzard',
-    img: class2,
-    descr: 'Fearless warriors wearing heavy armor use the magic of light to destroy enemies'
-  }
-])
-
-const active = ref(classList[0]);
-
-const emit = defineEmits(['updateRace']);
-
-watchEffect(() => {
-  emit('updateRace', active.value);
-});
+defineProps(['modelValue', 'items'])
+defineEmits(['update:modelValue'])
 </script>
 
 <template>
-  <div class="class__list">
-    <div
-      v-for="classItem in classList"
+  <div>
+    <tooltip
+      v-for="item in items"
       class="class__item flex-center pointer"
-      :class="{active: active === classItem}"
-      @click="active = classItem"
+      :class="{active: modelValue === item}"
+      @click="$emit('update:modelValue', item)"
+      :text="item.type"
     >
-      <img :src="classItem.img" alt="" />
-    </div>
+      <img :src="`/images/character/class/${item.img}.png`" alt="" />
+    </tooltip>
   </div>
 </template>
 
@@ -43,10 +23,23 @@ watchEffect(() => {
     position: relative;
     width: 60px;
     height: 60px;
-    & + & {
-      margin-left: 35px;
+    text-align: center;
+    flex-shrink: 0;
+    &:deep(.tooltip__value) {
+      padding: 11px 8px;
+      min-width: 65px;
+      background-color: $gray600;
       @media(max-width: $md) {
-        margin-left: 20px;
+        display: none;
+      }
+      &:before {
+        background-color: $gray600;
+      }
+    }
+    & + & {
+      // margin-left: 35px;
+      @media(max-width: $md) {
+        // margin-left: 20px;
       }
     }
     &:before {

@@ -37,7 +37,7 @@ function openTelegram() {
     isTelegramOpen.value = true;
   }
 
-  window.open("https://t.me/Alfacatalyst", "_blank")
+  window.open("https://t.me/AlfaCatalyst_Announcements", "_blank")
 }
 </script>
 
